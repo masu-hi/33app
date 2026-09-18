@@ -1,0 +1,12 @@
+{
+  "name": "oshi-rental",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "sass src/scss/style.scss assets/css/style.css --style=compressed",
+    "dev": "sass src/scss/style.scss assets/css/style.css --watch"
+  },
+  "devDependencies": {
+    "sass": "^1.83.0"
+  }
+}

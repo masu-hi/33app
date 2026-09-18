@@ -1,0 +1,129 @@
+$color-main: #c84d8c;
+$color-sub: #f7f5f8;
+$color-accent: #2f8f83;
+$color-text: #29252b;
+$color-white: #fff;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: $color-text;
+  background: $color-white;
+  font-family: "Noto Sans JP", sans-serif;
+  line-height: 1.7;
+}
+
+a {
+  color: inherit;
+}
+
+.site_header {
+  border-bottom: 1px solid #e8e3e9;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  &__brand {
+    color: $color-main;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  &__link {
+    font-size: 14px;
+    text-decoration: none;
+  }
+}
+
+.intro {
+  background: $color-sub;
+
+  &__inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 72px 16px;
+  }
+
+  &__eyebrow {
+    margin: 0 0 16px;
+    color: $color-main;
+    font-weight: 700;
+  }
+
+  &__title {
+    max-width: 14em;
+    margin: 0 0 24px;
+    font-size: clamp(28px, 5vw, 48px);
+    line-height: 1.4;
+  }
+
+  &__text {
+    max-width: 38em;
+    margin: 0 0 32px;
+  }
+
+  &__link {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: $color-white;
+    background: $color-accent;
+    font-weight: 700;
+    text-decoration: none;
+  }
+}
+
+.about {
+  &__inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 64px 16px;
+  }
+
+  &__title {
+    margin: 0 0 16px;
+    font-size: 24px;
+  }
+
+  &__text {
+    max-width: 48em;
+    margin: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .site_header__inner {
+    padding: 20px 32px;
+  }
+
+  .intro__inner {
+    padding: 96px 32px;
+  }
+
+  .about__inner {
+    padding: 80px 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .intro__inner {
+    padding-top: 112px;
+    padding-bottom: 112px;
+  }
+}
