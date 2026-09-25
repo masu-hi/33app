@@ -785,6 +785,11 @@ h3,
     "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Hiragino Kaku Gothic ProN", sans-serif;
   font-size: 16px;
   line-height: 23px;
+
+  &.is_leaving {
+    animation: page_fade_out 350ms ease forwards;
+    pointer-events: none;
+  }
 }
 
 .visually_hidden {
@@ -832,7 +837,13 @@ h3,
 
   form {
     display: grid;
-    gap: 50px;
+    gap: 0;
+    padding-bottom: 50px;
+    border-bottom: 1px solid $text;
+  }
+
+  form label + label {
+    margin-top: 50px;
   }
 
   label,
@@ -848,6 +859,10 @@ h3,
     border: 0;
     border-radius: 5px;
     background: $main;
+  }
+
+  > .auth_secondary {
+    margin-top: 50px;
   }
 }
 
@@ -875,9 +890,7 @@ h3,
 }
 
 .password_help {
-  margin: 49px 0 50px;
-  padding-bottom: 49px;
-  border-bottom: 1px solid $text;
+  margin: 12px 0 48px;
 
   a {
     color: #86a1d3;
@@ -1124,6 +1137,36 @@ h3,
   font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
   font-size: 16px;
   line-height: 23px;
+
+  &.is_arriving {
+    animation: page_fade_in 450ms ease-out both;
+  }
+}
+
+@keyframes page_fade_out {
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes page_fade_in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app_auth.is_leaving,
+  .mobile_app.is_arriving {
+    animation-duration: 1ms;
+  }
 }
 
 .app_shell {
@@ -1529,4 +1572,136 @@ h3,
   color: #5966a2;
   font-size: 32px;
   letter-spacing: 7px;
+}
+
+// Shared mobile search results
+.results_page {
+  background: $white;
+}
+
+.results_header {
+  padding: 25px 30px 18px;
+
+  &__title {
+    position: relative;
+    display: grid;
+    min-height: 28px;
+    margin-bottom: 14px;
+    place-items: center;
+  }
+
+  &__title button {
+    position: absolute;
+    left: -4px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    color: $text;
+    background: transparent;
+    font-size: 29px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 26px;
+  }
+
+  .app_search {
+    border-color: #afd6f5;
+    background: $sub;
+  }
+}
+
+.sort_tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+
+  button {
+    min-width: 0;
+    min-height: 38px;
+    padding: 4px 8px;
+    border: 1px solid #ead5ee;
+    border-radius: 19px;
+    color: $text;
+    background: $soft;
+    font-family: inherit;
+    font-size: 18px;
+    line-height: 26px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .is_selected {
+    border-color: #d2aede;
+    background: $main;
+  }
+}
+
+.result_list {
+  padding: 0 30px 20px;
+}
+
+.result_item {
+  position: relative;
+  min-height: 110px;
+  border-top: 1px solid #efdaf2;
+
+  &:last-child {
+    border-bottom: 1px solid #efdaf2;
+  }
+
+  &__link {
+    display: grid;
+    grid-template-columns: 86px 1fr;
+    min-height: 110px;
+    align-items: center;
+    padding: 8px 36px 8px 0;
+    color: $text;
+    text-decoration: none;
+  }
+
+  &__link > img {
+    width: 78px;
+    height: 92px;
+    object-fit: contain;
+  }
+
+  h2,
+  p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 23px;
+  }
+
+  h2 {
+    font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+    font-weight: 400;
+  }
+
+  p {
+    font-family: "Noto Sans JP", sans-serif;
+  }
+
+  &__favorite {
+    position: absolute;
+    right: 8px;
+    bottom: 18px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    color: $text;
+    background: transparent;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+  }
 }

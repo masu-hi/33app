@@ -11,13 +11,14 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/auth.js" defer></script>
   </head>
   <body class="app_auth">
     <main class="auth_screen auth_screen--login">
       <header class="auth_header"><img src="assets/images/logo.png" alt="おしりーす" /></header>
       <section class="login_form" aria-labelledby="login_title">
         <h1 id="login_title">ログイン</h1>
-        <form action="home.html">
+        <form action="home.html" data-login-form>
           <label>
             メールアドレス
             <input type="email" required autocomplete="email" />

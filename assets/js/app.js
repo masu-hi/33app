@@ -1,6 +1,11 @@
 const cartCountElements = document.querySelectorAll("[data-cart-count]");
 const savedCartCount = Number(localStorage.getItem("cartCount") || 0);
 let favoriteColor = localStorage.getItem("favoriteColor");
+
+if (sessionStorage.getItem("loginTransition") === "true") {
+  sessionStorage.removeItem("loginTransition");
+  document.body.classList.add("is_arriving");
+}
 const mainColors = {
   赤: "#f9e2e7",
   青: "#ecf1fb",
@@ -60,8 +65,76 @@ document.querySelectorAll("[data-artist-select]").forEach((button) => {
     document.querySelectorAll("[data-artist-select]").forEach((item) => {
       item.setAttribute("aria-pressed", String(item === button));
     });
+
+    const artist = button.textContent.trim();
+    window.location.href = `search.html?artist=${encodeURIComponent(artist)}`;
   });
 });
+
+const resultsPage = document.querySelector("[data-results-page]");
+
+if (resultsPage) {
+  const params = new URLSearchParams(window.location.search);
+  const categoryNames = {
+    penlight: "ペンライト",
+    fan: "うちわ",
+    binoculars: "双眼鏡",
+    bag: "バッグ",
+    photo: "撮影セット",
+  };
+  const category = params.get("category");
+  const searchTerm =
+    params.get("artist") || params.get("keyword") || categoryNames[category] || "ペンライト";
+  const itemName = params.get("artist")
+    ? `${searchTerm} デモグッズ`
+    : categoryNames[category] || searchTerm;
+  const resultsTitle = document.querySelector("[data-results-title]");
+  const resultsInput = document.querySelector("[data-results-input]");
+  const resultList = document.querySelector(".result_list");
+  const resultItems = [...document.querySelectorAll("[data-result-item]")];
+
+  resultsTitle.textContent = searchTerm;
+  document.title = `${searchTerm}の検索結果 | おしりーす`;
+  resultsInput.placeholder = `${searchTerm}から検索`;
+
+  document.querySelectorAll("[data-product-name]").forEach((name, index) => {
+    const variants = [
+      "シンプルタイプ",
+      "スタンダード",
+      "2点セット",
+      "カラーバリエーション",
+      "ライトタイプ",
+      "ロングタイプ",
+    ];
+    name.textContent = `${itemName}（${variants[index]}）`;
+  });
+
+  document.querySelectorAll("[data-sort]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const sort = button.dataset.sort;
+      const sortedItems = [...resultItems].sort((itemA, itemB) => {
+        if (sort === "low") return Number(itemA.dataset.price) - Number(itemB.dataset.price);
+        if (sort === "high") return Number(itemB.dataset.price) - Number(itemA.dataset.price);
+        if (sort === "new") return Number(itemB.dataset.order) - Number(itemA.dataset.order);
+        return Number(itemA.dataset.order) - Number(itemB.dataset.order);
+      });
+
+      document.querySelectorAll("[data-sort]").forEach((item) => {
+        item.classList.toggle("is_selected", item === button);
+      });
+      sortedItems.forEach((item) => resultList.append(item));
+    });
+  });
+
+  document.querySelector("[data-history-back]")?.addEventListener("click", () => {
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    window.location.href = "home.html";
+  });
+}
 
 const updateCartCount = (count) => {
   localStorage.setItem("cartCount", String(count));

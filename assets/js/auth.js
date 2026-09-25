@@ -156,3 +156,17 @@ if (document.querySelector("[data-registration-complete]")) {
     localStorage.setItem("favoriteColor", values.favorite_color);
   }
 }
+
+const loginForm = document.querySelector("[data-login-form]");
+
+loginForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  sessionStorage.setItem("loginTransition", "true");
+  document.body.classList.add("is_leaving");
+
+  const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 350;
+
+  window.setTimeout(() => {
+    window.location.href = loginForm.action;
+  }, delay);
+});

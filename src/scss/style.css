@@ -748,6 +748,10 @@ h3,
   font-size: 16px;
   line-height: 23px;
 }
+.app_auth.is_leaving {
+  animation: page_fade_out 350ms ease forwards;
+  pointer-events: none;
+}
 
 .visually_hidden {
   position: absolute;
@@ -792,7 +796,12 @@ h3,
 }
 .login_form form {
   display: grid;
-  gap: 50px;
+  gap: 0;
+  padding-bottom: 50px;
+  border-bottom: 1px solid #353b60;
+}
+.login_form form label + label {
+  margin-top: 50px;
 }
 .login_form label,
 .login_form .account_form > label {
@@ -806,6 +815,9 @@ h3,
   border: 0;
   border-radius: 5px;
   background: var(--color-main, #f6ecf8);
+}
+.login_form > .auth_secondary {
+  margin-top: 50px;
 }
 
 .auth_primary,
@@ -832,9 +844,7 @@ h3,
 }
 
 .password_help {
-  margin: 49px 0 50px;
-  padding-bottom: 49px;
-  border-bottom: 1px solid #353b60;
+  margin: 12px 0 48px;
 }
 .password_help a {
   color: #86a1d3;
@@ -1063,7 +1073,32 @@ h3,
   font-size: 16px;
   line-height: 23px;
 }
+.mobile_app.is_arriving {
+  animation: page_fade_in 450ms ease-out both;
+}
 
+@keyframes page_fade_out {
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+@keyframes page_fade_in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app_auth.is_leaving,
+  .mobile_app.is_arriving {
+    animation-duration: 1ms;
+  }
+}
 .app_shell {
   position: relative;
   width: 100%;
@@ -1453,4 +1488,122 @@ h3,
   color: #5966a2;
   font-size: 32px;
   letter-spacing: 7px;
+}
+
+.results_page {
+  background: #fff;
+}
+
+.results_header {
+  padding: 25px 30px 18px;
+}
+.results_header__title {
+  position: relative;
+  display: grid;
+  min-height: 28px;
+  margin-bottom: 14px;
+  place-items: center;
+}
+.results_header__title button {
+  position: absolute;
+  left: -4px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  color: #353b60;
+  background: transparent;
+  font-size: 29px;
+  line-height: 1;
+  cursor: pointer;
+}
+.results_header h1 {
+  margin: 0;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 26px;
+}
+.results_header .app_search {
+  border-color: #afd6f5;
+  background: #eff7ff;
+}
+
+.sort_tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+}
+.sort_tabs button {
+  min-width: 0;
+  min-height: 38px;
+  padding: 4px 8px;
+  border: 1px solid #ead5ee;
+  border-radius: 19px;
+  color: #353b60;
+  background: var(--color-soft, #fdf6ff);
+  font-family: inherit;
+  font-size: 18px;
+  line-height: 26px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.sort_tabs .is_selected {
+  border-color: #d2aede;
+  background: var(--color-main, #f6ecf8);
+}
+
+.result_list {
+  padding: 0 30px 20px;
+}
+
+.result_item {
+  position: relative;
+  min-height: 110px;
+  border-top: 1px solid #efdaf2;
+}
+.result_item:last-child {
+  border-bottom: 1px solid #efdaf2;
+}
+.result_item__link {
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  min-height: 110px;
+  align-items: center;
+  padding: 8px 36px 8px 0;
+  color: #353b60;
+  text-decoration: none;
+}
+.result_item__link > img {
+  width: 78px;
+  height: 92px;
+  object-fit: contain;
+}
+.result_item h2,
+.result_item p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 23px;
+}
+.result_item h2 {
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+  font-weight: 400;
+}
+.result_item p {
+  font-family: "Noto Sans JP", sans-serif;
+}
+.result_item__favorite {
+  position: absolute;
+  right: 8px;
+  bottom: 18px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  color: #353b60;
+  background: transparent;
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
 }
