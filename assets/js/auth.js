@@ -125,6 +125,14 @@ registerForm?.addEventListener("submit", (event) => {
   const values = Object.fromEntries(formData.entries());
   sessionStorage.setItem("registrationData", JSON.stringify(values));
   localStorage.setItem("favoriteColor", values.favorite_color);
+  localStorage.setItem("accountName", values.name);
+  localStorage.setItem(
+    "registeredAccount",
+    JSON.stringify({
+      name: values.name,
+      email: values.email.toLowerCase(),
+    }),
+  );
   window.location.href = "register_confirm.html";
 });
 
@@ -155,12 +163,42 @@ if (document.querySelector("[data-registration-complete]")) {
   if (values.favorite_color) {
     localStorage.setItem("favoriteColor", values.favorite_color);
   }
+
+  if (values.name) {
+    localStorage.setItem("accountName", values.name);
+  }
+
+  if (values.name && values.email) {
+    localStorage.setItem(
+      "registeredAccount",
+      JSON.stringify({
+        name: values.name,
+        email: values.email.toLowerCase(),
+      }),
+    );
+  }
 }
 
 const loginForm = document.querySelector("[data-login-form]");
 
 loginForm?.addEventListener("submit", (event) => {
   event.preventDefault();
+  const loginData = new FormData(loginForm);
+  const email = String(loginData.get("email") || "").toLowerCase();
+  const registeredAccount = JSON.parse(localStorage.getItem("registeredAccount") || "{}");
+  const registrationData = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
+  let loggedInName = "";
+
+  if (registeredAccount.email === email) {
+    loggedInName = registeredAccount.name;
+  } else if (String(registrationData.email || "").toLowerCase() === email) {
+    loggedInName = registrationData.name;
+  } else {
+    loggedInName = localStorage.getItem("accountName") || email.split("@")[0];
+  }
+
+  sessionStorage.setItem("isLoggedIn", "true");
+  sessionStorage.setItem("loggedInName", loggedInName);
   sessionStorage.setItem("loginTransition", "true");
   document.body.classList.add("is_leaving");
 
