@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>カート | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site_header">
+      <div class="site_header__inner">
+        <a class="site_header__brand" href="home.html">
+          <img src="assets/images/logo.png" alt="おしりーす" />
+        </a>
+        <nav class="site_header__nav">
+          <a href="search.html">商品を探す</a>
+          <a href="mypage.html">マイページ</a>
+          <a aria-current="page" class="cart_link" href="cart.html">
+            カート
+            <span data-cart-count>0</span>
+          </a>
+        </nav>
+      </div>
+    </header>
+    <main class="page page--narrow">
+      <div class="page__heading">
+        <p>CART</p>
+        <h1>カート</h1>
+      </div>
+      <ol class="progress">
+        <li class="is_current">カート</li>
+        <li>お支払い</li>
+        <li>確認</li>
+      </ol>
+      <section class="cart_item">
+        <img src="assets/images/penlight.png" alt="LEDコンサートライト" />
+        <div>
+          <p class="tag">ペンライト</p>
+          <h2>LEDコンサートライト 1本</h2>
+          <p>レンタル期間：3日間</p>
+          <button class="text_button" data-remove-cart>削除する</button>
+        </div>
+        <strong>800円</strong>
+      </section>
+      <section class="summary">
+        <dl>
+          <div>
+            <dt>小計</dt>
+            <dd>800円</dd>
+          </div>
+          <div>
+            <dt>送料</dt>
+            <dd>500円</dd>
+          </div>
+          <div class="summary__total">
+            <dt>合計</dt>
+            <dd>1,300円</dd>
+          </div>
+        </dl>
+        <a class="button button--wide" href="checkout.html">購入手続きへ</a>
+        <a class="back_link" href="search.html">商品を探し続ける</a>
+      </section>
+    </main>
+    <footer class="site_footer">
+      <img src="assets/images/logo.png" alt="おしりーす" />
+      <small>&copy; 2026 おしりーす</small>
+    </footer>
+  </body>
+</html>

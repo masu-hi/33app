@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登録内容の確認 | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/auth.js" defer></script>
+  </head>
+  <body class="app_auth">
+    <main class="auth_screen">
+      <header class="auth_header">
+        <a href="login.html"><img src="assets/images/logo.png" alt="おしりーす" /></a>
+      </header>
+      <section class="confirm_content" data-confirm-content>
+        <dl>
+          <div>
+            <dt>お名前</dt>
+            <dd data-value="name"></dd>
+          </div>
+          <div>
+            <dt>フリガナ</dt>
+            <dd data-value="kana"></dd>
+          </div>
+          <div>
+            <dt>生年月日</dt>
+            <dd data-value="birthday"></dd>
+          </div>
+          <div>
+            <dt>郵便番号</dt>
+            <dd data-value="postal"></dd>
+          </div>
+          <div>
+            <dt>都道府県</dt>
+            <dd data-value="prefecture"></dd>
+          </div>
+          <div>
+            <dt>市区町村番地</dt>
+            <dd data-value="address"></dd>
+          </div>
+          <div>
+            <dt>建物名/部屋番号（任意）</dt>
+            <dd data-value="building"></dd>
+          </div>
+          <div>
+            <dt>メールアドレス</dt>
+            <dd data-value="email"></dd>
+          </div>
+          <div>
+            <dt>パスワード</dt>
+            <dd data-value="password"></dd>
+            <small>※半角英数字８桁以上</small>
+          </div>
+          <div>
+            <dt>パスワード確認</dt>
+            <dd data-value="password_confirm"></dd>
+          </div>
+          <div>
+            <dt>推しカラー</dt>
+            <dd data-value="favorite_color"></dd>
+          </div>
+          <div>
+            <dt>利用規約・プライバシーについて</dt>
+            <dd>同意する</dd>
+          </div>
+        </dl>
+        <a class="auth_primary" href="register_complete.html">アカウント登録</a>
+        <a class="confirm_back" href="register.html">入力内容を修正する</a>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>商品を探す | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site_header">
+      <div class="site_header__inner">
+        <a class="site_header__brand" href="home.html">
+          <img src="assets/images/logo.png" alt="おしりーす" />
+        </a>
+        <nav class="site_header__nav">
+          <a aria-current="page" href="search.html">商品を探す</a>
+          <a href="mypage.html">マイページ</a>
+          <a class="cart_link" href="cart.html">
+            カート
+            <span data-cart-count>0</span>
+          </a>
+        </nav>
+      </div>
+    </header>
+    <main class="page">
+      <div class="page__heading">
+        <p>ITEMS</p>
+        <h1>レンタル商品を探す</h1>
+      </div>
+      <div class="search_layout">
+        <aside class="filter_panel">
+          <h2>絞り込み</h2>
+          <label>
+            カテゴリ
+            <select required data-filter-category>
+              <option value="all">すべて</option>
+              <option value="penlight">ペンライト</option>
+              <option value="set">セット商品</option>
+            </select>
+          </label>
+          <fieldset>
+            <legend>推しカラー</legend>
+            <label>
+              <input type="radio" name="color" required value="all" checked />
+              すべて
+            </label>
+            <label>
+              <input type="radio" name="color" required value="pink" />
+              ピンク
+            </label>
+            <label>
+              <input type="radio" name="color" required value="blue" />
+              ブルー
+            </label>
+          </fieldset>
+          <button class="button button--small" data-filter-button>この条件で探す</button>
+        </aside>
+        <section class="search_results">
+          <div class="search_results__header">
+            <h2>商品一覧</h2>
+            <p>
+              <span data-result-count>3</span>
+              件
+            </p>
+          </div>
+          <div class="product_grid">
+            <article class="product_card" data-product data-category="penlight" data-color="pink">
+              <a href="product_detail.html">
+                <img src="assets/images/penlight.png" alt="LEDコンサートライト" />
+                <div class="product_card__body">
+                  <span>ペンライト</span>
+                  <h3>LEDコンサートライト 1本</h3>
+                  <p>3日間 800円</p>
+                </div>
+              </a>
+            </article>
+            <article class="product_card" data-product data-category="set" data-color="blue">
+              <a href="product_detail.html">
+                <img src="assets/images/penlight.png" alt="LEDコンサートライト2本セット" />
+                <div class="product_card__body">
+                  <span>セット</span>
+                  <h3>LEDコンサートライト 2本セット</h3>
+                  <p>3日間 1,400円</p>
+                </div>
+              </a>
+            </article>
+            <article class="product_card" data-product data-category="set" data-color="pink">
+              <a href="product_detail.html">
+                <img src="assets/images/penlight.png" alt="LEDコンサートライト3本セット" />
+                <div class="product_card__body">
+                  <span>セット</span>
+                  <h3>LEDコンサートライト 3本セット</h3>
+                  <p>3日間 1,900円</p>
+                </div>
+              </a>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer class="site_footer">
+      <img src="assets/images/logo.png" alt="おしりーす" />
+      <small>&copy; 2026 おしりーす</small>
+    </footer>
+  </body>
+</html>

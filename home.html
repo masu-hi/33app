@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ホーム | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell">
+      <header class="app_header">
+        <a
+          class="app_header__icon"
+          href="#"
+          aria-label="設定"
+          data-nav-icon
+          data-pages="settings.html"
+        >
+          <img
+            src="assets/images/setting-icon--outline.png"
+            data-outline="assets/images/setting-icon--outline.png"
+            data-filled="assets/images/setting-icon--filled.png"
+            alt=""
+          />
+        </a>
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+      <section class="search_choices" aria-label="検索方法を選ぶ">
+        <a class="search_choice search_choice--artist" href="artist_search.html">
+          <span class="search_choice__visual search_choice__visual--artist" aria-hidden="true">
+            ♬
+          </span>
+          <strong>アーティスト</strong>
+          <small>
+            特定のアーティストや
+            <br />
+            グループに合わせたグッズ
+          </small>
+        </a>
+        <a class="search_choice search_choice--goods" href="goods_search.html">
+          <span class="search_choice__visual" aria-hidden="true">
+            <img src="assets/images/penlight.png" alt="" />
+          </span>
+          <strong>汎用品</strong>
+          <small>
+            どのライブでも使える
+            <br />
+            アイテム
+          </small>
+        </a>
+      </section>
+      <section class="keyword_search">
+        <h1>キーワード検索</h1>
+        <form action="search.html" class="app_search">
+          <span aria-hidden="true">⌕</span>
+          <input
+            name="keyword"
+            required
+            aria-label="検索ワード"
+            placeholder="アーティスト名・ライブ会場・グッズで検索"
+          />
+        </form>
+        <h2>人気の検索ワード</h2>
+        <div class="search_chips">
+          <a href="search.html?keyword=ペンライト">ペンライト</a>
+          <a href="search.html?keyword=双眼鏡">双眼鏡</a>
+          <a href="search.html?keyword=うちわ">うちわ</a>
+          <a href="search.html?keyword=バッグ">バッグ</a>
+          <a href="search.html?keyword=撮影セット">撮影セット</a>
+        </div>
+      </section>
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="#">お店について</a>
+          <a href="#">使い方ガイド</a>
+          <a href="#">利用規約</a>
+          <a href="#">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html">
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>

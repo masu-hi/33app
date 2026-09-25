@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>マイページ | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site_header">
+      <div class="site_header__inner">
+        <a class="site_header__brand" href="home.html">
+          <img src="assets/images/logo.png" alt="おしりーす" />
+        </a>
+        <nav class="site_header__nav">
+          <a href="search.html">商品を探す</a>
+          <a aria-current="page" href="mypage.html">マイページ</a>
+          <a class="cart_link" href="cart.html">
+            カート
+            <span data-cart-count>0</span>
+          </a>
+        </nav>
+      </div>
+    </header>
+    <main class="page">
+      <div class="page__heading">
+        <p>MY PAGE</p>
+        <h1>マイページ</h1>
+      </div>
+      <section class="welcome_panel">
+        <p>こんにちは</p>
+        <h2>おしりーすさん</h2>
+        <p>次のライブも、思いきり楽しみましょう。</p>
+      </section>
+      <div class="mypage_grid">
+        <a href="#">
+          <strong>レンタル履歴</strong>
+          <span>注文と返却状況を確認</span>
+        </a>
+        <a href="#">
+          <strong>お気に入り</strong>
+          <span>保存した商品を見る</span>
+        </a>
+        <a href="#">
+          <strong>登録情報</strong>
+          <span>住所・メールアドレスを変更</span>
+        </a>
+        <a href="#">
+          <strong>キャンセル・払い戻し</strong>
+          <span>手続きと状況を確認</span>
+        </a>
+        <a href="#">
+          <strong>よくある質問</strong>
+          <span>利用方法を確認</span>
+        </a>
+        <a href="#">
+          <strong>お問い合わせ</strong>
+          <span>困ったときはこちら</span>
+        </a>
+      </div>
+    </main>
+    <footer class="site_footer">
+      <img src="assets/images/logo.png" alt="おしりーす" />
+      <small>&copy; 2026 おしりーす</small>
+    </footer>
+  </body>
+</html>

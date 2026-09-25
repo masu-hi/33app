@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LEDコンサートライト | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site_header">
+      <div class="site_header__inner">
+        <a class="site_header__brand" href="home.html">
+          <img src="assets/images/logo.png" alt="おしりーす" />
+        </a>
+        <nav class="site_header__nav">
+          <a href="search.html">商品を探す</a>
+          <a href="mypage.html">マイページ</a>
+          <a class="cart_link" href="cart.html">
+            カート
+            <span data-cart-count>0</span>
+          </a>
+        </nav>
+      </div>
+    </header>
+    <main class="page">
+      <nav class="breadcrumb">
+        <a href="home.html">ホーム</a>
+        /
+        <a href="search.html">商品一覧</a>
+        / LEDコンサートライト
+      </nav>
+      <section class="product_detail">
+        <div class="product_detail__media">
+          <img src="assets/images/penlight.png" alt="LEDコンサートライト15色切替" />
+        </div>
+        <div class="product_detail__info">
+          <p class="tag">ペンライト</p>
+          <h1>LEDコンサートライト 1本</h1>
+          <p class="product_detail__price">
+            3日間
+            <strong>800円</strong>
+            <small>（税込）</small>
+          </p>
+          <p>
+            15色に切り替えられる軽量ペンライト。ストラップ付きで、初めてのライブにもおすすめです。
+          </p>
+          <dl>
+            <div>
+              <dt>セット内容</dt>
+              <dd>本体1本・ストラップ・電池</dd>
+            </div>
+            <div>
+              <dt>受取方法</dt>
+              <dd>宅配便</dd>
+            </div>
+            <div>
+              <dt>返却期限</dt>
+              <dd>利用最終日の翌日までに発送</dd>
+            </div>
+          </dl>
+          <label class="date_field">
+            利用開始日
+            <input type="date" required />
+          </label>
+          <button class="button button--wide" data-add-cart>カートに入れる</button>
+          <button class="favorite_button" type="button">お気に入りに追加</button>
+        </div>
+      </section>
+    </main>
+    <footer class="site_footer">
+      <img src="assets/images/logo.png" alt="おしりーす" />
+      <small>&copy; 2026 おしりーす</small>
+    </footer>
+  </body>
+</html>

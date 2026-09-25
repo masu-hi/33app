@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "sass src/scss/style.scss assets/css/style.css --style=compressed",
-    "dev": "sass src/scss/style.scss assets/css/style.css --watch"
+    "build": "sass src/scss/style.scss src/scss/style.css --style=expanded --no-source-map",
+    "dev": "node scripts/dev.mjs",
+    "format": "prettier --write \"*.html\" \"assets/js/*.js\" \"scripts/*.mjs\" \"src/scss/*.scss\"",
+    "format:check": "prettier --check \"*.html\" \"assets/js/*.js\" \"scripts/*.mjs\" \"src/scss/*.scss\""
   },
   "devDependencies": {
+    "prettier": "^3.9.9",
     "sass": "^1.83.0"
   }
 }

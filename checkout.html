@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お支払い | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site_header">
+      <div class="site_header__inner">
+        <a class="site_header__brand" href="home.html">
+          <img src="assets/images/logo.png" alt="おしりーす" />
+        </a>
+        <span class="site_header__secure">安全なお支払い</span>
+      </div>
+    </header>
+    <main class="page page--narrow">
+      <div class="page__heading">
+        <p>CHECKOUT</p>
+        <h1>お支払い</h1>
+      </div>
+      <ol class="progress">
+        <li>カート</li>
+        <li class="is_current">お支払い</li>
+        <li>確認</li>
+      </ol>
+      <form class="form_panel" data-checkout-form>
+        <section>
+          <h2>お届け先</h2>
+          <div class="form_grid">
+            <label>
+              お名前
+              <input required autocomplete="name" />
+            </label>
+            <label>
+              郵便番号
+              <input required inputmode="numeric" placeholder="000-0000" />
+            </label>
+            <label class="form_grid__wide">
+              住所
+              <input required autocomplete="street-address" />
+            </label>
+          </div>
+        </section>
+        <section>
+          <h2>お支払い方法</h2>
+          <label class="choice">
+            <input type="radio" name="payment" required checked />
+            クレジットカード
+          </label>
+          <div class="form_grid">
+            <label class="form_grid__wide">
+              カード番号
+              <input required inputmode="numeric" placeholder="0000 0000 0000 0000" />
+            </label>
+            <label>
+              有効期限
+              <input required placeholder="MM/YY" />
+            </label>
+            <label>
+              セキュリティコード
+              <input required inputmode="numeric" placeholder="123" />
+            </label>
+          </div>
+        </section>
+        <section class="summary">
+          <dl>
+            <div class="summary__total">
+              <dt>お支払い合計</dt>
+              <dd>1,300円</dd>
+            </div>
+          </dl>
+        </section>
+        <button class="button button--wide" type="submit">注文内容を確認する</button>
+        <p class="form_notice" data-checkout-message role="status"></p>
+      </form>
+    </main>
+    <footer class="site_footer">
+      <img src="assets/images/logo.png" alt="おしりーす" />
+      <small>&copy; 2026 おしりーす</small>
+    </footer>
+  </body>
+</html>
