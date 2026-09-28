@@ -177,9 +177,101 @@ const updateCartCount = (count) => {
 
 updateCartCount(savedCartCount);
 
+const productGallery = document.querySelector("[data-product-gallery]");
+
+if (productGallery) {
+  const gallerySlides = [...productGallery.children];
+  const galleryCount = document.querySelector("[data-gallery-count]");
+  const previousGalleryButton = document.querySelector("[data-gallery-previous]");
+  const nextGalleryButton = document.querySelector("[data-gallery-next]");
+  const galleryControls = [previousGalleryButton, nextGalleryButton].filter(Boolean);
+  let activeSlide = 0;
+  let swipeStartX = null;
+
+  const setGalleryControls = (visible) => {
+    galleryControls.forEach((button) => {
+      button.hidden = !visible;
+    });
+    productGallery.setAttribute("aria-expanded", String(visible));
+  };
+
+  const showSlide = (index) => {
+    activeSlide = (index + gallerySlides.length) % gallerySlides.length;
+    productGallery.style.transform = `translateX(-${activeSlide * 100}%)`;
+
+    if (galleryCount) {
+      galleryCount.textContent = `${activeSlide + 1} / ${gallerySlides.length}`;
+    }
+  };
+
+  productGallery.addEventListener("pointerdown", (event) => {
+    swipeStartX = event.clientX;
+    productGallery.setPointerCapture(event.pointerId);
+  });
+
+  productGallery.addEventListener("pointerup", (event) => {
+    if (swipeStartX === null) return;
+
+    const swipeDistance = event.clientX - swipeStartX;
+    swipeStartX = null;
+
+    if (Math.abs(swipeDistance) < 35) {
+      setGalleryControls(previousGalleryButton?.hidden);
+      return;
+    }
+
+    showSlide(activeSlide + (swipeDistance < 0 ? 1 : -1));
+  });
+
+  productGallery.addEventListener("pointercancel", () => {
+    swipeStartX = null;
+  });
+
+  productGallery.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      showSlide(activeSlide + 1);
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      showSlide(activeSlide - 1);
+    }
+  });
+
+  previousGalleryButton?.addEventListener("click", () => {
+    showSlide(activeSlide - 1);
+  });
+
+  nextGalleryButton?.addEventListener("click", () => {
+    showSlide(activeSlide + 1);
+  });
+}
+
 document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
   updateCartCount(1);
   window.location.href = "cart.html";
+});
+
+document.querySelector("[data-history-back]")?.addEventListener("click", () => {
+  if (window.history.length > 1) {
+    window.history.back();
+    return;
+  }
+
+  window.location.href = "home.html";
+});
+
+document.querySelector("[data-show-reviews]")?.addEventListener("click", () => {
+  window.alert("レビューは現在準備中です。\n評価 4.5 / 5.0");
+});
+
+document.querySelector(".product_detail__favorite")?.addEventListener("click", (event) => {
+  const button = event.currentTarget;
+  const isFavorite = button.getAttribute("aria-pressed") === "true";
+  button.setAttribute("aria-pressed", String(!isFavorite));
+  button.textContent = isFavorite ? "♡" : "♥";
+  button.setAttribute("aria-label", isFavorite ? "お気に入りに追加" : "お気に入りから削除");
 });
 
 document.querySelector("[data-remove-cart]")?.addEventListener("click", (event) => {
