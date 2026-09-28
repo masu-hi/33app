@@ -1,3 +1,4 @@
+@charset "UTF-8";
 *,
 *::before,
 *::after {
@@ -1892,6 +1893,208 @@ h3,
   font-size: 25px;
   line-height: 1;
   cursor: pointer;
+}
+
+.mypage {
+  color: #353b60;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+}
+
+.mypage_header {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 390px;
+  height: 95px;
+  padding: 0 30px;
+  transform: translateX(-50%);
+  background: var(--color-main, #f6ecf8);
+}
+.mypage_header > button, .mypage_header__back {
+  display: grid;
+  width: 34px;
+  height: 42px;
+  padding: 0;
+  border: 0;
+  place-items: center;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mypage_header > button img, .mypage_header__back img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+.mypage_header__actions {
+  display: flex;
+  gap: 10px;
+}
+.mypage_header__actions a {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+}
+.mypage_header__actions img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.mypage_name {
+  display: flex;
+  min-height: 59px;
+  align-items: center;
+  padding: 0 30px;
+  background: #fff;
+}
+.mypage_name h1 {
+  margin: 0;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 23px;
+}
+
+.rental_summary {
+  padding: 40px 30px;
+  background: linear-gradient(135deg, var(--color-main, #f6ecf8) 0%, var(--color-gradient-end, #edeefa) 100%);
+}
+.rental_summary__card {
+  display: block;
+  min-height: 121px;
+  padding: 17px 14px 15px;
+  border-radius: 10px;
+  color: #353b60;
+  background: #fff;
+  text-decoration: none;
+}
+.rental_summary__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1px 10px;
+}
+.rental_summary__heading strong {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 23px;
+}
+.rental_summary__heading > span {
+  font-family: sans-serif;
+  font-size: 32px;
+  font-weight: 200;
+  line-height: 1;
+}
+.rental_summary__statuses {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  font-family: "Noto Sans JP", sans-serif;
+  text-align: center;
+}
+.rental_summary__statuses > span {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+.rental_summary__statuses > span:not(:last-child)::after {
+  position: absolute;
+  right: -3px;
+  bottom: 0;
+  content: "›";
+  font-size: 18px;
+  line-height: 15px;
+}
+.rental_summary__statuses b {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 23px;
+}
+.rental_summary__statuses small {
+  font-size: 10px;
+  line-height: 15px;
+  white-space: nowrap;
+}
+
+.mypage_menu {
+  display: grid;
+  padding: 28px 0 18px;
+  background: #fff;
+}
+.mypage_menu a {
+  display: flex;
+  min-height: 72px;
+  align-items: center;
+  padding: 0 30px;
+  border-bottom: 1px solid #efdaf2;
+  color: #353b60;
+  font-size: 16px;
+  line-height: 23px;
+  text-decoration: none;
+}
+
+.mypage_support {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  min-height: 112px;
+  padding: 14px 18px 12px;
+  background: #fff;
+}
+.mypage_support a {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  color: #353b60;
+  font-size: 11px;
+  line-height: 16px;
+  text-decoration: none;
+}
+.mypage_support img {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 4px;
+  object-fit: contain;
+}
+
+.rental_history {
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+}
+.rental_history__content {
+  min-height: calc(100vh - 175px);
+  padding: 34px 30px;
+  background: var(--color-soft, #fdf6ff);
+}
+.rental_history h1 {
+  margin: 0 0 30px;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 400;
+}
+.rental_history__empty {
+  padding: 36px 20px;
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+}
+.rental_history__empty p {
+  margin: 0 0 24px;
+}
+.rental_history__empty a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 28px;
+  border-radius: 5px;
+  color: #353b60;
+  background: var(--color-main, #f6ecf8);
+  text-decoration: none;
 }
 
 .product_detail_page {

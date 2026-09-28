@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>レンタル履歴 | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell rental_history">
+      <header class="mypage_header">
+        <a class="mypage_header__back" href="mypage.html" aria-label="マイページへ戻る">
+          <img src="assets/images/back.png" alt="" />
+        </a>
+        <div class="mypage_header__actions">
+          <a href="#" aria-label="通知">
+            <img src="assets/images/notice-icon--outline.png" alt="" />
+          </a>
+          <a href="cart.html" aria-label="カート">
+            <img src="assets/images/cart-icon--outline.png" alt="" />
+          </a>
+        </div>
+      </header>
+      <section class="rental_history__content">
+        <h1>レンタル履歴</h1>
+        <div class="rental_history__empty">
+          <p>レンタル履歴はまだありません</p>
+          <a href="home.html">商品を探す</a>
+        </div>
+      </section>
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a href="home.html" data-nav-icon data-pages="home.html">
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html,rental_history.html">
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>

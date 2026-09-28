@@ -7,68 +7,134 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/app.js" defer></script>
   </head>
-  <body>
-    <header class="site_header">
-      <div class="site_header__inner">
-        <a class="site_header__brand" href="home.html">
-          <img src="assets/images/logo.png" alt="おしりーす" />
-        </a>
-        <nav class="site_header__nav">
-          <a href="search.html">商品を探す</a>
-          <a aria-current="page" href="mypage.html">マイページ</a>
-          <a class="cart_link" href="cart.html">
-            カート
-            <span data-cart-count>0</span>
+  <body class="mobile_app">
+    <main class="app_shell mypage">
+      <header class="mypage_header">
+        <button type="button" aria-label="前の画面へ戻る" data-history-back>
+          <img src="assets/images/back.png" alt="" />
+        </button>
+        <div class="mypage_header__actions">
+          <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
           </a>
-        </nav>
-      </div>
-    </header>
-    <main class="page">
-      <div class="page__heading">
-        <p>MY PAGE</p>
-        <h1>マイページ</h1>
-      </div>
-      <section class="welcome_panel">
-        <p>こんにちは</p>
-        <h2>おしりーすさん</h2>
-        <p>次のライブも、思いきり楽しみましょう。</p>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+
+      <section class="mypage_name" aria-label="アカウント名">
+        <h1 data-account-name>名前名前</h1>
       </section>
-      <div class="mypage_grid">
+
+      <section class="rental_summary">
+        <a class="rental_summary__card" href="rental_history.html">
+          <span class="rental_summary__heading">
+            <strong>レンタル履歴</strong>
+            <span aria-hidden="true">›</span>
+          </span>
+          <span class="rental_summary__statuses">
+            <span>
+              <b>0</b>
+              <small>配送待ち</small>
+            </span>
+            <span>
+              <b>0</b>
+              <small>配送中</small>
+            </span>
+            <span>
+              <b>0</b>
+              <small>配送完了</small>
+            </span>
+            <span>
+              <b>0</b>
+              <small>返品待ち</small>
+            </span>
+            <span>
+              <b>0</b>
+              <small>返品完了</small>
+            </span>
+          </span>
+        </a>
+      </section>
+
+      <nav class="mypage_menu" aria-label="マイページメニュー">
+        <a href="#">会員情報</a>
+        <a href="#">キャンセル・払い戻し</a>
+        <a href="#">お気に入り♡</a>
+        <a href="#">最近見た商品</a>
+        <a href="#">再入荷リスト</a>
+      </nav>
+
+      <nav class="mypage_support" aria-label="サポートメニュー">
         <a href="#">
-          <strong>レンタル履歴</strong>
-          <span>注文と返却状況を確認</span>
+          <img src="assets/images/question-icon.png" alt="" />
+          よくある質問
         </a>
         <a href="#">
-          <strong>お気に入り</strong>
-          <span>保存した商品を見る</span>
+          <img src="assets/images/help-icon.png" alt="" />
+          ヘルプ
         </a>
         <a href="#">
-          <strong>登録情報</strong>
-          <span>住所・メールアドレスを変更</span>
+          <img src="assets/images/note-icon.png" alt="" />
+          利用規約
         </a>
         <a href="#">
-          <strong>キャンセル・払い戻し</strong>
-          <span>手続きと状況を確認</span>
+          <img src="assets/images/setting-icon--filled.png" alt="" />
+          設定
         </a>
-        <a href="#">
-          <strong>よくある質問</strong>
-          <span>利用方法を確認</span>
+      </nav>
+
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="#">お店について</a>
+          <a href="#">使い方ガイド</a>
+          <a href="#">利用規約</a>
+          <a href="#">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
         </a>
-        <a href="#">
-          <strong>お問い合わせ</strong>
-          <span>困ったときはこちら</span>
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html,rental_history.html">
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
         </a>
-      </div>
+      </nav>
     </main>
-    <footer class="site_footer">
-      <img src="assets/images/logo.png" alt="おしりーす" />
-      <small>&copy; 2026 おしりーす</small>
-    </footer>
   </body>
 </html>

@@ -30,6 +30,18 @@ const softColors = {
   白: "#ffffff",
   黒: "#f7f7f9",
 };
+const gradientEndColors = {
+  赤: "#eef0fa",
+  青: "#f7eef9",
+  ピンク: "#edeefa",
+  紫: "#edf3fb",
+  緑: "#eef1fa",
+  黄色: "#f3effa",
+  オレンジ: "#eef0fa",
+  水色: "#f7effa",
+  白: "#edeef8",
+  黒: "#e5e7f1",
+};
 
 if (!favoriteColor) {
   const registrationData = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
@@ -43,6 +55,10 @@ if (!favoriteColor) {
 if (favoriteColor && mainColors[favoriteColor]) {
   document.documentElement.style.setProperty("--color-main", mainColors[favoriteColor]);
   document.documentElement.style.setProperty("--color-soft", softColors[favoriteColor]);
+  document.documentElement.style.setProperty(
+    "--color-gradient-end",
+    gradientEndColors[favoriteColor],
+  );
 }
 
 const currentPage = window.location.pathname.split("/").pop() || "home.html";
@@ -58,6 +74,31 @@ document.querySelectorAll("[data-nav-icon]").forEach((link) => {
   if (isCurrent) {
     link.setAttribute("aria-current", "page");
   }
+});
+
+const accountNameElement = document.querySelector("[data-account-name]");
+
+if (accountNameElement) {
+  const registrationData = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
+  const accountName =
+    sessionStorage.getItem("loggedInName") ||
+    localStorage.getItem("accountName") ||
+    registrationData.name ||
+    "ゲスト";
+  accountNameElement.textContent = accountName;
+
+  if (!localStorage.getItem("accountName") && registrationData.name) {
+    localStorage.setItem("accountName", registrationData.name);
+  }
+}
+
+document.querySelector("[data-history-back]")?.addEventListener("click", () => {
+  if (window.history.length > 1) {
+    window.history.back();
+    return;
+  }
+
+  window.location.href = "home.html";
 });
 
 document.querySelectorAll("[data-artist-select]").forEach((button) => {
