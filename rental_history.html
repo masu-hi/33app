@@ -28,9 +28,10 @@
           </a>
         </div>
       </header>
-      <section class="rental_history__content">
+      <section class="rental_history__content" data-rental-history>
         <h1>レンタル履歴</h1>
-        <div class="rental_history__empty">
+        <div class="rental_history__list" data-rental-history-list></div>
+        <div class="rental_history__empty" data-rental-history-empty>
           <p>レンタル履歴はまだありません</p>
           <a href="home.html">商品を探す</a>
         </div>
@@ -44,6 +45,11 @@
             alt=""
           />
           ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
         </a>
         <a href="mypage.html" data-nav-icon data-pages="mypage.html,rental_history.html">
           <img

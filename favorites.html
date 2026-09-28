@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お気に入り | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell favorites_page" data-favorites-page>
+      <header class="mypage_header">
+        <button type="button" aria-label="前の画面へ戻る" data-history-back>
+          <img src="assets/images/back.png" alt="" />
+        </button>
+        <div class="mypage_header__actions">
+          <a href="#" aria-label="通知">
+            <img src="assets/images/notice-icon--outline.png" alt="" />
+          </a>
+          <a href="cart.html" aria-label="カート">
+            <img src="assets/images/cart-icon--outline.png" alt="" />
+          </a>
+        </div>
+      </header>
+
+      <section class="favorites_page__content">
+        <h1>お気に入り</h1>
+        <form action="search.html" class="app_search favorites_page__search">
+          <span aria-hidden="true">⌕</span>
+          <input
+            name="keyword"
+            required
+            aria-label="お気に入りを検索"
+            placeholder="お気に入りを検索"
+          />
+        </form>
+        <p class="favorites_page__description">お気に入りに登録した商品が表示されます。</p>
+        <div class="favorites_list" data-favorites-list></div>
+        <div class="favorites_page__empty" data-favorites-empty hidden>
+          <p>お気に入りはまだありません</p>
+          <a href="home.html">商品を探す</a>
+        </div>
+      </section>
+
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="#">お店について</a>
+          <a href="#">使い方ガイド</a>
+          <a href="#">利用規約</a>
+          <a href="#">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav aria-current="page" class="is_current">
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
+        </a>
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html,rental_history.html">
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>

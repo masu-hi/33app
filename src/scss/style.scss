@@ -3,6 +3,7 @@
 $main: var(--color-main, #f6ecf8);
 $soft: var(--color-soft, #fdf6ff);
 $gradient_end: var(--color-gradient-end, #edeefa);
+$theme_line: var(--color-line, #ead5ee);
 $sub: #eff7ff;
 $text: #353b60;
 $white: #fff;
@@ -550,6 +551,10 @@ h3,
   cursor: pointer;
 }
 
+.product_detail__favorite.is_favorite {
+  color: #e98bb9;
+}
+
 .product_detail_page .product_detail__info h2 {
   margin: 8px 0 0;
   color: #46589a;
@@ -569,6 +574,14 @@ h3,
   line-height: 24px;
 }
 
+.product_detail__fee_note {
+  margin: 6px 0 36px;
+  color: #5960a0;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+}
+
 .product_detail__review_summary {
   display: flex;
   align-items: center;
@@ -582,7 +595,7 @@ h3,
   button {
     min-height: 35px;
     padding: 3px 13px;
-    border: 1px solid #f3d8f4;
+    border: 1px solid $theme_line;
     border-radius: 18px;
     color: #5960a0;
     background: #fff9ff;
@@ -605,7 +618,7 @@ h3,
   color: #46589a;
 
   h2 {
-    margin: 0 0 0;
+    margin: 0 0 20px;
     font-family: inherit;
     font-size: 18px;
     font-weight: 400;
@@ -733,14 +746,14 @@ h3,
 }
 
 .product_detail__cart_button {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   width: calc(100% - 52px);
   min-height: 40px;
   align-items: center;
+  justify-content: center;
   margin: 0 auto;
-  padding: 4px 17px 4px 47px;
-  border: 1px solid #f0d9f2;
+  padding: 4px 17px;
+  border: 1px solid $theme_line;
   border-radius: 21px;
   color: #46589a;
   background: #fff9ff;
@@ -1187,6 +1200,11 @@ h3,
   cursor: pointer;
 }
 
+.product_detail__cart_button.is_added {
+  border-color: #afd6f5;
+  background: $sub;
+}
+
 .auth_primary:disabled {
   color: rgba($text, 0.45);
   cursor: not-allowed;
@@ -1505,6 +1523,7 @@ h3,
 
   &__icon,
   &__actions a {
+    position: relative;
     display: grid;
     width: 30px;
     height: 30px;
@@ -1531,6 +1550,54 @@ h3,
     width: 26px;
     height: 26px;
     object-fit: contain;
+  }
+
+  &__cart_count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    display: grid;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    place-items: center;
+    border: 2px solid $main;
+    border-radius: 10px;
+    color: $white;
+    background: #5968a8;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+  }
+}
+
+.app_toast {
+  position: fixed;
+  z-index: 100;
+  bottom: 96px;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 48px);
+  margin: 0;
+  padding: 10px 18px;
+  transform: translate(-50%, 12px);
+  border-radius: 6px;
+  color: $white;
+  background: rgba(#353b60, 0.94);
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+
+  &.is_visible {
+    transform: translate(-50%, 0);
+    opacity: 1;
   }
 }
 
@@ -1619,7 +1686,7 @@ h3,
   align-items: center;
   height: 36px;
   padding: 0 12px;
-  border: 1px solid #dfc5e9;
+  border: 1px solid $theme_line;
   border-radius: 18px;
   background: $white;
 
@@ -1651,7 +1718,7 @@ h3,
   button {
     min-height: 34px;
     padding: 4px 19px;
-    border: 1px solid #ead5ee;
+    border: 1px solid $theme_line;
     border-radius: 17px;
     color: $text;
     background: $white;
@@ -1667,7 +1734,7 @@ h3,
   bottom: 0;
   left: 50%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   width: 100%;
   max-width: 390px;
   height: 80px;
@@ -1675,6 +1742,7 @@ h3,
   background: $main;
 
   a {
+    position: relative;
     display: grid;
     align-content: center;
     justify-items: center;
@@ -1692,6 +1760,45 @@ h3,
 
   .is_current {
     font-weight: 700;
+  }
+
+  &__favorite_icon {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 2px;
+    place-items: center;
+    color: transparent;
+    font-family: Arial, sans-serif;
+    font-size: 31px;
+    line-height: 30px;
+    transform: scaleX(1.08);
+    transform-origin: center;
+    -webkit-text-stroke: 1.8px #86a1d3;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 8px;
+    left: calc(50% + 10px);
+    display: grid;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    place-items: center;
+    border: 2px solid $main;
+    border-radius: 10px;
+    color: $white;
+    background: #5968a8;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  [data-favorite-nav].is_current &__favorite_icon {
+    color: #5968a8;
+    -webkit-text-stroke: 0;
   }
 }
 
@@ -1897,15 +2004,23 @@ h3,
   &__title button {
     position: absolute;
     left: -4px;
+    display: grid;
     width: 36px;
     height: 36px;
     padding: 0;
     border: 0;
+    place-items: center;
     color: $text;
     background: transparent;
     font-size: 29px;
     line-height: 1;
     cursor: pointer;
+  }
+
+  &__title button img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
   }
 
   h1 {
@@ -1932,7 +2047,7 @@ h3,
     min-width: 0;
     min-height: 38px;
     padding: 4px 8px;
-    border: 1px solid #ead5ee;
+    border: 1px solid $theme_line;
     border-radius: 19px;
     color: $text;
     background: $soft;
@@ -1944,7 +2059,7 @@ h3,
   }
 
   .is_selected {
-    border-color: #d2aede;
+    border-color: $theme_line;
     background: $main;
   }
 }
@@ -1956,10 +2071,10 @@ h3,
 .result_item {
   position: relative;
   min-height: 110px;
-  border-top: 1px solid #efdaf2;
+  border-top: 1px solid $theme_line;
 
   &:last-child {
-    border-bottom: 1px solid #efdaf2;
+    border-bottom: 1px solid $theme_line;
   }
 
   &__link {
@@ -2008,6 +2123,10 @@ h3,
     line-height: 1;
     cursor: pointer;
   }
+
+  &__favorite.is_favorite {
+    color: #e98bb9;
+  }
 }
 
 // My page
@@ -2046,8 +2165,8 @@ h3,
 
   > button img,
   &__back img {
-    width: 26px;
-    height: 26px;
+    width: 20px;
+    height: 20px;
     object-fit: contain;
   }
 
@@ -2057,6 +2176,7 @@ h3,
   }
 
   &__actions a {
+    position: relative;
     display: grid;
     width: 30px;
     height: 30px;
@@ -2166,7 +2286,7 @@ h3,
     min-height: 72px;
     align-items: center;
     padding: 0 30px;
-    border-bottom: 1px solid #efdaf2;
+    border-bottom: 1px solid $theme_line;
     color: $text;
     font-size: 16px;
     line-height: 23px;
@@ -2238,6 +2358,727 @@ h3,
   }
 }
 
+// Favorites page
+.favorites_page {
+  color: $text;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+
+  &__content {
+    min-height: calc(100vh - 175px);
+    padding-bottom: 32px;
+    background: $soft;
+  }
+
+  h1 {
+    margin: 0;
+    padding: 18px 30px;
+    border-bottom: 1px solid $theme_line;
+    background: $white;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 26px;
+  }
+
+  &__search {
+    width: calc(100% - 60px);
+    margin: 20px auto 8px;
+    border-color: $theme_line;
+  }
+
+  &__description {
+    margin: 0;
+    padding: 0 30px 16px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  &__empty {
+    margin: 16px 30px 0;
+    padding: 40px 20px;
+    border-radius: 8px;
+    background: $white;
+    text-align: center;
+  }
+
+  &__empty p {
+    margin: 0 0 24px;
+  }
+
+  &__empty a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 0 28px;
+    border-radius: 5px;
+    background: $main;
+    text-decoration: none;
+  }
+}
+
+.favorites_list {
+  border-top: 1px solid $theme_line;
+  background: $white;
+}
+
+.favorite_item {
+  position: relative;
+  min-height: 132px;
+  border-bottom: 1px solid $theme_line;
+
+  &__link {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr);
+    min-height: 132px;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 64px 14px 30px;
+    color: $text;
+    text-decoration: none;
+  }
+
+  &__link img {
+    width: 78px;
+    height: 96px;
+    object-fit: contain;
+  }
+
+  h2,
+  p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23px;
+  }
+
+  p {
+    font-family: "Noto Sans JP", sans-serif;
+  }
+
+  &__remove {
+    position: absolute;
+    right: 26px;
+    bottom: 24px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    color: #e98bb9;
+    background: transparent;
+    font-family: sans-serif;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+}
+
+// Cart page
+.cart_page {
+  padding-bottom: 0;
+  color: $text;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+
+  &__header_title {
+    position: absolute;
+    left: 70px;
+    margin: 0;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  &__content {
+    min-height: calc(100vh - 215px);
+    padding: 28px 30px 68px;
+    background: $white;
+  }
+
+  h1 {
+    margin: 0;
+    padding-bottom: 18px;
+    border-bottom: 1px solid $theme_line;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23px;
+  }
+
+  &__total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 72px;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  &__total > div {
+    display: grid;
+    gap: 4px;
+  }
+
+  &__total small {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 11px;
+    line-height: 17px;
+  }
+
+  &__total strong {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 22px;
+    line-height: 32px;
+  }
+
+  &__checkout {
+    display: flex;
+    width: 100%;
+    min-height: 64px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 42px;
+    border-radius: 6px;
+    color: $text;
+    background: $main;
+    font-size: 17px;
+    text-decoration: none;
+  }
+
+  &__checkout.is_disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  &__empty {
+    padding: 44px 12px;
+    text-align: center;
+  }
+
+  &__empty p {
+    margin: 0 0 24px;
+  }
+
+  &__empty a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 0 28px;
+    border-radius: 5px;
+    background: $main;
+    text-decoration: none;
+  }
+}
+
+.cart_product {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) 52px;
+  min-height: 120px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid $theme_line;
+
+  > img {
+    width: 82px;
+    height: 98px;
+    object-fit: contain;
+  }
+
+  &__details h2,
+  &__details p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+  }
+
+  &__details p {
+    font-family: "Noto Sans JP", sans-serif;
+  }
+
+  &__controls {
+    display: grid;
+    gap: 10px;
+    justify-items: end;
+  }
+
+  &__remove {
+    padding: 2px;
+    border: 0;
+    background: transparent;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  &__quantity {
+    display: grid;
+    grid-template-columns: 20px 22px 20px;
+    height: 24px;
+    overflow: hidden;
+    border: 1px solid #5968a8;
+    border-radius: 4px;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 13px;
+  }
+
+  &__quantity button,
+  &__quantity span {
+    display: grid;
+    padding: 0;
+    border: 0;
+    place-items: center;
+    background: $white;
+    line-height: 1;
+  }
+
+  &__quantity button:first-child {
+    border-right: 1px solid #5968a8;
+  }
+
+  &__quantity button:last-child {
+    border-left: 1px solid #5968a8;
+  }
+
+  &__quantity button {
+    cursor: pointer;
+  }
+}
+
+// Payment method page
+.payment_page {
+  padding-bottom: 0;
+  color: $text;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+
+  &__header_title {
+    position: absolute;
+    left: 70px;
+    margin: 0;
+    font-size: 18px;
+    line-height: 26px;
+  }
+}
+
+.payment_form {
+  min-height: calc(100vh - 215px);
+  padding: 28px 0 70px;
+  background: $white;
+
+  h1 {
+    margin: 0;
+    padding: 0 34px 22px;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 26px;
+  }
+
+  &__submit {
+    display: flex;
+    width: calc(100% - 68px);
+    min-height: 64px;
+    align-items: center;
+    justify-content: center;
+    margin: 132px auto 0;
+    padding: 8px 20px;
+    border: 0;
+    border-radius: 6px;
+    color: $text;
+    background: $main;
+    font-family: inherit;
+    font-size: 17px;
+    cursor: pointer;
+  }
+
+  .form_notice {
+    padding: 16px 30px 0;
+    font-size: 12px;
+  }
+}
+
+.payment_method {
+  border-bottom: 1px solid $theme_line;
+
+  &__choice,
+  .payment_subchoice {
+    display: flex;
+    min-height: 46px;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 44px;
+    cursor: pointer;
+  }
+
+  &__choice > input,
+  .payment_subchoice > input,
+  .convenience_list input {
+    width: 22px;
+    height: 22px;
+    flex: none;
+    margin: 0;
+    accent-color: #ff2938;
+  }
+
+  &__choice > span {
+    font-size: 17px;
+    line-height: 25px;
+  }
+
+  &__choice > small {
+    margin-left: auto;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 11px;
+    line-height: 17px;
+    white-space: nowrap;
+  }
+
+  &__panel {
+    padding: 10px 82px 20px;
+    border-top: 1px solid $theme_line;
+    background: $sub;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  &__panel > p {
+    margin: 8px 0;
+  }
+
+  &__fee {
+    font-weight: 700;
+  }
+
+  &__deadline {
+    text-align: center;
+  }
+}
+
+.payment_subchoice {
+  margin: 0 -38px;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+
+  span {
+    display: grid;
+    font-size: 15px;
+    line-height: 21px;
+  }
+
+  small {
+    font-size: 11px;
+    line-height: 16px;
+  }
+}
+
+.payment_card_fields {
+  display: grid;
+  gap: 12px;
+  padding: 8px 0 18px;
+
+  > label {
+    display: grid;
+    gap: 5px;
+    font-size: 11px;
+    line-height: 17px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    height: 28px;
+    padding: 2px 8px;
+    border: 0;
+    border-radius: 0;
+    background: $white;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 12px;
+  }
+
+  input[name="saved_security_code"],
+  input[name="security_code"] {
+    width: 99px;
+  }
+}
+
+.payment_card_heading {
+  margin: 2px 0 8px !important;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.payment_expiry {
+  display: grid;
+  grid-template-columns: 76px auto 76px auto;
+  gap: 7px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  legend {
+    margin-bottom: 5px;
+    padding: 0;
+    font-size: 11px;
+    line-height: 17px;
+  }
+}
+
+.payment_register_card {
+  display: flex !important;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 9px !important;
+  margin-top: 6px;
+
+  input {
+    width: 20px;
+    height: 20px;
+    accent-color: #5968a8;
+  }
+}
+
+.payment_balance_button {
+  min-height: 28px;
+  padding: 3px 10px;
+  border: 0;
+  background: $white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.convenience_list {
+  margin: 0 -82px;
+  padding: 0;
+  border: 0;
+
+  legend {
+    width: 100%;
+    padding: 8px 82px;
+    font-size: 12px;
+  }
+
+  label {
+    display: flex;
+    min-height: 46px;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 44px;
+    border-top: 1px solid $theme_line;
+    font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+  }
+}
+
+// Order confirmation and completion
+.order_page {
+  padding-bottom: 0;
+  color: $text;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+
+  &__header_title {
+    position: absolute;
+    left: 70px;
+    margin: 0;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  &__primary {
+    display: flex;
+    width: 100%;
+    min-height: 64px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 42px;
+    padding: 8px 20px;
+    border: 0;
+    border-radius: 6px;
+    color: $text;
+    background: $main;
+    font-family: inherit;
+    font-size: 17px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+.order_confirm,
+.order_complete {
+  min-height: calc(100vh - 215px);
+  padding: 28px 34px 70px;
+  background: $white;
+
+  h1 {
+    margin: 0 0 8px;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 26px;
+  }
+}
+
+.order_confirm__details,
+.order_complete__summary {
+  margin: 0;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 12px;
+  line-height: 19px;
+
+  div {
+    display: flex;
+  }
+
+  dt,
+  dd {
+    margin: 0;
+  }
+}
+
+.order_product {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 8px;
+  min-height: 120px;
+  margin-top: 24px;
+  padding: 10px 0;
+  border-top: 1px solid $theme_line;
+  border-bottom: 1px solid $theme_line;
+
+  img {
+    width: 82px;
+    height: 98px;
+    object-fit: contain;
+  }
+
+  h2,
+  p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+  }
+
+  p,
+  > span {
+    font-family: "Noto Sans JP", sans-serif;
+  }
+
+  > span {
+    justify-self: end;
+    font-size: 13px;
+  }
+}
+
+.order_totals {
+  margin: 62px 0 0;
+  padding: 22px 0 0;
+  border-top: 1px solid #cfd1da;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 13px;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+  }
+
+  dt,
+  dd {
+    margin: 0;
+  }
+
+  &__grand {
+    margin-top: 12px;
+    padding-top: 18px !important;
+    border-top: 1px solid #cfd1da;
+    font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+    font-size: 18px;
+  }
+
+  &__grand dd {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+}
+
+.order_complete {
+  h1 {
+    margin-bottom: 18px;
+  }
+
+  &__thanks {
+    margin: 0 0 38px;
+    padding: 20px 12px;
+    border-radius: 6px;
+    background: $sub;
+    font-size: 17px;
+    line-height: 25px;
+    text-align: center;
+  }
+
+  &__message {
+    margin: 52px 0 0;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+.rental_history__list {
+  display: grid;
+  gap: 16px;
+}
+
+.rental_history_item {
+  padding: 16px;
+  border-radius: 8px;
+  background: $white;
+
+  &__status,
+  &__period {
+    margin: 0;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  &__status {
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+
+  &__product {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid $theme_line;
+  }
+
+  &__product img {
+    width: 72px;
+    height: 86px;
+    object-fit: contain;
+  }
+
+  h2,
+  &__product p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+  }
+
+  &__product p {
+    font-family: "Noto Sans JP", sans-serif;
+  }
+}
+
 .product_detail_page {
   background: $white;
 }
@@ -2280,7 +3121,7 @@ h3,
 .product_detail__price {
   margin-bottom: 14px;
   padding-bottom: 14px;
-  border-bottom: 1px solid #efdaf2;
+  border-bottom: 1px solid $theme_line;
   font-size: 14px;
   line-height: 1.5;
 
@@ -2303,7 +3144,7 @@ h3,
   grid-template-columns: 1fr;
   gap: 4px;
   padding: 10px 0;
-  border-bottom: 1px solid #efdaf2;
+  border-bottom: 1px solid $theme_line;
 }
 
 .product_detail__info dt {
@@ -2461,17 +3302,70 @@ h3,
 }
 
 .product_detail_page .rental_calendar__frame {
-  display: grid;
-  height: 341px;
-  padding: 0;
-  place-items: center;
-  background: #ddd;
+  min-height: 320px;
+  padding: 20px 16px 16px;
+  border-radius: 8px;
+  background: #f5f7ff;
 }
 
-.product_detail_page .rental_calendar__frame span {
-  color: #000;
+.rental_calendar__controls {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  margin-bottom: 14px;
+
+  button {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    place-items: center;
+    color: #46589a;
+    background: $white;
+    font-family: sans-serif;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  button:last-child {
+    justify-self: end;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
+
+  .rental_calendar__month {
+    margin: 0;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+  }
+}
+
+.product_detail_page .rental_calendar__weekdays {
   font-family: "Noto Sans JP", sans-serif;
-  font-size: 64px;
-  font-weight: 400;
-  line-height: 1;
+  font-size: 12px;
+  line-height: 28px;
+}
+
+.product_detail_page .rental_calendar__day,
+.product_detail_page .rental_calendar__blank {
+  min-height: 36px;
+  aspect-ratio: auto;
+}
+
+.product_detail_page .rental_calendar__day {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 13px;
+}
+
+.product_detail__cart_button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
