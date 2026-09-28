@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>おしりーすについて</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+
+  <body class="mobile_app">
+    <main class="app_shell about_page">
+      <header class="app_header">
+        <a
+          class="app_header__icon"
+          href="#"
+          aria-label="設定"
+          data-nav-icon
+          data-pages="settings.html"
+        >
+          <img
+            src="assets/images/setting-icon--outline.png"
+            data-outline="assets/images/setting-icon--outline.png"
+            data-filled="assets/images/setting-icon--filled.png"
+            alt=""
+          />
+        </a>
+
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+
+        <div class="app_header__actions">
+          <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+      <div class="about_content">
+        <section class="about_intro">
+          <h1 class="about_intro__title">こんな悩み、ありませんか？</h1>
+
+          <div class="about_problem about_problem--right">
+            <div class="about_problem__bubble">
+              友達に誘われて、初めて行くグループのライブ。
+              <br />
+              楽しみだけど、ペンライトを持ってないんだよね
+              <br />
+              「ライブのためだけに買うのはなぁ……」
+            </div>
+            <img src="assets/images/about-01.png" alt="" class="about_problem__image" />
+          </div>
+
+          <!-- 悩み02 -->
+          <div class="about_problem about_problem--left">
+            <img src="assets/images/about-02.png" alt="" class="about_problem__image" />
+            <div class="about_problem__bubble">
+              推し活グッズを買ってみたものの、、
+              <br />
+              家に置いておくスペースがないなぁ、、、
+            </div>
+          </div>
+
+          <!-- 悩み03 -->
+          <div class="about_problem about_problem--right">
+            <div class="about_problem__bubble">
+              初めてのライブたのしみだけど、、、
+              <br />
+              何を準備したらいいの！！
+            </div>
+            <img src="assets/images/about-03.png" alt="" class="about_problem__image" />
+          </div>
+        </section>
+
+        <!-- --------------------------------
+          02 : ライブって
+        --------------------------------- -->
+        <section class="about_feeling">
+          <!-- 飾りハート -->
+          <span class="about_feeling__decor about_feeling__decor--heart-pink-1" aria-hidden="true">
+            ♥
+          </span>
+          <span class="about_feeling__decor about_feeling__decor--heart-blue-1" aria-hidden="true">
+            ♥
+          </span>
+          <span class="about_feeling__decor about_feeling__decor--heart-pink-2" aria-hidden="true">
+            ♥
+          </span>
+          <span class="about_feeling__decor about_feeling__decor--heart-blue-2" aria-hidden="true">
+            ♥
+          </span>
+
+          <!-- 飾りうちわ -->
+          <img
+            src="assets/images/utiwa.png"
+            alt=""
+            class="about_feeling__uchiwa"
+            aria-hidden="true"
+          />
+
+          <!-- 中央の円 -->
+          <div class="about_feeling__circle">
+            <p>
+              ライブって、
+              <br />
+              <br />
+              楽しみな気持ちと一緒に、
+              <br />
+              <br />
+              ちょっとした
+              <br />
+              <br />
+              不安もありますよね。
+            </p>
+          </div>
+
+          <!-- 飾りうちわ -->
+          <img
+            src="assets/images/utiwa.png"
+            alt=""
+            class="about_feeling__uchiwa"
+            aria-hidden="true"
+          />
+
+          <!-- 円右下のハート -->
+          <span class="about_feeling__decor about_feeling__decor--heart-pink-3" aria-hidden="true">
+            ♥
+          </span>
+          <span class="about_feeling__decor about_feeling__decor--heart-blue-3" aria-hidden="true">
+            ♥
+          </span>
+          <span class="about_feeling__decor about_feeling__decor--heart-blue-4" aria-hidden="true">
+            ♥
+          </span>
+          <span class="about_feeling__decor about_feeling__decor--heart-pink-4" aria-hidden="true">
+            ♥
+          </span>
+        </section>
+
+        <!-- --------------------------------
+          03 : 解決策・思い
+        --------------------------------- -->
+        <section class="about_solution">
+          <div class="about_solution__top">
+            <img src="assets/images/about-04.png" alt="" class="about_solution__image" />
+
+            <div class="about_solution__bubble">
+              必要なものを必要なときだけ借りられたら、
+              <br />
+              もっと気軽にライブを楽しめるんじゃないか！！
+            </div>
+          </div>
+
+          <p class="about_solution__text">
+            そんな思いから、
+            <br />
+            このレンタルサービスをはじめました!!
+          </p>
+        </section>
+
+        <section class="about_oshi">
+          <h2 class="about_oshi__title">いつもの推し活も、</h2>
+
+          <div class="about_oshi__main_image_wrap">
+            <img
+              src="assets/images/about-05.png"
+              alt="ライブで盛り上がる人々"
+              class="about_oshi__main_image"
+            />
+          </div>
+
+          <div class="about_oshi__feature about_oshi__feature--worry">
+            <img src="assets/images/about-06.png" alt="" class="about_oshi__feature_image" />
+            <p class="about_oshi__feature_text">
+              初めてで
+              <br />
+              不安なライブも
+            </p>
+          </div>
+
+          <div class="about_oshi__feature about_oshi__feature--enjoy">
+            <img src="assets/images/about-07.png" alt="" class="about_oshi__feature_image" />
+            <p class="about_oshi__feature_text">
+              準備の不安はぜんぶ預けて、
+              <br />
+              思いっきり楽しみませんか？
+            </p>
+          </div>
+        </section>
+
+        <!-- --------------------------------
+          05 : エンディングメッセージ & ロゴ
+        --------------------------------- -->
+        <section class="about_end">
+          <p class="about_end__text">
+            楽しい推し活ライフに！！
+            <br />
+            あなたのそばに
+          </p>
+          <img src="assets/images/logo.png" alt="おしりーす" class="about_end__logo" />
+        </section>
+      </div>
+
+      <!-- =========================
+        フッター
+      ========================== -->
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="#">お店について</a>
+          <a href="#">使い方ガイド</a>
+          <a href="#">利用規約</a>
+          <a href="#">個人情報保護方針</a>
+        </nav>
+
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+
+      <!-- =========================
+        下部ナビ
+      ========================== -->
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html">
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>
