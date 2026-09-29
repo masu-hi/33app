@@ -206,7 +206,7 @@ h3,
 }
 
 .section__heading p,
-.page__heading > p {
+.page__heading>p {
   margin: 0 0 4px;
   color: #7d6b8a;
   font-size: 12px;
@@ -277,7 +277,7 @@ h3,
   background: $sub;
 }
 
-.steps > * {
+.steps>* {
   max-width: 1120px;
   margin-right: auto;
   margin-left: auto;
@@ -361,7 +361,7 @@ h3,
   font-size: 20px;
 }
 
-.filter_panel > label,
+.filter_panel>label,
 .filter_panel fieldset {
   display: grid;
   gap: 8px;
@@ -826,7 +826,7 @@ h3,
   margin: 0 0 8px;
 }
 
-.cart_item > strong {
+.cart_item>strong {
   grid-column: 2;
   justify-self: end;
 }
@@ -871,7 +871,7 @@ h3,
   gap: 24px;
 }
 
-.form_panel > section {
+.form_panel>section {
   padding: 24px;
   border: 1px solid $line;
   border-radius: 8px;
@@ -888,7 +888,7 @@ h3,
 }
 
 .form_grid label,
-.auth form > label {
+.auth form>label {
   display: grid;
   gap: 6px;
   font-weight: 700;
@@ -942,7 +942,7 @@ h3,
   box-shadow: 0 12px 40px rgba($text, 0.08);
 }
 
-.auth__panel > p:first-child {
+.auth__panel>p:first-child {
   margin: 0;
   color: #7d6b8a;
   font-size: 12px;
@@ -1077,7 +1077,7 @@ h3,
     width: 120px;
   }
 
-  .cart_item > strong {
+  .cart_item>strong {
     grid-column: auto;
   }
 
@@ -1159,12 +1159,12 @@ h3,
     border-bottom: 1px solid $text;
   }
 
-  form label + label {
+  form label+label {
     margin-top: 50px;
   }
 
   label,
-  .account_form > label {
+  .account_form>label {
     display: grid;
     gap: 10px;
   }
@@ -1178,7 +1178,7 @@ h3,
     background: $main;
   }
 
-  > .auth_secondary {
+  >.auth_secondary {
     margin-top: 50px;
   }
 }
@@ -1224,7 +1224,7 @@ h3,
   gap: 49px;
   padding: 68px 52px 100px;
 
-  > label {
+  >label {
     display: grid;
     gap: 10px;
   }
@@ -1483,6 +1483,7 @@ h3,
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .app_auth.is_leaving,
   .mobile_app.is_arriving {
     animation-duration: 1ms;
@@ -1889,7 +1890,7 @@ h3,
   height: 42px;
   border: 2px solid var(--choice-color);
   border-radius: 21px;
-  color: var(--choice-color);
+  color: $text;
   background: $white;
   box-shadow: 0 2px 0 var(--choice-color);
   font: inherit;
@@ -1904,39 +1905,39 @@ h3,
 
   &.is_selected {
     background: var(--choice-color);
-    color: $white;
+    color: $text;
   }
 
   &--red {
-    --choice-color: #fa797d;
+    --choice-color: #f6cbd3;
   }
 
   &--blue {
-    --choice-color: #7ca6f2;
+    --choice-color: #bfd2f5;
   }
 
   &--pink {
-    --choice-color: #ee74e6;
+    --choice-color: #f6ecf8;
   }
 
   &--aqua {
-    --choice-color: #68d8e7;
+    --choice-color: #c5ebf2;
   }
 
   &--orange {
-    --choice-color: #f0a06f;
+    --choice-color: #ffd8bd;
   }
 
   &--purple {
-    --choice-color: #c273ed;
+    --choice-color: #dcc9f1;
   }
 
   &--yellow {
-    --choice-color: #e7de5d;
+    --choice-color: #fff0b8;
   }
 
   &--green {
-    --choice-color: #65dc7c;
+    --choice-color: #c9eccf;
   }
 
   &--white {
@@ -1954,7 +1955,7 @@ h3,
 
 .usage_guide {
   padding: 31px 30px 64px;
-  color: #4f6097;
+  color: #222;
   font-size: 13px;
   line-height: 18px;
 
@@ -1976,39 +1977,9 @@ h3,
     text-align: center;
   }
 
-  &__rental h2 button {
-    border: 0;
+  &__rental h2 {
     color: #222;
-    background: transparent;
-    font: inherit;
     font-size: 17px;
-    cursor: pointer;
-  }
-
-  &__toggle_icon {
-    display: inline-grid;
-    width: 20px;
-    height: 20px;
-    margin-left: 8px;
-    place-items: center;
-    border-radius: 50%;
-    color: #7f6ba7;
-    background: #f2eafb;
-    transition: transform 180ms ease;
-  }
-
-  &__toggle_icon svg {
-    width: 13px;
-    height: 13px;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 2;
-  }
-
-  &__rental h2 button[aria-expanded="true"] .usage_guide__toggle_icon {
-    transform: rotate(180deg);
   }
 
   &__steps {
@@ -2109,11 +2080,11 @@ h3,
     content: "・";
   }
 
-  &__section p + ul {
+  &__section p+ul {
     margin-top: 4px;
   }
 
-  &__section ul + p {
+  &__section ul+p {
     margin-top: 12px;
   }
 }
@@ -2124,14 +2095,14 @@ h3,
 
 .privacy_policy {
   padding: 28px 30px 65px;
-  color: #7180b1;
+  color: #222;
   font-family: $body;
   font-size: 9px;
   line-height: 1.35;
 
   h1,
   h2 {
-    color: #6878ad;
+    color: #222;
     font-family: "M PLUS Rounded 1c", sans-serif;
     font-weight: 500;
   }
@@ -2148,7 +2119,7 @@ h3,
     font-size: 11px;
   }
 
-  > p {
+  >p {
     margin: 0;
   }
 
@@ -2441,7 +2412,7 @@ h3,
     text-align: center;
   }
 
-  > p {
+  >p {
     margin: 27px 0 24px;
     font-size: 13px;
   }
@@ -2571,6 +2542,12 @@ h3,
     margin: 0;
   }
 
+  .search_choice__visual--penlight img {
+    width: 56px;
+    height: 70px;
+    object-fit: contain;
+  }
+
   h1,
   p {
     margin: 0;
@@ -2649,12 +2626,14 @@ h3,
 }
 
 @for $item from 1 through 8 {
-  $column: ($item - 1) % 4;
-  $row: math.floor(math.div($item - 1, 4));
+  $column: (
+    $item - 1) % 4;
+  $row: math.floor(math.div($item - 1, 4)
+  );
 
-  .artist_avatar--#{$item} {
-    background-position: $column * 33.333% $row * 100%;
-  }
+.artist_avatar--#{$item} {
+  background-position: $column * 33.333% $row * 100%;
+}
 }
 
 .goods_content {
@@ -2691,8 +2670,17 @@ h3,
     object-fit: contain;
   }
 
+  &__penlight_image img {
+    width: 56px;
+    height: 70px;
+  }
+
   b {
     font-weight: 500;
+  }
+
+  &__set {
+    grid-column: 1 / -1;
   }
 }
 
@@ -2792,6 +2780,50 @@ h3,
   }
 }
 
+.binocular_filter {
+  margin-top: 8px;
+
+  h2 {
+    margin: 0 0 4px 2px;
+    color: $text;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  &__options {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  &__options::-webkit-scrollbar {
+    display: none;
+  }
+
+  button {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 3px 11px;
+    border: 1px solid $theme_line;
+    border-radius: 17px;
+    color: $text;
+    background: $soft;
+    font-family: inherit;
+    font-size: 18px;
+    line-height: 26px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  button[aria-pressed="true"] {
+    background: #fff;
+  }
+}
+
 .result_list {
   padding: 0 30px 20px;
 }
@@ -2815,7 +2847,7 @@ h3,
     text-decoration: none;
   }
 
-  &__link > img {
+  &__link>img {
     width: 78px;
     height: 92px;
     object-fit: contain;
@@ -2878,7 +2910,7 @@ h3,
   transform: translateX(-50%);
   background: $main;
 
-  > button,
+  >button,
   &__back {
     display: grid;
     width: 34px;
@@ -2891,7 +2923,7 @@ h3,
     cursor: pointer;
   }
 
-  > button img,
+  >button img,
   &__back img {
     width: 20px;
     height: 20px;
@@ -2965,7 +2997,7 @@ h3,
     line-height: 23px;
   }
 
-  &__heading > span {
+  &__heading>span {
     font-family: sans-serif;
     font-size: 32px;
     font-weight: 200;
@@ -2979,14 +3011,14 @@ h3,
     text-align: center;
   }
 
-  &__statuses > span {
+  &__statuses>span {
     position: relative;
     display: grid;
     gap: 4px;
     justify-items: center;
   }
 
-  &__statuses > span:not(:last-child)::after {
+  &__statuses>span:not(:last-child)::after {
     position: absolute;
     right: -3px;
     bottom: 0;
@@ -3247,7 +3279,7 @@ h3,
     line-height: 26px;
   }
 
-  &__total > div {
+  &__total>div {
     display: grid;
     gap: 4px;
   }
@@ -3312,7 +3344,7 @@ h3,
   padding: 10px 0;
   border-bottom: 1px solid $theme_line;
 
-  > img {
+  >img {
     width: 82px;
     height: 98px;
     object-fit: contain;
@@ -3443,8 +3475,8 @@ h3,
     cursor: pointer;
   }
 
-  &__choice > input,
-  .payment_subchoice > input,
+  &__choice>input,
+  .payment_subchoice>input,
   .convenience_list input {
     width: 22px;
     height: 22px;
@@ -3453,12 +3485,12 @@ h3,
     accent-color: #ff2938;
   }
 
-  &__choice > span {
+  &__choice>span {
     font-size: 17px;
     line-height: 25px;
   }
 
-  &__choice > small {
+  &__choice>small {
     margin-left: auto;
     font-family: "Noto Sans JP", sans-serif;
     font-size: 11px;
@@ -3475,7 +3507,7 @@ h3,
     line-height: 20px;
   }
 
-  &__panel > p {
+  &__panel>p {
     margin: 8px 0;
   }
 
@@ -3510,7 +3542,7 @@ h3,
   gap: 12px;
   padding: 8px 0 18px;
 
-  > label {
+  >label {
     display: grid;
     gap: 5px;
     font-size: 11px;
@@ -3697,11 +3729,11 @@ h3,
   }
 
   p,
-  > span {
+  >span {
     font-family: "Noto Sans JP", sans-serif;
   }
 
-  > span {
+  >span {
     justify-self: end;
     font-size: 13px;
   }
@@ -4261,58 +4293,57 @@ h3,
     line-height: 1;
 
     &--heart-pink-1 {
-      top: 36px;
-      left: 78px;
+      top: 126px;
+      left: 67px;
       color: #f6cbe5;
       font-size: 18px;
       transform: rotate(-12deg);
     }
 
     &--heart-blue-1 {
-      top: 62px;
-      left: 30px;
+      top: 150px;
+      left: 40px;
       color: #cae3fc;
-      font-size: 26px;
-      transform: rotate(15deg);
+      font-size: 20px;
     }
 
     &--heart-pink-2 {
-      top: 100px;
+      top: 195px;
       left: 65px;
       color: #f9d8ec;
       font-size: 16px;
     }
 
     &--heart-blue-2 {
-      top: 72px;
-      left: 118px;
+      top: 160px;
+      left: 95px;
       color: #d4e8fc;
       font-size: 22px;
     }
 
     &--heart-pink-3 {
-      bottom: 95px;
+      bottom: 145px;
       right: 75px;
       color: #f9d8ec;
       font-size: 18px;
     }
 
     &--heart-blue-3 {
-      bottom: 50px;
+      bottom: 100px;
       right: 45px;
       color: #cae3fc;
       font-size: 24px;
     }
 
     &--heart-blue-4 {
-      bottom: 120px;
+      bottom: 170px;
       right: 50px;
       color: #d8ebfd;
       font-size: 20px;
     }
 
     &--heart-pink-4 {
-      bottom: 80px;
+      bottom: 130px;
       right: 18px;
       color: #f6cbe5;
       font-size: 16px;
@@ -4330,7 +4361,7 @@ h3,
 }
 
 .about_solution {
-  padding: 40px 24px 50px;
+  padding: 0 24px 50px;
 
   &__top {
     display: flex;
@@ -4388,7 +4419,7 @@ h3,
   }
 
   &__main_image_wrap {
-    margin-bottom: 45px;
+    margin-bottom: 150px;
     text-align: center;
   }
 
@@ -4402,7 +4433,7 @@ h3,
     display: flex;
     align-items: center;
     gap: 20px;
-    margin-bottom: 45px;
+    margin-bottom: 150px;
 
     &--worry {
       justify-content: center;
@@ -4438,7 +4469,7 @@ h3,
 }
 
 .about_end {
-  padding: 40px 24px 60px;
+  padding: 0 24px 60px;
   text-align: center;
 
   &__text {

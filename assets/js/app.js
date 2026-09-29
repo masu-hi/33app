@@ -76,7 +76,7 @@ if (sessionStorage.getItem("loginTransition") === "true") {
 const mainColors = {
   赤: "#f6cbd3",
   青: "#bfd2f5",
-  ピンク: "#f4c9db",
+  ピンク: "#f6ecf8",
   紫: "#dcc9f1",
   緑: "#c9eccf",
   黄色: "#fff0b8",
@@ -179,16 +179,6 @@ favoriteColorButtons.forEach((button) => {
     localStorage.setItem("favoriteColor", favoriteColor);
     applyFavoriteColor(favoriteColor);
     updateFavoriteColorButtons(favoriteColor);
-  });
-});
-
-document.querySelectorAll("[data-guide-toggle]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const content = document.getElementById(button.getAttribute("aria-controls"));
-    const isExpanded = button.getAttribute("aria-expanded") === "true";
-
-    button.setAttribute("aria-expanded", String(!isExpanded));
-    content.hidden = isExpanded;
   });
 });
 
@@ -371,6 +361,35 @@ if (resultsPage) {
   document.title = `${searchTerm}の検索結果 | おしりーす`;
   resultsInput.placeholder = `${searchTerm}から検索`;
 
+  const binocularFilter = document.querySelector("[data-binocular-filter]");
+
+  if (category === "binoculars" || searchTerm === "双眼鏡") {
+    binocularFilter.hidden = false;
+    const selectedFilters = new Set();
+    const filterOptions = [...document.querySelectorAll("[data-binocular-filter-option]")];
+
+    const renderFilterOptions = () => {
+      filterOptions.forEach((option) => {
+        const filter = option.dataset.binocularFilterOption;
+        const isSelected = selectedFilters.has(filter);
+        option.setAttribute("aria-pressed", String(isSelected));
+        option.textContent = `${filter}${isSelected ? "−" : "＋"}`;
+        option.setAttribute(
+          "aria-label",
+          isSelected ? `${filter}の絞り込みを取り消す` : `${filter}で絞り込む`,
+        );
+      });
+    };
+
+    filterOptions.forEach((option) => {
+      option.addEventListener("click", () => {
+        const filter = option.dataset.binocularFilterOption;
+        selectedFilters.has(filter) ? selectedFilters.delete(filter) : selectedFilters.add(filter);
+        renderFilterOptions();
+      });
+    });
+  }
+
   document.querySelectorAll("[data-product-name]").forEach((name, index) => {
     const variants = [
       "シンプルタイプ",
@@ -382,6 +401,22 @@ if (resultsPage) {
     ];
     name.textContent = `${itemName}（${variants[index]}）`;
   });
+
+  if (["fan", "binoculars", "bag"].includes(category)) {
+    const categoryImages = {
+      fan: "assets/images/fan_hero.png",
+      binoculars: "assets/images/binoculars_hero.png",
+      bag: "assets/images/bag_hero.png",
+    };
+
+    document.querySelectorAll(".result_item__link").forEach((link) => {
+      link.href = `product_detail.html?category=${category}`;
+    });
+    document.querySelectorAll(".result_item__link > img").forEach((image) => {
+      image.src = categoryImages[category];
+      image.alt = `${categoryNames[category]}の商品画像`;
+    });
+  }
 
   document.querySelectorAll("[data-sort]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -410,6 +445,52 @@ const updateCartCount = (count) => {
 };
 
 updateCartCount(savedCartCount);
+
+const productDetail = document.querySelector("[data-product-detail]");
+
+if (productDetail) {
+  const category = new URLSearchParams(window.location.search).get("category");
+  const productDetails = {
+    fan: {
+      name: "ファンサうちわ",
+      price: "¥2,400 / 3日〜",
+      description:
+        "ライブでのファンサにぴったりなうちわです。大きく見やすい文字と、ステージからも見つけてもらいやすいデザインです。初めての方でも気軽に使える、ライブ観戦におすすめのうちわです。",
+      image: "assets/images/fan_hero.png",
+      favoriteId: "fan-uchiwa",
+    },
+    binoculars: {
+      name: "双眼鏡（8倍）",
+      price: "¥2,400 / 3日〜",
+      description:
+        "ライブやコンサートで遠くの推しをしっかり見られる双眼鏡です。コンパクトで持ち運びやすく、ステージ上の表情やパフォーマンスも楽しめます。推し活やライブ観戦におすすめです。",
+      image: "assets/images/binoculars_hero.png",
+      favoriteId: "binoculars-8x",
+    },
+    bag: {
+      name: "推し活バッグ",
+      price: "¥2,400 / 3日〜",
+      description:
+        "推し活にぴったりな、可愛らしく使いやすいバッグです。収納力があり、ライブやイベントに必要なものをまとめて持ち運べます。推しカラーで楽しめるバッグです。",
+      image: "assets/images/bag_hero.png",
+      favoriteId: "oshi-bag",
+    },
+  };
+  const product = productDetails[category];
+
+  if (product) {
+    document.title = `${product.name} | おしりーす`;
+    productDetail.querySelector("[data-product-detail-name]").textContent = product.name;
+    productDetail.querySelector("[data-product-detail-price]").textContent = product.price;
+    productDetail.querySelector("[data-product-detail-description]").textContent =
+      product.description;
+    productDetail.querySelector("[data-favorite-id]").dataset.favoriteId = product.favoriteId;
+    document.querySelectorAll("[data-product-gallery-image]").forEach((image) => {
+      image.src = product.image;
+      image.alt = product.name;
+    });
+  }
+}
 
 const productGallery = document.querySelector("[data-product-gallery]");
 
