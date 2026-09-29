@@ -23,6 +23,7 @@
       startDate: entry.startDate || "",
       endDate: entry.endDate || "",
       selectedOptions: entry.selectedOptions || {},
+      notify: entry.notify !== false,
       createdAt: entry.createdAt || new Date().toISOString(),
     };
     const entries = getEntries();
@@ -53,9 +54,24 @@
 
   const products = window.PRODUCTS || {};
   const overrides = JSON.parse(localStorage.getItem("productOverrides") || "{}");
+  const isDemoPreview = new URLSearchParams(window.location.search).get("demo") === "1";
+
+  const getDemoEntries = () =>
+    Object.keys(products)
+      .slice(0, 3)
+      .map((productId, index) => ({
+        productId,
+        startDate: `2026-10-${String(10 + index * 4).padStart(2, "0")}`,
+        endDate: `2026-10-${String(13 + index * 4).padStart(2, "0")}`,
+        selectedOptions: {
+          option: products[productId]?.options?.[0]?.values?.[0] || "",
+        },
+        isDemo: true,
+      }));
 
   const render = () => {
-    const entries = getEntries();
+    const savedEntries = getEntries();
+    const entries = savedEntries.length || !isDemoPreview ? savedEntries : getDemoEntries();
     list.replaceChildren();
     empty.hidden = entries.length > 0;
 
@@ -85,11 +101,15 @@
       options.textContent = selectedLabels.length ? selectedLabels.join(" / ") : "";
       options.hidden = selectedLabels.length === 0;
       removeButton.type = "button";
-      removeButton.textContent = "削除";
-      removeButton.addEventListener("click", () => {
-        remove(index);
-        render();
-      });
+      removeButton.textContent = entry.isDemo ? "プレビュー" : "削除";
+      removeButton.disabled = entry.isDemo;
+
+      if (!entry.isDemo) {
+        removeButton.addEventListener("click", () => {
+          remove(index);
+          render();
+        });
+      }
 
       details.append(name, period, options);
       link.append(image, details);

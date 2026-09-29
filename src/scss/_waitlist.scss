@@ -80,6 +80,11 @@
   cursor: pointer;
 }
 
+.waitlist_item > button:disabled {
+  color: #858aa0;
+  cursor: default;
+}
+
 .waitlist_page__empty {
   margin: 16px 30px 0;
   padding: 40px 20px;

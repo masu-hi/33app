@@ -577,6 +577,8 @@ if (rentalCalendar) {
   const lastMonth = new Date(today.getFullYear(), today.getMonth() + 5, 1);
   let visibleMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   let selectedDateKey = "";
+  const productParams = new URLSearchParams(window.location.search);
+  const currentProductId = productParams.get("id") || productParams.get("category") || "penlight";
 
   today.setHours(0, 0, 0, 0);
 
@@ -592,7 +594,7 @@ if (rentalCalendar) {
     return `${date.getMonth() + 1}月${date.getDate()}日(${weekdays[date.getDay()]})`;
   };
 
-  const bookedDateKeys = new Set(
+  const demoBookedDateKeys = new Set(
     [4, 9, 16].map((daysLater) => {
       const date = new Date(today);
       date.setDate(date.getDate() + daysLater);
@@ -600,8 +602,35 @@ if (rentalCalendar) {
     }),
   );
 
-  const isUnavailable = (date) =>
-    date < today || date.getDay() === 0 || bookedDateKeys.has(toDateKey(date));
+  const bookedDateKeys = new Set(demoBookedDateKeys);
+  const rentalOrders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+
+  rentalOrders
+    .filter((order) => {
+      const orderProductId = order.productId || "penlight";
+      return orderProductId === currentProductId && order.status !== "キャンセル";
+    })
+    .forEach((order) => {
+      if (!order.arrivalDate || !order.returnDate) return;
+      const currentDate = new Date(`${order.arrivalDate}T00:00:00`);
+      const returnDate = new Date(`${order.returnDate}T00:00:00`);
+
+      while (currentDate <= returnDate) {
+        bookedDateKeys.add(toDateKey(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    });
+
+  const overlapsBookedPeriod = (arrivalDate) => {
+    for (let dayOffset = 0; dayOffset < 4; dayOffset += 1) {
+      const rentalDate = new Date(arrivalDate);
+      rentalDate.setDate(rentalDate.getDate() + dayOffset);
+      if (bookedDateKeys.has(toDateKey(rentalDate))) return true;
+    }
+    return false;
+  };
+
+  const isUnavailable = (date) => date < today || date.getDay() === 0 || overlapsBookedPeriod(date);
 
   const renderCalendar = () => {
     const year = visibleMonth.getFullYear();
@@ -652,7 +681,10 @@ if (rentalCalendar) {
           returnDate: toDateKey(returnDate),
           nights: 3,
           days: 4,
-          product: "ペンライト（シンプルタイプ）",
+          productId: currentProductId,
+          product:
+            document.querySelector("[data-product-detail-name]")?.textContent.trim() ||
+            "ペンライト（シンプルタイプ）",
         };
         selectedPeriod.textContent = `${formatDate(date)}～${formatDate(returnDate)}　3泊4日`;
         cartButton.disabled = false;
@@ -997,8 +1029,21 @@ const formatStoredDate = (dateKey) => {
   return `${year}年${month}月${day}日`;
 };
 
+const createOrderId = () => {
+  const now = new Date();
+  const date = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("");
+  const serial = String(now.getTime()).slice(-6);
+  return `OSR-${date}-${serial}`;
+};
+
 const getOrderDraft = () => {
   const registration = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
+  const accountProfile = getActiveAccount()?.profile || {};
+  const customer = { ...registration, ...accountProfile };
   const reservation = JSON.parse(localStorage.getItem("pendingReservation") || "{}");
   const quantity = Math.max(1, Number(localStorage.getItem("cartCount") || 0));
   const payment = localStorage.getItem("selectedPaymentMethod") || "credit";
@@ -1006,9 +1051,16 @@ const getOrderDraft = () => {
   const subtotal = 800 * quantity;
   const shipping = 440;
 
+  let orderId = localStorage.getItem("pendingOrderId");
+  if (!orderId) {
+    orderId = createOrderId();
+    localStorage.setItem("pendingOrderId", orderId);
+  }
+
   return {
-    id: `order-${Date.now()}`,
-    product: "ペンライト（シンプルタイプ）",
+    id: orderId,
+    productId: reservation.productId || "penlight",
+    product: reservation.product || "ペンライト（シンプルタイプ）",
     quantity,
     subtotal,
     shipping,
@@ -1016,6 +1068,11 @@ const getOrderDraft = () => {
     total: subtotal + shipping + paymentFee,
     payment,
     paymentName: paymentNames[payment],
+    customer: {
+      name: customer.name || "未登録",
+      email: customer.email || activeAccountEmail || "未登録",
+      phone: customer.phone || customer.tel || "未登録",
+    },
     arrivalDate: reservation.arrivalDate || "",
     returnDate: reservation.returnDate || "",
     period:
@@ -1024,12 +1081,12 @@ const getOrderDraft = () => {
         : "3泊4日",
     address:
       [
-        registration.postal_first && registration.postal_last
-          ? `〒${registration.postal_first}-${registration.postal_last}`
+        customer.postal_first && customer.postal_last
+          ? `〒${customer.postal_first}-${customer.postal_last}`
           : "",
-        registration.prefecture,
-        registration.address,
-        registration.building,
+        customer.prefecture,
+        customer.address,
+        customer.building,
       ]
         .filter(Boolean)
         .join(" ") || "登録済みのお届け先",
@@ -1040,6 +1097,7 @@ const orderConfirmPage = document.querySelector("[data-order-confirm]");
 
 if (orderConfirmPage) {
   const draft = getOrderDraft();
+  document.querySelector("[data-order-id]").textContent = draft.id;
   document.querySelector("[data-order-address]").textContent = draft.address;
   document.querySelector("[data-order-period]").textContent = draft.period;
   document.querySelector("[data-order-payment]").textContent = draft.paymentName;
@@ -1066,6 +1124,7 @@ if (orderConfirmPage) {
     localStorage.setItem("latestOrder", JSON.stringify(order));
     localStorage.setItem("cartCount", "0");
     localStorage.removeItem("pendingReservation");
+    localStorage.removeItem("pendingOrderId");
     window.location.href = "order_complete.html";
   });
 }
@@ -1074,6 +1133,7 @@ const orderCompletePage = document.querySelector("[data-order-complete]");
 
 if (orderCompletePage) {
   const order = JSON.parse(localStorage.getItem("latestOrder") || "null") || getOrderDraft();
+  document.querySelector("[data-complete-id]").textContent = order.id;
   document.querySelector("[data-complete-date]").textContent = order.placedDate || "本日";
   document.querySelector("[data-complete-period]").textContent = order.period;
   document.querySelector("[data-complete-payment]").textContent = order.paymentName;
@@ -1092,6 +1152,7 @@ if (rentalHistoryPage) {
 
   orders.forEach((order) => {
     const article = document.createElement("article");
+    const orderId = document.createElement("p");
     const status = document.createElement("p");
     const period = document.createElement("p");
     const product = document.createElement("div");
@@ -1101,10 +1162,12 @@ if (rentalHistoryPage) {
     const price = document.createElement("p");
 
     article.className = "rental_history_item";
+    orderId.className = "rental_history_item__order_id";
     status.className = "rental_history_item__status";
     period.className = "rental_history_item__period";
     product.className = "rental_history_item__product";
     status.textContent = order.status;
+    orderId.textContent = `注文番号：${order.id}`;
     period.textContent = `レンタル期間：${order.period}`;
     image.src = "assets/images/penlight.png";
     image.alt = "";
@@ -1112,7 +1175,7 @@ if (rentalHistoryPage) {
     price.textContent = `合計 ¥${order.total.toLocaleString("ja-JP")}`;
     details.append(name, price);
     product.append(image, details);
-    article.append(status, period, product);
+    article.append(orderId, status, period, product);
     list.append(article);
   });
 }
