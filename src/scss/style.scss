@@ -1,4 +1,6 @@
 @use "sass:math";
+@use "admin";
+@use "waitlist";
 
 $main: var(--color-main, #f6ecf8);
 $soft: var(--color-soft, #fdf6ff);

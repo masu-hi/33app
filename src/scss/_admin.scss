@@ -1,0 +1,255 @@
+.admin_page {
+  min-height: 100vh;
+  margin: 0;
+  color: #252a3d;
+  background: #f5f6f8;
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.admin_header {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px clamp(20px, 5vw, 64px);
+  border-bottom: 1px solid #dfe2e8;
+  background: #fff;
+}
+
+.admin_header p,
+.admin_header h1 {
+  margin: 0;
+}
+
+.admin_header p {
+  color: #68708a;
+  font-size: 12px;
+}
+
+.admin_header h1 {
+  font-size: 21px;
+}
+
+.admin_header a {
+  color: #405795;
+  font-size: 14px;
+}
+
+.admin_main {
+  width: min(1180px, calc(100% - 40px));
+  margin: 32px auto 80px;
+}
+
+.admin_summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin_summary div {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid #e1e4eb;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.admin_summary span {
+  color: #697087;
+  font-size: 13px;
+}
+
+.admin_summary strong {
+  font-size: 28px;
+}
+
+.admin_products {
+  margin-top: 24px;
+  border: 1px solid #e1e4eb;
+  background: #fff;
+}
+
+.admin_products__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px;
+  border-bottom: 1px solid #e1e4eb;
+}
+
+.admin_products__heading h2,
+.admin_products__heading p {
+  margin: 0;
+}
+
+.admin_products__heading h2 {
+  font-size: 18px;
+}
+
+.admin_products__heading p {
+  margin-top: 4px;
+  color: #697087;
+  font-size: 12px;
+}
+
+.admin_products__heading input {
+  width: min(280px, 100%);
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid #cfd4df;
+  border-radius: 4px;
+}
+
+.admin_product {
+  display: grid;
+  grid-template-columns: minmax(190px, 1fr) 110px 90px 110px 64px;
+  align-items: center;
+  gap: 16px;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eceef2;
+  font-size: 14px;
+}
+
+.admin_product > div {
+  display: grid;
+}
+
+.admin_product small {
+  color: #757d92;
+}
+
+.admin_product .is_public,
+.admin_product .is_available {
+  color: #176b45;
+}
+
+.admin_product .is_private,
+.admin_product .is_unavailable {
+  color: #a23d48;
+}
+
+.admin_product button,
+.admin_editor button {
+  min-height: 36px;
+  border: 1px solid #aeb6c7;
+  border-radius: 4px;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.admin_empty {
+  margin: 0;
+  padding: 56px 20px;
+  color: #697087;
+  text-align: center;
+}
+
+.admin_editor {
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  display: grid;
+  padding: 24px;
+  place-items: center;
+  background: rgb(31 35 49 / 45%);
+}
+
+.admin_editor[hidden] {
+  display: none;
+}
+
+.admin_editor form {
+  display: grid;
+  width: min(460px, 100%);
+  gap: 16px;
+  padding: 24px;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.admin_editor__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin_editor__heading h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.admin_editor__heading button {
+  width: 36px;
+  padding: 0;
+  border: 0;
+  font-size: 22px;
+}
+
+.admin_editor label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.admin_editor input,
+.admin_editor select {
+  min-height: 42px;
+  padding: 0 10px;
+  border: 1px solid #cfd4df;
+  border-radius: 4px;
+  background: #fff;
+  font: inherit;
+}
+
+.admin_editor__price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin_editor__price input {
+  flex: 1;
+}
+
+.admin_editor__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.admin_editor__actions button {
+  padding: 0 16px;
+}
+
+.admin_editor__actions button:last-child {
+  border-color: #405795;
+  color: #fff;
+  background: #405795;
+}
+
+@media (max-width: 720px) {
+  .admin_summary {
+    grid-template-columns: 1fr;
+  }
+
+  .admin_products__heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin_products__heading input {
+    width: 100%;
+  }
+
+  .admin_product {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin_product > div,
+  .admin_product button {
+    grid-column: 1 / -1;
+  }
+}
