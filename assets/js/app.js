@@ -40,16 +40,16 @@ if (sessionStorage.getItem("loginTransition") === "true") {
   document.body.classList.add("is_arriving");
 }
 const mainColors = {
-  赤: "#f9e2e7",
-  青: "#ecf1fb",
-  ピンク: "#f6ecf8",
-  紫: "#f3ecfa",
-  緑: "#ecf7f0",
-  黄色: "#fff9e8",
-  オレンジ: "#fff1e6",
-  水色: "#eaf7fb",
+  赤: "#f6cbd3",
+  青: "#bfd2f5",
+  ピンク: "#f4c9db",
+  紫: "#dcc9f1",
+  緑: "#c9eccf",
+  黄色: "#fff0b8",
+  オレンジ: "#ffd8bd",
+  水色: "#c5ebf2",
   白: "#f7f7f7",
-  黒: "#ececf0",
+  黒: "#404148",
 };
 const softColors = {
   赤: "#fff6f7",
@@ -88,6 +88,15 @@ const lineColors = {
   黒: "#d2d3dc",
 };
 
+const applyFavoriteColor = (color) => {
+  if (!mainColors[color]) return;
+
+  document.documentElement.style.setProperty("--color-main", mainColors[color]);
+  document.documentElement.style.setProperty("--color-soft", softColors[color]);
+  document.documentElement.style.setProperty("--color-gradient-end", gradientEndColors[color]);
+  document.documentElement.classList.toggle("is-dark-favorite", color === "黒");
+};
+
 if (!favoriteColor) {
   const registrationData = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
   favoriteColor = registrationData.favorite_color;
@@ -96,6 +105,7 @@ if (!favoriteColor) {
     localStorage.setItem("favoriteColor", favoriteColor);
   }
 }
+
 
 if (favoriteColor && mainColors[favoriteColor]) {
   document.documentElement.style.setProperty("--color-main", mainColors[favoriteColor]);
@@ -106,6 +116,39 @@ if (favoriteColor && mainColors[favoriteColor]) {
   );
   document.documentElement.style.setProperty("--color-line", lineColors[favoriteColor]);
 }
+
+applyFavoriteColor(favoriteColor);
+
+const favoriteColorButtons = document.querySelectorAll("[data-favorite-color]");
+
+const updateFavoriteColorButtons = (color) => {
+  favoriteColorButtons.forEach((button) => {
+    const isSelected = button.dataset.favoriteColor === color;
+    button.classList.toggle("is_selected", isSelected);
+    button.setAttribute("aria-pressed", String(isSelected));
+  });
+};
+
+updateFavoriteColorButtons(favoriteColor);
+
+favoriteColorButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    favoriteColor = button.dataset.favoriteColor;
+    localStorage.setItem("favoriteColor", favoriteColor);
+    applyFavoriteColor(favoriteColor);
+    updateFavoriteColorButtons(favoriteColor);
+  });
+});
+
+document.querySelectorAll("[data-guide-toggle]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const content = document.getElementById(button.getAttribute("aria-controls"));
+    const isExpanded = button.getAttribute("aria-expanded") === "true";
+
+    button.setAttribute("aria-expanded", String(!isExpanded));
+    content.hidden = isExpanded;
+  });
+});
 
 const currentPage = window.location.pathname.split("/").pop() || "home.html";
 
@@ -137,6 +180,105 @@ if (accountNameElement) {
     localStorage.setItem("accountName", registrationData.name);
   }
 }
+
+const memberInfo = document.querySelector("[data-member-info]");
+
+if (memberInfo) {
+  let profile = JSON.parse(
+    localStorage.getItem("memberProfile") || sessionStorage.getItem("registrationData") || "{}",
+  );
+  const memberList = memberInfo.querySelector(".member_info__list");
+  const editButton = memberInfo.querySelector("[data-member-edit]");
+  const editForm = memberInfo.querySelector("[data-member-edit-form]");
+  const memberIntro = memberInfo.querySelector("[data-member-intro]");
+
+  const renderMemberInfo = () => {
+    const memberValues = {
+      ...profile,
+      birthday: profile.birth_year
+        ? `${profile.birth_year}年${profile.birth_month}月${profile.birth_day}日`
+        : "未登録",
+      postal: profile.postal_first ? `${profile.postal_first}-${profile.postal_last}` : "未登録",
+      address: [profile.prefecture, profile.address].filter(Boolean).join(" "),
+      building: profile.building || "なし",
+    };
+
+    memberInfo.querySelectorAll("[data-member-value]").forEach((element) => {
+      element.textContent = memberValues[element.dataset.memberValue] || "未登録";
+    });
+  };
+
+  const showEditForm = () => {
+    Object.entries(profile).forEach(([name, value]) => {
+      const field = editForm.elements.namedItem(name);
+      if (field) field.value = value;
+    });
+    memberList.hidden = true;
+    editButton.hidden = true;
+    editForm.hidden = false;
+    memberIntro.textContent = "登録されている会員情報を変更できます。";
+  };
+
+  renderMemberInfo();
+
+  editButton.addEventListener("click", showEditForm);
+  memberInfo.querySelector("[data-member-edit-cancel]").addEventListener("click", () => {
+    editForm.hidden = true;
+    memberList.hidden = false;
+    editButton.hidden = false;
+    memberIntro.textContent = "登録されている会員情報を確認できます。";
+  });
+  editForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const profileChanges = Object.fromEntries(new FormData(editForm).entries());
+    const registeredAccount = JSON.parse(localStorage.getItem("registeredAccount") || "{}");
+
+    profile = { ...profile, ...profileChanges };
+    localStorage.setItem("memberProfile", JSON.stringify(profile));
+    localStorage.setItem("accountName", profile.name);
+    localStorage.setItem("favoriteColor", profile.favorite_color);
+    localStorage.setItem(
+      "registeredAccount",
+      JSON.stringify({
+        ...registeredAccount,
+        name: profile.name,
+        email: profile.email.toLowerCase(),
+      }),
+    );
+    applyFavoriteColor(profile.favorite_color);
+    renderMemberInfo();
+    editForm.hidden = true;
+    memberList.hidden = false;
+    editButton.hidden = false;
+    memberIntro.textContent = "登録されている会員情報を確認できます。";
+  });
+}
+
+const passwordSettingForm = document.querySelector("[data-password-setting-form]");
+
+passwordSettingForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const values = Object.fromEntries(new FormData(passwordSettingForm).entries());
+  const status = passwordSettingForm.querySelector("[data-password-setting-status]");
+  const registeredAccount = JSON.parse(localStorage.getItem("registeredAccount") || "{}");
+
+  if (registeredAccount.password && registeredAccount.password !== values.current_password) {
+    status.textContent = "現在のパスワードが正しくありません。";
+    return;
+  }
+
+  if (values.new_password !== values.new_password_confirm) {
+    status.textContent = "新しいパスワードと確認用パスワードが一致していません。";
+    return;
+  }
+
+  localStorage.setItem(
+    "registeredAccount",
+    JSON.stringify({ ...registeredAccount, password: values.new_password }),
+  );
+  passwordSettingForm.reset();
+  status.textContent = "パスワードを変更しました。";
+});
 
 document.querySelector("[data-history-back]")?.addEventListener("click", () => {
   if (window.history.length > 1) {

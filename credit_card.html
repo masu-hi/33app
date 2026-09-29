@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>クレジットカードの登録・追加 | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell credit_card_page">
+      <header class="app_header">
+        <a
+          class="app_header__icon"
+          href="#"
+          aria-label="設定"
+          data-nav-icon
+          data-pages="settings.html"
+        >
+          <img
+            src="assets/images/setting-icon--outline.png"
+            data-outline="assets/images/setting-icon--outline.png"
+            data-filled="assets/images/setting-icon--filled.png"
+            alt=""
+          />
+        </a>
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+
+      <section class="credit_card" aria-labelledby="credit-card-title">
+        <h1 id="credit-card-title">クレジットカードの登録・追加</h1>
+        <p class="credit_card__intro">お支払いに使用するクレジットカードを登録できます。</p>
+        <form class="credit_card__form">
+          <label>
+            カード番号
+            <input
+              name="card_number"
+              type="text"
+              inputmode="numeric"
+              autocomplete="cc-number"
+              placeholder="1234 5678 9012 3456"
+              maxlength="19"
+              required
+            />
+          </label>
+          <div class="credit_card__form_row">
+            <label>
+              有効期限
+              <span class="credit_card__expiry_inputs">
+                <input
+                  name="expiry_month"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="cc-exp-month"
+                  placeholder="MM"
+                  maxlength="2"
+                  required
+                />
+                <b>/</b>
+                <input
+                  name="expiry_year"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="cc-exp-year"
+                  placeholder="YY"
+                  maxlength="2"
+                  required
+                />
+              </span>
+            </label>
+            <label>
+              セキュリティコード
+              <input
+                name="security_code"
+                type="text"
+                inputmode="numeric"
+                autocomplete="cc-csc"
+                placeholder="123"
+                maxlength="4"
+                required
+              />
+            </label>
+          </div>
+          <label>
+            カード名義
+            <input
+              name="card_holder"
+              type="text"
+              autocomplete="cc-name"
+              placeholder="TAROU YAMADA"
+              required
+            />
+          </label>
+          <p class="credit_card__note">※カードに記載されているローマ字で入力してください。</p>
+          <button class="credit_card__submit" type="submit">このカードを登録する</button>
+        </form>
+        <p class="credit_card__security">🔒 お客様のカード情報は暗号化して安全に送信されます。</p>
+      </section>
+
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="#">お店について</a>
+          <a href="usage_guide.html">使い方ガイド</a>
+          <a href="#">利用規約</a>
+          <a href="privacy_policy.html">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a
+          href="mypage.html"
+          data-nav-icon
+          data-pages="mypage.html,rental_history.html,member_info.html"
+        >
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>

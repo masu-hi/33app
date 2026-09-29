@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使い方ガイド | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell usage_guide_page">
+      <header class="app_header">
+        <a
+          class="app_header__icon"
+          href="#"
+          aria-label="設定"
+          data-nav-icon
+          data-pages="settings.html"
+        >
+          <img
+            src="assets/images/setting-icon--outline.png"
+            data-outline="assets/images/setting-icon--outline.png"
+            data-filled="assets/images/setting-icon--filled.png"
+            alt=""
+          />
+        </a>
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+
+      <section class="usage_guide" aria-labelledby="usage-guide-title">
+        <h1 id="usage-guide-title">使い方ガイド</h1>
+        <section class="usage_guide__rental">
+          <h2>
+            <button
+              type="button"
+              aria-expanded="false"
+              aria-controls="rental-steps"
+              data-guide-toggle
+            >
+              借り方
+              <span class="usage_guide__toggle_icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" focusable="false">
+                  <path d="m4 6 4 4 4-4" />
+                </svg>
+              </span>
+            </button>
+          </h2>
+          <ol id="rental-steps" class="usage_guide__steps" hidden>
+            <li>
+              <h3>1. 商品を選ぶ</h3>
+              <div class="usage_guide__step_content">
+                <div class="usage_guide__mock usage_guide__mock--search" aria-hidden="true">
+                  <span>おしりーす</span>
+                  <b>⌕</b>
+                </div>
+                <p>
+                  アーティスト、汎用品、ライブ会場など
+                  <br />
+                  絞り込みをして検索
+                </p>
+              </div>
+            </li>
+            <li>
+              <h3>2. 期間を選ぶ</h3>
+              <div class="usage_guide__step_content">
+                <div class="usage_guide__mock usage_guide__mock--calendar" aria-hidden="true">
+                  <span>レンタル可能日</span>
+                  <b>カレンダー</b>
+                </div>
+                <p>
+                  商品を選択後、商品ページにてレンタル
+                  <br />
+                  期間を指定し、カートに追加
+                </p>
+              </div>
+            </li>
+            <li>
+              <h3>3. 決済方法を選択</h3>
+              <div class="usage_guide__step_content">
+                <div class="usage_guide__mock usage_guide__mock--payment" aria-hidden="true">
+                  <span>＜ 戻る</span>
+                  <b>お支払い方法</b>
+                </div>
+                <p>決済方法を選んで決済をし注文完了</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section class="usage_guide__section">
+          <h2>返品の仕方</h2>
+          <p>
+            届けられた箱に入れ、中に入っている着払い伝票を貼って
+            <br />
+            レンタル終了日の24時までに郵便局かコンビニで発送する
+          </p>
+        </section>
+        <section class="usage_guide__section">
+          <h2>キャンセル払い戻し</h2>
+          <p>利用者都合によるキャンセル料は、次のとおりとします。</p>
+          <ul>
+            <li>利用日の7日前まで：無料</li>
+            <li>利用日の6日前から3日前まで：レンタル料金の50%</li>
+            <li>利用日の2日前以降または無断キャンセル：レンタル料金の100%</li>
+          </ul>
+          <p>
+            ・発送後にキャンセルする場合、発送済みの送料および返送料は、利用者の負担となります。
+            <br />
+            ・実際のキャンセル料が当社に通常生じる損害を超える場合は、法令に従って取り扱います。
+          </p>
+        </section>
+        <section class="usage_guide__section">
+          <h2>盗難・破損</h2>
+          <ul>
+            <li>初期不良 全額返金国内旅行の場合代替品配送</li>
+            <li>使用において問題のない傷はお咎めなし</li>
+            <li>料理や煙草ができるくらい　2000円上限</li>
+            <li>修理不能　全額負担</li>
+            <li>盗難・紛失　全額負担</li>
+            <li>返却商品の汚れ、水濡れ　別途清掃料金請求</li>
+          </ul>
+        </section>
+      </section>
+
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="#">お店について</a>
+          <a href="usage_guide.html" aria-current="page">使い方ガイド</a>
+          <a href="#">利用規約</a>
+          <a href="#">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+    </main>
+  </body>
+</html>

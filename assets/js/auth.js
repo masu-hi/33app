@@ -131,6 +131,7 @@ registerForm?.addEventListener("submit", (event) => {
     JSON.stringify({
       name: values.name,
       email: values.email.toLowerCase(),
+      password: values.password,
     }),
   );
   window.location.href = "register_confirm.html";
@@ -157,6 +158,13 @@ if (confirmContent) {
   });
 }
 
+document.querySelector("[data-registration-submit]")?.addEventListener("click", () => {
+  const values = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
+  const { password, password_confirm, ...memberProfile } = values;
+
+  localStorage.setItem("memberProfile", JSON.stringify(memberProfile));
+});
+
 if (document.querySelector("[data-registration-complete]")) {
   const values = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
 
@@ -174,6 +182,7 @@ if (document.querySelector("[data-registration-complete]")) {
       JSON.stringify({
         name: values.name,
         email: values.email.toLowerCase(),
+        password: values.password,
       }),
     );
   }
