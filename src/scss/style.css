@@ -165,8 +165,10 @@ h3,
   width: 100%;
   height: 100%;
   max-height: 480px;
-  object-fit: cover;
-  object-position: center;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
 }
 
 .section,
@@ -224,7 +226,8 @@ h3,
 .product_card img {
   width: 100%;
   aspect-ratio: 1;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .product_card__body {
@@ -1156,6 +1159,7 @@ h3,
   background: var(--color-main, #f6ecf8);
 }
 .account_form select {
+  width: -moz-fit-content;
   width: fit-content;
   max-width: 100%;
   font-size: 14px;
@@ -1437,7 +1441,8 @@ h3,
 .app_header__icon img, .app_header__actions img {
   width: 26px;
   height: 26px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .search_choices {
@@ -1478,7 +1483,8 @@ h3,
 .search_choice__visual img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .search_choice__visual--artist {
   border: 1px solid #e2e4ed;
@@ -1580,7 +1586,8 @@ h3,
   width: 30px;
   height: 30px;
   margin-bottom: 2px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .bottom_nav .is_current {
   font-weight: 700;
@@ -1754,7 +1761,8 @@ h3,
 .goods_grid img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .goods_grid b {
   font-weight: 500;
@@ -1865,7 +1873,8 @@ h3,
 .result_item__link > img {
   width: 78px;
   height: 92px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .result_item h2,
 .result_item p {
@@ -1929,7 +1938,8 @@ h3,
 .mypage_header > button img, .mypage_header__back img {
   width: 26px;
   height: 26px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .mypage_header__actions {
   display: flex;
@@ -1944,7 +1954,8 @@ h3,
 .mypage_header__actions img {
   width: 26px;
   height: 26px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .mypage_name {
@@ -2060,7 +2071,8 @@ h3,
   width: 44px;
   height: 44px;
   margin-bottom: 4px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .rental_history {
@@ -2280,7 +2292,8 @@ h3,
   width: 100%;
   height: 100%;
   max-width: none;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   transform: scale(1);
 }
 
@@ -2365,7 +2378,8 @@ h3,
 .about_problem__image {
   width: 110px;
   flex-shrink: 0;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_problem__bubble {
   position: relative;
@@ -2414,7 +2428,8 @@ h3,
   width: 28px;
   height: 28px;
   margin-bottom: 2px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .about_feeling {
@@ -2448,7 +2463,8 @@ h3,
   position: absolute;
   width: 26px;
   height: auto;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_feeling__penlight--1 {
   top: 24px;
@@ -2522,7 +2538,8 @@ h3,
   left: 28px;
   width: 65px;
   height: auto;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .about_solution {
@@ -2537,7 +2554,8 @@ h3,
 .about_solution__image {
   width: 120px;
   flex-shrink: 0;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_solution__bubble {
   position: relative;
@@ -2584,7 +2602,8 @@ h3,
 .about_oshi__main_image {
   width: 92%;
   margin: 0 auto;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_oshi__feature {
   display: flex;
@@ -2600,7 +2619,8 @@ h3,
   text-align: center;
 }
 .about_oshi__feature_image {
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_oshi__feature--worry .about_oshi__feature_image {
   width: 120px;
@@ -2633,4 +2653,4 @@ h3,
 .about_end__logo {
   width: 140px;
   margin: 0 auto;
-}
+}/*# sourceMappingURL=style.css.map */
