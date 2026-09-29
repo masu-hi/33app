@@ -1890,7 +1890,7 @@ h3,
   height: 42px;
   border: 2px solid var(--choice-color);
   border-radius: 21px;
-  color: var(--choice-color);
+  color: $text;
   background: $white;
   box-shadow: 0 2px 0 var(--choice-color);
   font: inherit;
@@ -1905,39 +1905,39 @@ h3,
 
   &.is_selected {
     background: var(--choice-color);
-    color: $white;
+    color: $text;
   }
 
   &--red {
-    --choice-color: #fa797d;
+    --choice-color: #f6cbd3;
   }
 
   &--blue {
-    --choice-color: #7ca6f2;
+    --choice-color: #bfd2f5;
   }
 
   &--pink {
-    --choice-color: #ee74e6;
+    --choice-color: #f6ecf8;
   }
 
   &--aqua {
-    --choice-color: #68d8e7;
+    --choice-color: #c5ebf2;
   }
 
   &--orange {
-    --choice-color: #f0a06f;
+    --choice-color: #ffd8bd;
   }
 
   &--purple {
-    --choice-color: #c273ed;
+    --choice-color: #dcc9f1;
   }
 
   &--yellow {
-    --choice-color: #e7de5d;
+    --choice-color: #fff0b8;
   }
 
   &--green {
-    --choice-color: #65dc7c;
+    --choice-color: #c9eccf;
   }
 
   &--white {
@@ -1955,7 +1955,7 @@ h3,
 
 .usage_guide {
   padding: 31px 30px 64px;
-  color: #4f6097;
+  color: #222;
   font-size: 13px;
   line-height: 18px;
 
@@ -1977,39 +1977,9 @@ h3,
     text-align: center;
   }
 
-  &__rental h2 button {
-    border: 0;
+  &__rental h2 {
     color: #222;
-    background: transparent;
-    font: inherit;
     font-size: 17px;
-    cursor: pointer;
-  }
-
-  &__toggle_icon {
-    display: inline-grid;
-    width: 20px;
-    height: 20px;
-    margin-left: 8px;
-    place-items: center;
-    border-radius: 50%;
-    color: #7f6ba7;
-    background: #f2eafb;
-    transition: transform 180ms ease;
-  }
-
-  &__toggle_icon svg {
-    width: 13px;
-    height: 13px;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 2;
-  }
-
-  &__rental h2 button[aria-expanded="true"] .usage_guide__toggle_icon {
-    transform: rotate(180deg);
   }
 
   &__steps {
@@ -2125,14 +2095,14 @@ h3,
 
 .privacy_policy {
   padding: 28px 30px 65px;
-  color: #7180b1;
+  color: #222;
   font-family: $body;
   font-size: 9px;
   line-height: 1.35;
 
   h1,
   h2 {
-    color: #6878ad;
+    color: #222;
     font-family: "M PLUS Rounded 1c", sans-serif;
     font-weight: 500;
   }
@@ -2572,6 +2542,12 @@ h3,
     margin: 0;
   }
 
+  .search_choice__visual--penlight img {
+    width: 56px;
+    height: 70px;
+    object-fit: contain;
+  }
+
   h1,
   p {
     margin: 0;
@@ -2694,8 +2670,17 @@ h3,
     object-fit: contain;
   }
 
+  &__penlight_image img {
+    width: 56px;
+    height: 70px;
+  }
+
   b {
     font-weight: 500;
+  }
+
+  &__set {
+    grid-column: 1 / -1;
   }
 }
 
@@ -2792,6 +2777,50 @@ h3,
   .is_selected {
     border-color: $theme_line;
     background: $main;
+  }
+}
+
+.binocular_filter {
+  margin-top: 8px;
+
+  h2 {
+    margin: 0 0 4px 2px;
+    color: $text;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  &__options {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  &__options::-webkit-scrollbar {
+    display: none;
+  }
+
+  button {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 3px 11px;
+    border: 1px solid $theme_line;
+    border-radius: 17px;
+    color: $text;
+    background: $soft;
+    font-family: inherit;
+    font-size: 18px;
+    line-height: 26px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  button[aria-pressed="true"] {
+    background: #fff;
   }
 }
 

@@ -60,7 +60,7 @@
         </div>
       </section>
 
-      <section class="product_detail" aria-label="商品詳細">
+      <section class="product_detail" aria-label="商品詳細" data-product-detail>
         <div class="product_detail__media" aria-label="商品画像ギャラリー">
           <div
             class="product_detail__gallery"
@@ -70,22 +70,39 @@
             aria-label="商品画像。左右にスワイプ、または左右の矢印キーで切り替え"
           >
             <div class="product_detail__gallery_slide">
-              <img src="assets/images/penlight.png" alt="LEDコンサートライトの全体" />
+              <img
+                src="assets/images/penlight.png"
+                alt="LEDコンサートライトの全体"
+                data-product-gallery-image
+              />
             </div>
             <div class="product_detail__gallery_slide product_detail__gallery_slide--colors">
               <img
                 src="assets/images/penlight.png"
                 alt="LEDコンサートライトのカラーバリエーション"
+                data-product-gallery-image
               />
             </div>
             <div class="product_detail__gallery_slide product_detail__gallery_slide--body">
-              <img src="assets/images/penlight.png" alt="LEDコンサートライトの本体部分" />
+              <img
+                src="assets/images/penlight.png"
+                alt="LEDコンサートライトの本体部分"
+                data-product-gallery-image
+              />
             </div>
             <div class="product_detail__gallery_slide product_detail__gallery_slide--features">
-              <img src="assets/images/penlight.png" alt="LEDコンサートライトの機能" />
+              <img
+                src="assets/images/penlight.png"
+                alt="LEDコンサートライトの機能"
+                data-product-gallery-image
+              />
             </div>
             <div class="product_detail__gallery_slide product_detail__gallery_slide--strap">
-              <img src="assets/images/penlight.png" alt="LEDコンサートライトのストラップ" />
+              <img
+                src="assets/images/penlight.png"
+                alt="LEDコンサートライトのストラップ"
+                data-product-gallery-image
+              />
             </div>
           </div>
           <button
@@ -122,8 +139,8 @@
               ♡
             </button>
           </div>
-          <h2>ペンライト（シンプルタイプ）</h2>
-          <p class="product_detail__price">¥800 / 3泊4日〜</p>
+          <h2 data-product-detail-name>ペンライト（シンプルタイプ）</h2>
+          <p class="product_detail__price" data-product-detail-price>¥800 / 3泊4日〜</p>
           <p class="product_detail__fee_note">
             ※別途、一律送料440円（税込）がかかります。
             <br />
@@ -133,7 +150,7 @@
             <span aria-label="評価4.5、5点満点">★ 4.5</span>
             <button type="button" data-show-reviews>レビューを見る</button>
           </div>
-          <p class="product_detail__description">
+          <p class="product_detail__description" data-product-detail-description>
             シンプルで使いやすい定番のペンライトです。どんな場面でも使いやすい汎用タイプなので、初めての方でも使いやすいペンライトです。
           </p>
         </div>
