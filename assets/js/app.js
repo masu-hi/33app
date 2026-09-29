@@ -12,7 +12,41 @@ document
 
 const cartCountElements = document.querySelectorAll("[data-cart-count]");
 const savedCartCount = Number(localStorage.getItem("cartCount") || 0);
-let favoriteColor = localStorage.getItem("favoriteColor");
+const normalizeEmail = (email) =>
+  String(email || "")
+    .trim()
+    .toLowerCase();
+const getAccounts = () => JSON.parse(localStorage.getItem("accounts") || "{}");
+const legacyAccount = JSON.parse(localStorage.getItem("registeredAccount") || "{}");
+const activeAccountEmail = normalizeEmail(
+  sessionStorage.getItem("activeAccountEmail") ||
+    (sessionStorage.getItem("isLoggedIn") === "true" ? legacyAccount.email : ""),
+);
+
+if (activeAccountEmail && !getAccounts()[activeAccountEmail]) {
+  const accounts = getAccounts();
+  const legacyProfile = JSON.parse(localStorage.getItem("memberProfile") || "{}");
+  accounts[activeAccountEmail] = {
+    password: legacyAccount.password || "",
+    profile: {
+      ...legacyProfile,
+      name: legacyAccount.name || legacyProfile.name,
+      email: activeAccountEmail,
+    },
+  };
+  localStorage.setItem("accounts", JSON.stringify(accounts));
+  sessionStorage.setItem("activeAccountEmail", activeAccountEmail);
+}
+
+const getActiveAccount = () => getAccounts()[activeAccountEmail] || null;
+const saveActiveAccount = (account) => {
+  if (!activeAccountEmail) return;
+  const accounts = getAccounts();
+  accounts[activeAccountEmail] = account;
+  localStorage.setItem("accounts", JSON.stringify(accounts));
+};
+let favoriteColor =
+  getActiveAccount()?.profile?.favorite_color || localStorage.getItem("favoriteColor");
 
 const showToast = (message) => {
   let toast = document.querySelector("[data-toast]");
@@ -106,7 +140,6 @@ if (!favoriteColor) {
   }
 }
 
-
 if (favoriteColor && mainColors[favoriteColor]) {
   document.documentElement.style.setProperty("--color-main", mainColors[favoriteColor]);
   document.documentElement.style.setProperty("--color-soft", softColors[favoriteColor]);
@@ -134,6 +167,15 @@ updateFavoriteColorButtons(favoriteColor);
 favoriteColorButtons.forEach((button) => {
   button.addEventListener("click", () => {
     favoriteColor = button.dataset.favoriteColor;
+    const activeAccount = getActiveAccount();
+
+    if (activeAccount) {
+      saveActiveAccount({
+        ...activeAccount,
+        profile: { ...activeAccount.profile, favorite_color: favoriteColor },
+      });
+    }
+
     localStorage.setItem("favoriteColor", favoriteColor);
     applyFavoriteColor(favoriteColor);
     updateFavoriteColorButtons(favoriteColor);
@@ -168,25 +210,14 @@ document.querySelectorAll("[data-nav-icon]").forEach((link) => {
 const accountNameElement = document.querySelector("[data-account-name]");
 
 if (accountNameElement) {
-  const registrationData = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
-  const accountName =
-    sessionStorage.getItem("loggedInName") ||
-    localStorage.getItem("accountName") ||
-    registrationData.name ||
-    "ゲスト";
+  const accountName = getActiveAccount()?.profile?.name || "ゲスト";
   accountNameElement.textContent = accountName;
-
-  if (!localStorage.getItem("accountName") && registrationData.name) {
-    localStorage.setItem("accountName", registrationData.name);
-  }
 }
 
 const memberInfo = document.querySelector("[data-member-info]");
 
 if (memberInfo) {
-  let profile = JSON.parse(
-    localStorage.getItem("memberProfile") || sessionStorage.getItem("registrationData") || "{}",
-  );
+  let profile = getActiveAccount()?.profile || {};
   const memberList = memberInfo.querySelector(".member_info__list");
   const editButton = memberInfo.querySelector("[data-member-edit]");
   const editForm = memberInfo.querySelector("[data-member-edit-form]");
@@ -231,9 +262,11 @@ if (memberInfo) {
   editForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const profileChanges = Object.fromEntries(new FormData(editForm).entries());
-    const registeredAccount = JSON.parse(localStorage.getItem("registeredAccount") || "{}");
+    const activeAccount = getActiveAccount();
 
     profile = { ...profile, ...profileChanges };
+    profile.email = activeAccountEmail;
+    saveActiveAccount({ ...activeAccount, profile });
     localStorage.setItem("memberProfile", JSON.stringify(profile));
     localStorage.setItem("accountName", profile.name);
     localStorage.setItem("favoriteColor", profile.favorite_color);
@@ -260,9 +293,9 @@ passwordSettingForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const values = Object.fromEntries(new FormData(passwordSettingForm).entries());
   const status = passwordSettingForm.querySelector("[data-password-setting-status]");
-  const registeredAccount = JSON.parse(localStorage.getItem("registeredAccount") || "{}");
+  const activeAccount = getActiveAccount();
 
-  if (registeredAccount.password && registeredAccount.password !== values.current_password) {
+  if (!activeAccount || activeAccount.password !== values.current_password) {
     status.textContent = "現在のパスワードが正しくありません。";
     return;
   }
@@ -272,10 +305,7 @@ passwordSettingForm?.addEventListener("submit", (event) => {
     return;
   }
 
-  localStorage.setItem(
-    "registeredAccount",
-    JSON.stringify({ ...registeredAccount, password: values.new_password }),
-  );
+  saveActiveAccount({ ...activeAccount, password: values.new_password });
   passwordSettingForm.reset();
   status.textContent = "パスワードを変更しました。";
 });

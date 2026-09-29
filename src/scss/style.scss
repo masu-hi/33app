@@ -1475,12 +1475,10 @@ h3,
 @keyframes page_fade_in {
   from {
     opacity: 0;
-    transform: translateY(6px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -1804,7 +1802,7 @@ h3,
 
 .app_footer {
   min-height: 120px;
-  padding: 36px 30px 24px;
+  padding: 36px 30px 104px;
   color: $text;
   background: $main;
   font-size: 10px;

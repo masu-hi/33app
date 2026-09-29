@@ -7,6 +7,23 @@ const formError = document.querySelector("[data-form-error]");
 const prefectureSelect = document.querySelector("[data-prefecture]");
 const addressSearchButton = document.querySelector("[data-address-search]");
 const postalStatus = document.querySelector("[data-postal-status]");
+const normalizeEmail = (email) =>
+  String(email || "")
+    .trim()
+    .toLowerCase();
+const getAccounts = () => JSON.parse(localStorage.getItem("accounts") || "{}");
+const saveAccount = (values) => {
+  const email = normalizeEmail(values.email);
+  if (!email) return;
+
+  const accounts = getAccounts();
+  const { password, password_confirm, ...profile } = values;
+  accounts[email] = {
+    password: password || accounts[email]?.password || "",
+    profile: { ...accounts[email]?.profile, ...profile, email },
+  };
+  localStorage.setItem("accounts", JSON.stringify(accounts));
+};
 const prefectures = [
   "北海道",
   "青森県",
@@ -123,6 +140,7 @@ registerForm?.addEventListener("submit", (event) => {
   }
 
   const values = Object.fromEntries(formData.entries());
+  values.email = normalizeEmail(values.email);
   sessionStorage.setItem("registrationData", JSON.stringify(values));
   localStorage.setItem("favoriteColor", values.favorite_color);
   localStorage.setItem("accountName", values.name);
@@ -162,6 +180,7 @@ document.querySelector("[data-registration-submit]")?.addEventListener("click", 
   const values = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
   const { password, password_confirm, ...memberProfile } = values;
 
+  saveAccount(values);
   localStorage.setItem("memberProfile", JSON.stringify(memberProfile));
 });
 
@@ -177,6 +196,7 @@ if (document.querySelector("[data-registration-complete]")) {
   }
 
   if (values.name && values.email) {
+    saveAccount(values);
     localStorage.setItem(
       "registeredAccount",
       JSON.stringify({
@@ -193,20 +213,37 @@ const loginForm = document.querySelector("[data-login-form]");
 loginForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const loginData = new FormData(loginForm);
-  const email = String(loginData.get("email") || "").toLowerCase();
+  const email = normalizeEmail(loginData.get("email"));
+  const password = String(loginData.get("password") || "");
+  const loginError = loginForm.querySelector("[data-login-error]");
   const registeredAccount = JSON.parse(localStorage.getItem("registeredAccount") || "{}");
-  const registrationData = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
-  let loggedInName = "";
+  const legacyEmail = normalizeEmail(registeredAccount.email);
+  const storedAccount = getAccounts()[email];
+  const storedAccountMatches = storedAccount?.password === password;
+  const legacyAccountMatches =
+    legacyEmail === email && String(registeredAccount.password || "") === password;
 
-  if (registeredAccount.email === email) {
-    loggedInName = registeredAccount.name;
-  } else if (String(registrationData.email || "").toLowerCase() === email) {
-    loggedInName = registrationData.name;
-  } else {
-    loggedInName = localStorage.getItem("accountName") || email.split("@")[0];
+  if (!storedAccountMatches && legacyAccountMatches) {
+    const legacyProfile = JSON.parse(localStorage.getItem("memberProfile") || "{}");
+    saveAccount({
+      ...legacyProfile,
+      name: registeredAccount.name || legacyProfile.name,
+      email,
+      password: registeredAccount.password,
+    });
   }
 
+  const account = getAccounts()[email];
+
+  if (!account || account.password !== password) {
+    loginError.textContent = "メールアドレスまたはパスワードが正しくありません。";
+    return;
+  }
+
+  const loggedInName = account.profile.name || "ゲスト";
+
   sessionStorage.setItem("isLoggedIn", "true");
+  sessionStorage.setItem("activeAccountEmail", email);
   sessionStorage.setItem("loggedInName", loggedInName);
   sessionStorage.setItem("loginTransition", "true");
   document.body.classList.add("is_leaving");
