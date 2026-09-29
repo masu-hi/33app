@@ -165,10 +165,8 @@ h3,
   width: 100%;
   height: 100%;
   max-height: 480px;
-  -o-object-fit: cover;
-     object-fit: cover;
-  -o-object-position: center;
-     object-position: center;
+  object-fit: cover;
+  object-position: center;
 }
 
 .section,
@@ -226,8 +224,7 @@ h3,
 .product_card img {
   width: 100%;
   aspect-ratio: 1;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .product_card__body {
@@ -1176,7 +1173,6 @@ h3,
   background: var(--color-main, #f6ecf8);
 }
 .account_form select {
-  width: -moz-fit-content;
   width: fit-content;
   max-width: 100%;
   font-size: 14px;
@@ -1457,8 +1453,7 @@ h3,
 .app_header__icon img, .app_header__actions img {
   width: 26px;
   height: 26px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .app_header__cart_count {
   position: absolute;
@@ -1484,7 +1479,6 @@ h3,
   z-index: 100;
   bottom: 96px;
   left: 50%;
-  width: -moz-max-content;
   width: max-content;
   max-width: calc(100% - 48px);
   margin: 0;
@@ -1544,8 +1538,7 @@ h3,
 .search_choice__visual img {
   width: 100%;
   height: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 .search_choice__visual--artist {
   border: 1px solid #e2e4ed;
@@ -1648,8 +1641,7 @@ h3,
   width: 30px;
   height: 30px;
   margin-bottom: 2px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .bottom_nav .is_current {
   font-weight: 700;
@@ -2460,8 +2452,7 @@ h3,
 .goods_grid img {
   width: 100%;
   height: 100%;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .goods_grid__penlight_image img {
   width: 56px;
@@ -2523,8 +2514,7 @@ h3,
 .results_header__title button img {
   width: 20px;
   height: 20px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .results_header h1 {
   margin: 0;
@@ -2626,8 +2616,7 @@ h3,
 .result_item__link > img {
   width: 78px;
   height: 92px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .result_item h2,
 .result_item p {
@@ -2694,12 +2683,14 @@ h3,
 .mypage_header > button img, .mypage_header__back img {
   width: 20px;
   height: 20px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .mypage_header__actions {
   display: flex;
   gap: 10px;
+}
+.mypage_header__actions:only-child {
+  margin-left: auto;
 }
 .mypage_header__actions a {
   position: relative;
@@ -2711,8 +2702,7 @@ h3,
 .mypage_header__actions img {
   width: 26px;
   height: 26px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 
 .mypage_name {
@@ -2828,8 +2818,7 @@ h3,
   width: 44px;
   height: 44px;
   margin-bottom: 4px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 
 .rental_history {
@@ -2939,8 +2928,7 @@ h3,
 .favorite_item__link img {
   width: 78px;
   height: 96px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .favorite_item h2,
 .favorite_item p {
@@ -2966,6 +2954,10 @@ h3,
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
+}
+
+.recently_viewed_page .favorite_item__link {
+  padding-right: 30px;
 }
 
 .cart_page {
@@ -3062,8 +3054,7 @@ h3,
 .cart_product > img {
   width: 82px;
   height: 98px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .cart_product__details h2, .cart_product__details p {
   margin: 0;
@@ -3397,8 +3388,7 @@ h3,
 .order_product img {
   width: 82px;
   height: 98px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .order_product h2,
 .order_product p {
@@ -3496,8 +3486,7 @@ h3,
 .rental_history_item__product img {
   width: 72px;
   height: 86px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .rental_history_item h2, .rental_history_item__product p {
   margin: 0;
@@ -3692,8 +3681,7 @@ h3,
   width: 100%;
   height: 100%;
   max-width: none;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   transform: scale(1);
 }
 
@@ -3827,8 +3815,7 @@ h3,
 .about_problem__image {
   width: 110px;
   flex-shrink: 0;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .about_problem__bubble {
   position: relative;
@@ -3877,8 +3864,7 @@ h3,
   width: 28px;
   height: 28px;
   margin-bottom: 2px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 
 .about_feeling {
@@ -3912,8 +3898,7 @@ h3,
   position: absolute;
   width: 26px;
   height: auto;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .about_feeling__penlight--1 {
   top: 24px;
@@ -3986,8 +3971,7 @@ h3,
   left: 28px;
   width: 65px;
   height: auto;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 
 .about_solution {
@@ -4002,8 +3986,7 @@ h3,
 .about_solution__image {
   width: 120px;
   flex-shrink: 0;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .about_solution__bubble {
   position: relative;
@@ -4050,8 +4033,7 @@ h3,
 .about_oshi__main_image {
   width: 92%;
   margin: 0 auto;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .about_oshi__feature {
   display: flex;
@@ -4067,8 +4049,7 @@ h3,
   text-align: center;
 }
 .about_oshi__feature_image {
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 .about_oshi__feature--worry .about_oshi__feature_image {
   width: 120px;
@@ -4101,4 +4082,4 @@ h3,
 .about_end__logo {
   width: 140px;
   margin: 0 auto;
-}/*# sourceMappingURL=style.css.map */
+}

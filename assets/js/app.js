@@ -204,6 +204,21 @@ if (accountNameElement) {
   accountNameElement.textContent = accountName;
 }
 
+const rentalStatusCounts = document.querySelectorAll("[data-rental-status-count]");
+
+if (rentalStatusCounts.length) {
+  const orders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+  const counts = orders.reduce((result, order) => {
+    const status = order.status || "配送待ち";
+    result[status] = (result[status] || 0) + 1;
+    return result;
+  }, {});
+
+  rentalStatusCounts.forEach((element) => {
+    element.textContent = String(counts[element.dataset.rentalStatusCount] || 0);
+  });
+}
+
 const memberInfo = document.querySelector("[data-member-info]");
 
 if (memberInfo) {
@@ -724,6 +739,51 @@ const favoriteProducts = {
     image: "assets/images/penlight.png",
   },
 };
+
+const recentlyViewedKey = "recentlyViewedProducts";
+const productDetailPage = document.querySelector(".product_detail_page");
+
+if (productDetailPage) {
+  const productId = new URLSearchParams(window.location.search).get("id") || "penlight-simple";
+  const recentlyViewed = JSON.parse(localStorage.getItem(recentlyViewedKey) || "[]");
+  const updatedRecentlyViewed = [
+    productId,
+    ...recentlyViewed.filter((savedProductId) => savedProductId !== productId),
+  ].slice(0, 10);
+  localStorage.setItem(recentlyViewedKey, JSON.stringify(updatedRecentlyViewed));
+}
+
+const recentlyViewedList = document.querySelector("[data-recently-viewed-list]");
+const recentlyViewedEmpty = document.querySelector("[data-recently-viewed-empty]");
+
+if (recentlyViewedList && recentlyViewedEmpty) {
+  const recentlyViewed = JSON.parse(localStorage.getItem(recentlyViewedKey) || "[]").filter(
+    (productId) => favoriteProducts[productId],
+  );
+  recentlyViewedEmpty.hidden = recentlyViewed.length > 0;
+
+  recentlyViewed.forEach((productId) => {
+    const product = favoriteProducts[productId];
+    const article = document.createElement("article");
+    const link = document.createElement("a");
+    const image = document.createElement("img");
+    const details = document.createElement("div");
+    const name = document.createElement("h2");
+    const price = document.createElement("p");
+
+    article.className = "favorite_item";
+    link.className = "favorite_item__link";
+    link.href = `product_detail.html?id=${encodeURIComponent(productId)}`;
+    image.src = product.image;
+    image.alt = "";
+    name.textContent = product.name;
+    price.textContent = product.price;
+    details.append(name, price);
+    link.append(image, details);
+    article.append(link);
+    recentlyViewedList.append(article);
+  });
+}
 
 const updateFavoriteCount = () => {
   document.querySelectorAll("[data-favorite-count]").forEach((badge) => {

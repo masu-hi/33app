@@ -2935,6 +2935,10 @@ h3,
     gap: 10px;
   }
 
+  &__actions:only-child {
+    margin-left: auto;
+  }
+
   &__actions a {
     position: relative;
     display: grid;
@@ -3230,6 +3234,10 @@ h3,
     line-height: 1;
     cursor: pointer;
   }
+}
+
+.recently_viewed_page .favorite_item__link {
+  padding-right: 30px;
 }
 
 // Cart page
