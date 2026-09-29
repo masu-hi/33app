@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>注文内容の確認 | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell order_page" data-order-confirm>
+      <header class="mypage_header">
+        <a class="mypage_header__back" href="checkout.html" aria-label="決済方法へ戻る">
+          <img src="assets/images/back.png" alt="" />
+        </a>
+        <p class="order_page__header_title">カート</p>
+        <div class="mypage_header__actions">
+          <a href="#" aria-label="通知">
+            <img src="assets/images/notice-icon--outline.png" alt="" />
+          </a>
+          <a href="cart.html" aria-label="カート">
+            <img src="assets/images/cart-icon--outline.png" alt="" />
+          </a>
+        </div>
+      </header>
+
+      <section class="order_confirm">
+        <h1>注文内容の確認</h1>
+        <dl class="order_confirm__details">
+          <div>
+            <dt>お届け先：</dt>
+            <dd data-order-address></dd>
+          </div>
+          <div>
+            <dt>レンタル期間：</dt>
+            <dd data-order-period></dd>
+          </div>
+          <div>
+            <dt>受け取り方法：</dt>
+            <dd>配送で受け取り</dd>
+          </div>
+          <div>
+            <dt>支払い方法：</dt>
+            <dd data-order-payment></dd>
+          </div>
+        </dl>
+
+        <article class="order_product">
+          <img src="assets/images/penlight.png" alt="LEDコンサートライト" />
+          <div>
+            <h2>
+              ペンライト
+              <br />
+              （シンプルタイプ）
+            </h2>
+            <p>¥800 / 3泊4日〜</p>
+          </div>
+          <span data-order-quantity>1</span>
+        </article>
+
+        <dl class="order_totals">
+          <div>
+            <dt>商品合計</dt>
+            <dd data-order-subtotal></dd>
+          </div>
+          <div>
+            <dt>往復送料</dt>
+            <dd>¥440</dd>
+          </div>
+          <div data-order-fee-row>
+            <dt>決済手数料</dt>
+            <dd data-order-fee></dd>
+          </div>
+          <div class="order_totals__grand">
+            <dt>合計</dt>
+            <dd data-order-total></dd>
+          </div>
+        </dl>
+
+        <button class="order_page__primary" type="button" data-place-order>注文を確定する</button>
+      </section>
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="#">お店について</a>
+          <a href="#">使い方ガイド</a>
+          <a href="#">利用規約</a>
+          <a href="#">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+    </main>
+  </body>
+</html>

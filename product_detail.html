@@ -53,7 +53,9 @@
 
       <section class="results_header product_detail_header">
         <div class="results_header__title">
-          <button type="button" aria-label="前の画面へ戻る" data-history-back>←</button>
+          <button type="button" aria-label="前の画面へ戻る" data-history-back>
+            <img src="assets/images/back.png" alt="" />
+          </button>
           <h1>商品詳細</h1>
         </div>
       </section>
@@ -111,12 +113,22 @@
         <div class="product_detail__info">
           <div class="product_detail__heading">
             <p class="tag">汎用品</p>
-            <button class="product_detail__favorite" type="button" aria-label="お気に入りに追加">
+            <button
+              class="product_detail__favorite"
+              type="button"
+              aria-label="お気に入りに追加"
+              data-favorite-id="penlight-simple"
+            >
               ♡
             </button>
           </div>
           <h2>ペンライト（シンプルタイプ）</h2>
-          <p class="product_detail__price">¥2,400 / 3日〜</p>
+          <p class="product_detail__price">¥800 / 3泊4日〜</p>
+          <p class="product_detail__fee_note">
+            ※別途、一律送料440円（税込）がかかります。
+            <br />
+            ※延長料金は1日につき440円（税込）です。
+          </p>
           <div class="product_detail__review_summary">
             <span aria-label="評価4.5、5点満点">★ 4.5</span>
             <button type="button" data-show-reviews>レビューを見る</button>
@@ -128,8 +140,22 @@
 
         <section class="rental_calendar" aria-labelledby="rental-calendar-title">
           <h2 id="rental-calendar-title">レンタル可能日</h2>
-          <div class="rental_calendar__frame" aria-label="カレンダーのダミー表示">
-            <span>カレンダー</span>
+          <div class="rental_calendar__frame" data-rental-calendar>
+            <div class="rental_calendar__controls">
+              <button type="button" aria-label="前の月を表示" data-calendar-previous>‹</button>
+              <p class="rental_calendar__month" data-calendar-month aria-live="polite"></p>
+              <button type="button" aria-label="次の月を表示" data-calendar-next>›</button>
+            </div>
+            <div class="rental_calendar__weekdays" aria-hidden="true">
+              <span>日</span>
+              <span>月</span>
+              <span>火</span>
+              <span>水</span>
+              <span>木</span>
+              <span>金</span>
+              <span>土</span>
+            </div>
+            <div class="rental_calendar__days" data-calendar-days></div>
           </div>
           <div class="rental_calendar__legend" aria-label="カレンダーの凡例">
             <span>
@@ -148,13 +174,17 @@
             </span>
           </div>
           <p class="rental_calendar__period">レンタル期間</p>
-          <p class="rental_calendar__selected_period" data-selected-period>
-            9月24日(木)～9月26日(土)　3日間
+          <p class="rental_calendar__selected_period" data-selected-period aria-live="polite">
+            商品が届く日を選択してください
           </p>
-          <button class="product_detail__cart_button" type="button" data-add-cart>
-            <span>カート</span>
-            <span aria-hidden="true">🛒</span>
-            <b aria-hidden="true">→</b>
+          <button
+            class="product_detail__cart_button"
+            type="button"
+            data-add-cart
+            data-cart-state="ready"
+            disabled
+          >
+            カートに入れる
           </button>
         </section>
       </section>
@@ -181,6 +211,11 @@
             alt=""
           />
           ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
         </a>
         <a href="mypage.html" data-nav-icon data-pages="mypage.html">
           <img

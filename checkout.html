@@ -3,89 +3,169 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>お支払い | おしりーす</title>
+    <title>決済方法 | おしりーす</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/app.js" defer></script>
   </head>
-  <body>
-    <header class="site_header">
-      <div class="site_header__inner">
-        <a class="site_header__brand" href="home.html">
-          <img src="assets/images/logo.png" alt="おしりーす" />
+  <body class="mobile_app">
+    <main class="app_shell payment_page" data-payment-page>
+      <header class="mypage_header">
+        <a class="mypage_header__back" href="cart.html" aria-label="カートへ戻る">
+          <img src="assets/images/back.png" alt="" />
         </a>
-        <span class="site_header__secure">安全なお支払い</span>
-      </div>
-    </header>
-    <main class="page page--narrow">
-      <div class="page__heading">
-        <p>CHECKOUT</p>
-        <h1>お支払い</h1>
-      </div>
-      <ol class="progress">
-        <li>カート</li>
-        <li class="is_current">お支払い</li>
-        <li>確認</li>
-      </ol>
-      <form class="form_panel" data-checkout-form>
-        <section>
-          <h2>お届け先</h2>
-          <div class="form_grid">
-            <label>
-              お名前
-              <input required autocomplete="name" />
-            </label>
-            <label>
-              郵便番号
-              <input required inputmode="numeric" placeholder="000-0000" />
-            </label>
-            <label class="form_grid__wide">
-              住所
-              <input required autocomplete="street-address" />
-            </label>
-          </div>
-        </section>
-        <section>
-          <h2>お支払い方法</h2>
-          <label class="choice">
-            <input type="radio" name="payment" required checked />
-            クレジットカード
+        <p class="payment_page__header_title">カート</p>
+      </header>
+
+      <form class="payment_form" data-checkout-form>
+        <h1>決済方法</h1>
+
+        <section class="payment_method is_selected" data-payment-method="credit">
+          <label class="payment_method__choice">
+            <input type="radio" name="payment" value="credit" checked required />
+            <span>クレジットカード</span>
           </label>
-          <div class="form_grid">
-            <label class="form_grid__wide">
-              カード番号
-              <input required inputmode="numeric" placeholder="0000 0000 0000 0000" />
-            </label>
-            <label>
-              有効期限
-              <input required placeholder="MM/YY" />
-            </label>
-            <label>
-              セキュリティコード
-              <input required inputmode="numeric" placeholder="123" />
-            </label>
+          <div class="payment_method__panel" data-payment-panel>
+            <p class="payment_card_heading">カード情報を入力</p>
+            <div class="payment_card_fields" data-card-fields="new">
+              <label>
+                カード番号
+                <input
+                  name="card_number"
+                  inputmode="numeric"
+                  autocomplete="cc-number"
+                  maxlength="19"
+                />
+              </label>
+              <label>
+                セキュリティコード
+                <input
+                  name="security_code"
+                  inputmode="numeric"
+                  autocomplete="cc-csc"
+                  maxlength="4"
+                />
+              </label>
+              <fieldset class="payment_expiry">
+                <legend>有効期限</legend>
+                <select name="expiry_month" aria-label="有効期限の月">
+                  <option>01</option>
+                  <option>02</option>
+                  <option>03</option>
+                  <option>04</option>
+                  <option>05</option>
+                  <option>06</option>
+                  <option>07</option>
+                  <option>08</option>
+                  <option>09</option>
+                  <option>10</option>
+                  <option>11</option>
+                  <option>12</option>
+                </select>
+                <span>月</span>
+                <select name="expiry_year" aria-label="有効期限の年">
+                  <option>26</option>
+                  <option>27</option>
+                  <option>28</option>
+                  <option>29</option>
+                  <option>30</option>
+                  <option>31</option>
+                </select>
+                <span>年</span>
+              </fieldset>
+              <label>
+                支払い回数
+                <select name="installments">
+                  <option value="once">一括払い</option>
+                  <option value="3">3回払い</option>
+                  <option value="6">6回払い</option>
+                </select>
+              </label>
+              <label class="payment_register_card">
+                <input type="checkbox" name="save_card" />
+                <span>このカード情報を登録する</span>
+              </label>
+            </div>
           </div>
         </section>
-        <section class="summary">
-          <dl>
-            <div class="summary__total">
-              <dt>お支払い合計</dt>
-              <dd>1,300円</dd>
-            </div>
-          </dl>
+
+        <section class="payment_method" data-payment-method="paypay">
+          <label class="payment_method__choice">
+            <input type="radio" name="payment" value="paypay" />
+            <span>PayPay</span>
+          </label>
+          <div class="payment_method__panel" data-payment-panel hidden>
+            <p>PayPay残高：¥2,000</p>
+            <button class="payment_balance_button" type="button">残高を再読み込み</button>
+          </div>
         </section>
-        <button class="button button--wide" type="submit">注文内容を確認する</button>
+
+        <section class="payment_method" data-payment-method="deferred">
+          <label class="payment_method__choice">
+            <input type="radio" name="payment" value="deferred" />
+            <span>後払い</span>
+            <small>手数料250円</small>
+          </label>
+          <div class="payment_method__panel" data-payment-panel hidden>
+            <p class="payment_method__fee">後払い手数料250円（税込）がかかります。</p>
+            <p>商品発送後に発行される請求案内に従ってお支払いください。</p>
+            <p class="payment_method__deadline">お支払い期限：請求案内の発行から14日以内</p>
+          </div>
+        </section>
+
+        <section class="payment_method" data-payment-method="convenience">
+          <label class="payment_method__choice">
+            <input type="radio" name="payment" value="convenience" />
+            <span>コンビニ前払い</span>
+            <small>手数料220円</small>
+          </label>
+          <div class="payment_method__panel" data-payment-panel hidden>
+            <p class="payment_method__fee">コンビニ前払い手数料220円（税込）がかかります。</p>
+            <fieldset class="convenience_list">
+              <legend>お支払い先のコンビニ</legend>
+              <label>
+                <input type="radio" name="store" value="lawson" />
+                ローソン
+              </label>
+              <label>
+                <input type="radio" name="store" value="familymart" />
+                ファミリーマート
+              </label>
+              <label>
+                <input type="radio" name="store" value="ministop" />
+                ミニストップ
+              </label>
+              <label>
+                <input type="radio" name="store" value="daily" />
+                デイリーヤマザキ
+              </label>
+              <label>
+                <input type="radio" name="store" value="seven" />
+                セブンイレブン
+              </label>
+            </fieldset>
+            <p class="payment_method__deadline">お支払い期限：申込完了から3日以内</p>
+          </div>
+        </section>
+
+        <button class="payment_form__submit" type="submit">最終確認</button>
         <p class="form_notice" data-checkout-message role="status"></p>
       </form>
+
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="#">お店について</a>
+          <a href="#">使い方ガイド</a>
+          <a href="#">利用規約</a>
+          <a href="#">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
     </main>
-    <footer class="site_footer">
-      <img src="assets/images/logo.png" alt="おしりーす" />
-      <small>&copy; 2026 おしりーす</small>
-    </footer>
   </body>
 </html>

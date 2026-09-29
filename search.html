@@ -53,7 +53,9 @@
 
       <section class="results_header">
         <div class="results_header__title">
-          <button type="button" aria-label="前の画面へ戻る" data-history-back>←</button>
+          <button type="button" aria-label="前の画面へ戻る" data-history-back>
+            <img src="assets/images/back.png" alt="" />
+          </button>
           <h1 data-results-title>ペンライト</h1>
         </div>
         <form action="search.html" class="app_search">
@@ -87,7 +89,12 @@
               </p>
             </div>
           </a>
-          <button class="result_item__favorite" type="button" aria-label="お気に入りに追加">
+          <button
+            class="result_item__favorite"
+            type="button"
+            aria-label="お気に入りに追加"
+            data-favorite-id="penlight-simple"
+          >
             ♡
           </button>
         </article>
@@ -103,7 +110,12 @@
               </p>
             </div>
           </a>
-          <button class="result_item__favorite" type="button" aria-label="お気に入りに追加">
+          <button
+            class="result_item__favorite"
+            type="button"
+            aria-label="お気に入りに追加"
+            data-favorite-id="penlight-standard"
+          >
             ♡
           </button>
         </article>
@@ -119,7 +131,12 @@
               </p>
             </div>
           </a>
-          <button class="result_item__favorite" type="button" aria-label="お気に入りに追加">
+          <button
+            class="result_item__favorite"
+            type="button"
+            aria-label="お気に入りに追加"
+            data-favorite-id="penlight-pair"
+          >
             ♡
           </button>
         </article>
@@ -135,7 +152,12 @@
               </p>
             </div>
           </a>
-          <button class="result_item__favorite" type="button" aria-label="お気に入りに追加">
+          <button
+            class="result_item__favorite"
+            type="button"
+            aria-label="お気に入りに追加"
+            data-favorite-id="penlight-color-change"
+          >
             ♡
           </button>
         </article>
@@ -151,7 +173,12 @@
               </p>
             </div>
           </a>
-          <button class="result_item__favorite" type="button" aria-label="お気に入りに追加">
+          <button
+            class="result_item__favorite"
+            type="button"
+            aria-label="お気に入りに追加"
+            data-favorite-id="penlight-light"
+          >
             ♡
           </button>
         </article>
@@ -167,7 +194,12 @@
               </p>
             </div>
           </a>
-          <button class="result_item__favorite" type="button" aria-label="お気に入りに追加">
+          <button
+            class="result_item__favorite"
+            type="button"
+            aria-label="お気に入りに追加"
+            data-favorite-id="penlight-long"
+          >
             ♡
           </button>
         </article>
@@ -195,6 +227,11 @@
             alt=""
           />
           ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
         </a>
         <a href="mypage.html" data-nav-icon data-pages="mypage.html">
           <img
