@@ -2665,6 +2665,9 @@ h3,
   display: flex;
   gap: 10px;
 }
+.mypage_header__actions:only-child {
+  margin-left: auto;
+}
 .mypage_header__actions a {
   position: relative;
   display: grid;
@@ -2927,6 +2930,10 @@ h3,
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
+}
+
+.recently_viewed_page .favorite_item__link {
+  padding-right: 30px;
 }
 
 .cart_page {
