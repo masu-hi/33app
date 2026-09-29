@@ -10,6 +10,20 @@ document
     link.append(badge);
   });
 
+document
+  .querySelectorAll('.app_header a[href="notice.html"], .mypage_header a[href="notice.html"]')
+  .forEach((link) => {
+    if (link.querySelector("[data-notice-count]")) return;
+
+    const badge = document.createElement("span");
+    badge.className = "app_header__notice_count";
+    badge.dataset.noticeCount = "";
+    badge.setAttribute("aria-label", "未読の通知数");
+    badge.textContent = "2";
+    link.append(badge);
+  });
+
+
 const cartCountElements = document.querySelectorAll("[data-cart-count]");
 const savedCartCount = Number(localStorage.getItem("cartCount") || 0);
 const normalizeEmail = (email) =>
@@ -278,7 +292,7 @@ if (memberInfo) {
     localStorage.setItem(
       "registeredAccount",
       JSON.stringify({
-        ...registeredAccount,
+        ...legacyAccount,
         name: profile.name,
         email: profile.email.toLowerCase(),
       }),
@@ -313,6 +327,15 @@ passwordSettingForm?.addEventListener("submit", (event) => {
   saveActiveAccount({ ...activeAccount, password: values.new_password });
   passwordSettingForm.reset();
   status.textContent = "パスワードを変更しました。";
+});
+
+const contactForm = document.querySelector("[data-contact-form]");
+
+contactForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const status = contactForm.querySelector("[data-contact-status]");
+  contactForm.reset();
+  status.textContent = "お問い合わせを受け付けました。返信までしばらくお待ちください。";
 });
 
 document.querySelector("[data-history-back]")?.addEventListener("click", () => {
@@ -1143,3 +1166,31 @@ document.querySelector("[data-checkout-form]")?.addEventListener("submit", (even
   document.querySelector("[data-checkout-message]").textContent =
     "入力内容を確認しました。発表用デモのため、決済は実行されません。";
 });
+
+const noticeTabs = document.querySelectorAll("[data-notice-tab]");
+if (noticeTabs.length) {
+  const emptyElement = document.querySelector("[data-notice-empty]");
+  noticeTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      noticeTabs.forEach((t) => {
+        t.classList.remove("is_active");
+        t.setAttribute("aria-selected", "false");
+      });
+      tab.classList.add("is_active");
+      tab.setAttribute("aria-selected", "true");
+
+      const category = tab.dataset.noticeTab;
+      let visibleCount = 0;
+      document.querySelectorAll("[data-notice-list] .notice_item").forEach((item) => {
+        const matches = category === "all" || item.dataset.category === category;
+        item.hidden = !matches;
+        if (matches) visibleCount += 1;
+      });
+
+      if (emptyElement) {
+        emptyElement.hidden = visibleCount > 0;
+      }
+    });
+  });
+}
+
