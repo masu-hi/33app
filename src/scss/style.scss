@@ -2942,7 +2942,6 @@ h3,
     text-decoration: none;
   }
 
-  &__link > img {
   &__link2 {
     display: grid;
     grid-template-columns: 86px 1fr;
@@ -2954,7 +2953,7 @@ h3,
     text-decoration: none;
   }
 
-  &__link>img {
+  &__link > img {
     width: 78px;
     height: 92px;
     object-fit: contain;
@@ -2994,7 +2993,6 @@ h3,
   &__favorite.is_favorite {
     color: #e98bb9;
   }
-}
 }
 
 // My page
