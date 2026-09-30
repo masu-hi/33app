@@ -1,0 +1,109 @@
+.waitlist_page {
+  color: var(--color-text, #353b60);
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+}
+
+.waitlist_page__content {
+  min-height: calc(100vh - 175px);
+  padding-bottom: 32px;
+  background: var(--color-soft, #fbf6fc);
+}
+
+.waitlist_page__content h1 {
+  margin: 0;
+  padding: 18px 30px;
+  border-bottom: 1px solid var(--color-line, #ead5ee);
+  background: #fff;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 26px;
+}
+
+.waitlist_page__description {
+  margin: 0;
+  padding: 18px 30px;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.waitlist_list {
+  border-top: 1px solid var(--color-line, #ead5ee);
+  background: #fff;
+}
+
+.waitlist_item {
+  position: relative;
+  min-height: 132px;
+  border-bottom: 1px solid var(--color-line, #ead5ee);
+}
+
+.waitlist_item__product {
+  display: grid;
+  min-height: 132px;
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 14px 72px 14px 30px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.waitlist_item__product img {
+  width: 78px;
+  height: 96px;
+  object-fit: contain;
+}
+
+.waitlist_item h2,
+.waitlist_item p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.waitlist_item h2 {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.waitlist_item > button {
+  position: absolute;
+  right: 24px;
+  bottom: 22px;
+  padding: 5px;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.waitlist_item > button:disabled {
+  color: #858aa0;
+  cursor: default;
+}
+
+.waitlist_page__empty {
+  margin: 16px 30px 0;
+  padding: 40px 20px;
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+}
+
+.waitlist_page__empty p {
+  margin: 0 0 24px;
+}
+
+.waitlist_page__empty a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 28px;
+  border-radius: 5px;
+  color: inherit;
+  background: var(--color-main, #f6ecf8);
+  text-decoration: none;
+}

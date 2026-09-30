@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>よくある質問 | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell faq_page">
+      <header class="app_header">
+        <a
+          class="app_header__icon"
+          href="color_change.html"
+          aria-label="設定"
+          data-nav-icon
+          data-pages="color_change.html,password_setting.html,credit_card.html"
+        >
+          <img
+            src="assets/images/setting-icon--outline.png"
+            data-outline="assets/images/setting-icon--outline.png"
+            data-filled="assets/images/setting-icon--filled.png"
+            alt=""
+          />
+        </a>
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="notice.html" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+
+      <section class="faq" aria-labelledby="faq-title">
+        <div class="faq__heading">
+          <img src="assets/images/question-icon.png" alt="" />
+          <div>
+            <h1 id="faq-title">よくある質問</h1>
+            <p>よくある質問をまとめました。</p>
+          </div>
+        </div>
+
+        <section class="faq__category">
+          <h2>レンタルについて</h2>
+          <details class="faq_item">
+            <summary>レンタル期間は何日間ですか？</summary>
+            <div class="faq_item__answer">
+              <p>基本料金は3泊4日です。商品によって異なる場合は、商品詳細ページに表示します。</p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>レンタル期間を延長できますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                次の予約が入っていない場合に限り延長できます。延長料金は、1商品につき1日440円（税込）です。延長を希望する場合は、返却期限前にお問い合わせください。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>レンタルできない日を選べますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                選べません。商品詳細ページから空き待ちリストへ登録すると、空きが出た際に通知を受け取る設定ができます。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>複数の商品を同時に借りられますか？</summary>
+            <div class="faq_item__answer">
+              <p>在庫があれば、複数の商品を同時にカートへ追加できます。</p>
+            </div>
+          </details>
+        </section>
+
+        <section class="faq__category">
+          <h2>料金・支払いについて</h2>
+          <details class="faq_item">
+            <summary>送料はいくらですか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                1回のご注文につき、往復送料440円（税込）がかかります。送料を含む支払総額は、注文確定前の確認画面でご確認いただけます。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>利用できる支払い方法は何ですか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                クレジットカード、PayPay、後払い、コンビニ前払いを利用できます。後払いには250円（税込）、コンビニ前払いには220円（税込）の手数料がかかります。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>注文後に支払い方法を変更できますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                注文確定後は変更できません。変更が必要な場合は、一度キャンセルして改めて注文してください。キャンセルの時期によっては、キャンセル料がかかります。
+              </p>
+            </div>
+          </details>
+        </section>
+
+        <section class="faq__category">
+          <h2>受け取り・返却について</h2>
+          <details class="faq_item">
+            <summary>商品はいつ届きますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                選択したレンタル開始日までに届くよう発送します。配送状況はマイページから確認できます。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>返却方法を教えてください。</summary>
+            <div class="faq_item__answer">
+              <p>
+                商品に同梱されている返却案内に従い、商品本体、ケース、ストラップなどの付属品をすべて入れて返送してください。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>返却期限を過ぎるとどうなりますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                1商品につき1日440円（税込）の延長料金がかかります。返却が遅れることが分かった場合は、期限前にお問い合わせください。
+              </p>
+              <p>
+                連絡なく一定期間返却されない場合は、紛失として商品相当額などをご請求することがあります。
+              </p>
+            </div>
+          </details>
+        </section>
+
+        <section class="faq__category">
+          <h2>空き待ちについて</h2>
+          <details class="faq_item">
+            <summary>レンタルしたい商品に空きがない場合はどうすればよいですか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                商品詳細ページから空き待ちリストへ登録できます。登録時に「通知を受け取る」を選択した方には、キャンセルなどで商品に空きが出た際に通知します。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>空き待ちリストに登録すれば、必ずレンタルできますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                空き待ちリストへの登録は、商品の確保や予約を保証するものではありません。通知後の予約は先着順となります。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>通知が届いた商品は取り置きされますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                商品の取り置きは行っていません。ほかの利用者が先に予約した場合、再びレンタルできなくなることがあります。
+              </p>
+            </div>
+          </details>
+        </section>
+
+        <section class="faq__category">
+          <h2>商品のトラブルについて</h2>
+          <details class="faq_item">
+            <summary>届いた商品に不具合があった場合はどうすればよいですか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                使用前に商品の状態が分かる写真を撮り、お問い合わせください。商品に問題があると確認できた場合は、交換、返金または料金の一部返還などを行います。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>商品を汚したり、壊したりした場合はどうなりますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                通常の使用で生じた軽微な傷や劣化については、原則として費用を請求しません。故意または過失による破損、著しい汚れ、水濡れ、付属品の不足などがある場合は、修理費、清掃費または再調達費をご負担いただく場合があります。
+              </p>
+              <p>まずは商品の状態が分かる写真を添えてお問い合わせください。</p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>商品を紛失したり、盗難に遭った場合はどうすればよいですか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                速やかにお問い合わせください。商品を返却できない場合は、商品相当額などをご負担いただく場合があります。盗難の場合は、警察への届出をお願いすることがあります。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>ペンライトの電池は付属しますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                動作確認済みの電池を入れた状態でお届けします。付属品の詳細は商品詳細ページをご確認ください。
+              </p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>商品の色や種類は選べますか？</summary>
+            <div class="faq_item__answer">
+              <p>商品詳細ページで、在庫がある色・種類・機能を選択できます。</p>
+            </div>
+          </details>
+        </section>
+
+        <section class="faq__category">
+          <h2>キャンセルについて</h2>
+          <details class="faq_item">
+            <summary>注文をキャンセルできますか？</summary>
+            <div class="faq_item__answer">
+              <p>マイページの「キャンセル・払い戻し」からお手続きいただけます。</p>
+              <ul>
+                <li>利用日の7日前まで：無料</li>
+                <li>利用日の6日前から3日前まで：レンタル料金の50％</li>
+                <li>利用日の2日前以降または無断キャンセル：レンタル料金の100％</li>
+              </ul>
+              <p>発送後は、発送済みの送料および返送料をご負担いただきます。</p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>公演が中止・延期になった場合、注文も自動的にキャンセルされますか？</summary>
+            <div class="faq_item__answer">
+              <p>
+                公演の中止や延期だけでは、自動的にキャンセルされません。発送状況などによって対応が異なるため、「キャンセル・払い戻し」ページをご確認ください。
+              </p>
+              <p>
+                発送後または商品受取後の場合は、送料などの発生済み費用を差し引いて返金することがあります。
+              </p>
+            </div>
+          </details>
+        </section>
+
+        <section class="faq__category">
+          <h2>アカウントについて</h2>
+          <details class="faq_item">
+            <summary>推しカラーは変更できますか？</summary>
+            <div class="faq_item__answer">
+              <p>設定の「推しカラー変更」からいつでも変更できます。</p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>パスワードを忘れた場合はどうすればよいですか？</summary>
+            <div class="faq_item__answer">
+              <p>ログイン画面の「パスワードをお忘れの方」から再設定できます。</p>
+            </div>
+          </details>
+          <details class="faq_item">
+            <summary>お気に入りやカートの商品は保存されますか？</summary>
+            <div class="faq_item__answer">
+              <p>同じアカウントでログインしている場合、登録した商品を確認できます。</p>
+            </div>
+          </details>
+        </section>
+
+        <div class="faq__links">
+          <p>詳しい利用方法や規定もご確認いただけます。</p>
+          <a href="usage_guide.html">使い方ガイドを見る</a>
+          <a href="terms.html">利用規約を見る</a>
+          <a href="cancellation_refund.html">キャンセル・払い戻しを見る</a>
+        </div>
+      </section>
+
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="about.html">お店について</a>
+          <a href="usage_guide.html">使い方ガイド</a>
+          <a href="terms.html">利用規約</a>
+          <a href="privacy_policy.html">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
+        </a>
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html,faq.html">
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>

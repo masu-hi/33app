@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ヘルプ | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell help_page">
+      <header class="app_header">
+        <a
+          class="app_header__icon"
+          href="color_change.html"
+          aria-label="設定"
+          data-nav-icon
+          data-pages="color_change.html,password_setting.html,credit_card.html"
+        >
+          <img
+            src="assets/images/setting-icon--outline.png"
+            data-outline="assets/images/setting-icon--outline.png"
+            data-filled="assets/images/setting-icon--filled.png"
+            alt=""
+          />
+        </a>
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="notice.html" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+
+      <section class="help" aria-labelledby="help-title">
+        <div class="help__heading">
+          <img src="assets/images/help-icon.png" alt="" />
+          <div>
+            <h1 id="help-title">ヘルプ</h1>
+            <p>どのようなことでお困りですか？</p>
+          </div>
+        </div>
+
+        <section class="help__urgent" aria-labelledby="help-trouble-title">
+          <div>
+            <span class="help__mark" aria-hidden="true">!</span>
+            <div>
+              <h2 id="help-trouble-title">商品にトラブルがあった方</h2>
+              <p>故障・不足・破損・紛失・返却の遅れはこちら</p>
+            </div>
+          </div>
+          <a href="contact.html">お問い合わせへ</a>
+        </section>
+
+        <section class="help__section">
+          <h2>注文・レンタル</h2>
+          <nav class="help_menu" aria-label="注文・レンタルのヘルプ">
+            <a href="rental_history.html">
+              <span>
+                <strong>注文内容・配送状況を確認したい</strong>
+                <small>レンタル履歴を確認できます</small>
+              </span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+            <a href="cancellation_refund.html">
+              <span>
+                <strong>注文をキャンセルしたい</strong>
+                <small>キャンセル条件や払い戻しを確認できます</small>
+              </span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+            <a href="usage_guide.html">
+              <span>
+                <strong>レンタル・返却方法を知りたい</strong>
+                <small>商品の借り方から返却までをご案内します</small>
+              </span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+            <a href="waitlist.html">
+              <span>
+                <strong>借りたい商品の在庫がない</strong>
+                <small>空き待ちリストを確認できます</small>
+              </span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+          </nav>
+        </section>
+
+        <section class="help__section">
+          <h2>アカウント・支払い</h2>
+          <nav class="help_menu" aria-label="アカウント・支払いのヘルプ">
+            <a href="member_info.html">
+              <span>
+                <strong>登録情報を確認・変更したい</strong>
+                <small>会員情報を確認できます</small>
+              </span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+            <a href="password_setting.html">
+              <span>
+                <strong>パスワードを再設定したい</strong>
+                <small>新しいパスワードを設定できます</small>
+              </span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+            <a href="color_change.html">
+              <span>
+                <strong>推しカラーを変更したい</strong>
+                <small>アプリに反映するカラーを選べます</small>
+              </span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+            <a href="credit_card.html">
+              <span>
+                <strong>クレジットカードを登録・変更したい</strong>
+                <small>お支払いに使うカードを管理できます</small>
+              </span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+            <a href="faq.html">
+              <span>
+                <strong>支払い方法について確認したい</strong>
+                <small>料金・支払いのよくある質問を確認できます</small>
+              </span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+          </nav>
+        </section>
+
+        <section class="help__section">
+          <h2>サービスについて</h2>
+          <nav class="help_menu" aria-label="サービスについてのヘルプ">
+            <a href="faq.html">
+              <span><strong>よくある質問を見る</strong></span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+            <a href="terms.html">
+              <span><strong>利用規約を確認する</strong></span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+            <a href="privacy_policy.html">
+              <span><strong>個人情報保護方針を確認する</strong></span>
+              <span class="help_menu__arrow" aria-hidden="true">›</span>
+            </a>
+          </nav>
+        </section>
+
+        <section class="help__contact">
+          <h2>解決しない場合</h2>
+          <p>お問い合わせページから、詳しい状況をお知らせください。</p>
+          <a href="contact.html">お問い合わせ</a>
+        </section>
+      </section>
+
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="about.html">お店について</a>
+          <a href="usage_guide.html">使い方ガイド</a>
+          <a href="terms.html">利用規約</a>
+          <a href="privacy_policy.html">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
+        </a>
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html,help.html">
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>

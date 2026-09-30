@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>レンタル申込管理 | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/admin_orders.js" defer></script>
+  </head>
+  <body class="admin_page">
+    <header class="admin_header">
+      <div>
+        <p>おしりーす</p>
+        <h1>レンタル申込管理</h1>
+      </div>
+      <a href="home.html">利用者画面</a>
+    </header>
+
+    <nav class="admin_nav" aria-label="管理メニュー">
+      <a href="admin.html">商品管理</a>
+      <a href="admin_orders.html" aria-current="page">レンタル申込管理</a>
+      <a href="admin_waitlist.html">空き待ち管理</a>
+    </nav>
+
+    <main class="admin_main">
+      <section class="admin_summary" aria-label="申込状況">
+        <div>
+          <span>申込件数</span>
+          <strong data-order-total>0</strong>
+        </div>
+        <div>
+          <span>配送待ち</span>
+          <strong data-order-waiting>0</strong>
+        </div>
+        <div>
+          <span>返却待ち</span>
+          <strong data-order-returning>0</strong>
+        </div>
+      </section>
+
+      <section class="admin_orders" aria-labelledby="admin-orders-title">
+        <div class="admin_products__heading">
+          <div>
+            <h2 id="admin-orders-title">レンタル申込一覧</h2>
+            <p>配送に必要な情報とレンタル状況を確認できます。</p>
+          </div>
+          <input
+            type="search"
+            placeholder="注文番号・氏名で検索"
+            aria-label="注文番号・氏名で検索"
+            data-order-search
+          />
+        </div>
+        <div class="admin_orders__list" data-admin-orders></div>
+        <p class="admin_empty" data-admin-orders-empty hidden>レンタル申込はまだありません。</p>
+      </section>
+    </main>
+  </body>
+</html>

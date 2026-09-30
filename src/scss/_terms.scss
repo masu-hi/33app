@@ -1,0 +1,65 @@
+.terms_page .privacy_policy {
+  color: #353b60;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.terms_page .privacy_policy h1,
+.terms_page .privacy_policy h2 {
+  color: #353b60;
+}
+
+.terms_page .privacy_policy h1 {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.terms_page .privacy_policy h2 {
+  margin-bottom: 14px;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.terms_page .privacy_policy p,
+.terms_page .privacy_policy li {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.terms_page .privacy_policy ul,
+.terms_page .privacy_policy ol {
+  padding-left: 22px;
+}
+
+.terms_page .privacy_policy__date {
+  font-size: 13px;
+}
+
+.terms_operator {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.terms_operator>div {
+  display: grid;
+  grid-template-columns: 4em minmax(0, 1fr);
+}
+
+.terms_operator dt,
+.terms_operator dd {
+  margin: 0;
+}
+
+.terms_operator dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.terms_operator dd span {
+  display: block;
+}
+
+.terms_operator--compact {
+  gap: 2px;
+}

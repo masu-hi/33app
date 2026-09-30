@@ -1,4 +1,9 @@
 @use "sass:math";
+@use "admin";
+@use "faq";
+@use "help";
+@use "terms";
+@use "waitlist";
 @use "product_detail";
 
 $main: var(--color-main, #f6ecf8);
@@ -3982,11 +3987,17 @@ h3,
   background: $white;
 
   &__status,
-  &__period {
+  &__period,
+  &__order_id {
     margin: 0;
     font-family: "Noto Sans JP", sans-serif;
     font-size: 12px;
     line-height: 18px;
+  }
+
+  &__order_id {
+    margin-bottom: 6px;
+    color: #62698a;
   }
 
   &__status {
