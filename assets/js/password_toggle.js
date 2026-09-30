@@ -8,7 +8,7 @@ document.querySelectorAll('input[type="password"]').forEach((input) => {
 
   button.className = "password_input__toggle";
   button.type = "button";
-  button.textContent = "👁";
+  button.innerHTML = '<span class="password_input__icon" aria-hidden="true"></span>';
   button.setAttribute("aria-label", "パスワードを表示");
   button.setAttribute("aria-pressed", "false");
   button.addEventListener("click", () => {
