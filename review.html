@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>セット商品 | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="src/scss/style.css" />
+
+    <script src="assets/js/app.js" defer></script>
+</head>
+
+<body class="mobile_app">
+    <main class="app_shell product_detail_page">
+        <header class="app_header">
+            <a class="app_header__icon" href="color_change.html" aria-label="設定" data-nav-icon
+                data-pages="color_change.html,password_setting.html,credit_card.html">
+                <img src="assets/images/setting-icon--outline.png"
+                    data-outline="assets/images/setting-icon--outline.png"
+                    data-filled="assets/images/setting-icon--filled.png" alt="" />
+            </a>
+            <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+            <div class="app_header__actions">
+                <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
+                    <img src="assets/images/notice-icon--outline.png"
+                        data-outline="assets/images/notice-icon--outline.png"
+                        data-filled="assets/images/notice-icon--filled.png" alt="" />
+                </a>
+                <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+                    <img src="assets/images/cart-icon--outline.png" data-outline="assets/images/cart-icon--outline.png"
+                        data-filled="assets/images/cart-icon--filled.png" alt="" />
+                </a>
+            </div>
+        </header>
+
+        <section class="review_section">
+
+            <!-- ページタイトル -->
+            <div class="results_header product_detail_header">
+                <div class="results_header__title">
+                    <button type="button" aria-label="前の画面へ戻る" data-history-back>
+                        <img src="assets/images/back.png" alt="" />
+                    </button>
+                    <h1>レビュー</h1>
+                </div>
+            </div>
+
+
+            <!-- 総合評価 -->
+            <div class="review_summary">
+
+                <p class="review_summary__count" data-review-count>
+                    15,300件のレビュー
+                </p>
+
+                <div class="review_summary__rating">
+
+                    <span class="review_summary__stars" data-review-summary-stars>
+                        ★★★★★
+                    </span>
+
+                    <span class="review_summary__score" data-review-average>
+                        4.5
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- レビュー投稿 -->
+            <section class="review_form">
+
+                <h2 class="review_form__title">レビューを書く</h2>
+
+                <div class="review_form__rating">
+                    <p>評価</p>
+
+                    <div class="review_form__stars" data-review-stars>
+                        <button type="button" data-rating="1">★</button>
+                        <button type="button" data-rating="2">★</button>
+                        <button type="button" data-rating="3">★</button>
+                        <button type="button" data-rating="4">★</button>
+                        <button type="button" data-rating="5">★</button>
+                    </div>
+                </div>
+
+                <textarea class="review_form__textarea" placeholder="レビューを入力してください" maxlength="300"></textarea>
+
+                <button type="button" class="review_form__button" data-review-submit>
+                    レビューを投稿する
+                </button>
+
+            </section>
+
+
+            <!-- レビュー一覧 -->
+            <div class="review_list">
+
+                <!-- レビュー1 -->
+                <article class="review_item">
+
+                    <div class="review_item__header">
+                        <span class="review_item__stars">★★★★★</span>
+                        <span class="review_item__score">5/5</span>
+                        <time datetime="2026-09-28">2026.09.28</time>
+                    </div>
+
+                    <p class="review_item__text">
+                        初めて行くグループのライブだったので、ペンライトを<br>
+                        買うか迷ってました🥺<br>
+                        1回だけだったのでレンタルできて助かりました！<br>
+                        ちゃんとライブに間に合ってよかったです♡
+                    </p>
+
+                </article>
+
+
+                <!-- レビュー2 -->
+                <article class="review_item">
+
+                    <div class="review_item__header">
+                        <span class="review_item__stars">★★★★★</span>
+                        <span class="review_item__score">5/5</span>
+                        <time datetime="2026-09-28">2026.09.28</time>
+                    </div>
+
+                    <p class="review_item__text">
+                        遠征だったので荷物を増やしたくなくて利用しました！<br>
+                        必要なものだけ借りられるのがちょうどよくて便利です◎
+                    </p>
+
+                </article>
+
+
+                <!-- レビュー3 -->
+                <article class="review_item">
+
+                    <div class="review_item__header">
+                        <span class="review_item__stars">★★★★★</span>
+                        <span class="review_item__score">5/5</span>
+                        <time datetime="2026-09-28">2026.09.28</time>
+                    </div>
+
+                    <p class="review_item__text">
+                        推しが変わって使わなくなったグッズを買うのはもったい<br>
+                        ないな〜と思っていたので、レンタルできてよかった<br>
+                        です！またライブのときに利用したいです！
+                    </p>
+
+                </article>
+
+
+                <!-- レビュー4 -->
+                <article class="review_item">
+
+                    <div class="review_item__header">
+                        <span class="review_item__stars">★★★★★</span>
+                        <span class="review_item__score">5/5</span>
+                        <time datetime="2026-09-28">2026.09.28</time>
+                    </div>
+
+                    <p class="review_item__text">
+                        友達に誘われて初めてライブに行きました！何を持って<br>
+                        いけばいいか分からなかったけど、必要なものをまとめ<br>
+                        て探せたので準備しやすかったです✨
+                    </p>
+
+                </article>
+
+
+                <!-- レビュー5 -->
+                <article class="review_item">
+
+                    <div class="review_item__header">
+                        <span class="review_item__stars">★★★★☆</span>
+                        <span class="review_item__score">4/5</span>
+                        <time datetime="2026-09-27">2026.09.27</time>
+                    </div>
+
+                    <p class="review_item__text">
+                        初めて利用しましたが、予約も簡単で使いやすかったです！<br>
+                        またライブに行くときに利用したいと思います。
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+        <footer class="app_footer">
+            <nav aria-label="フッターナビゲーション">
+                <a href="about.html">お店について</a>
+                <a href="usage_guide.html">使い方ガイド</a>
+                <a href="#">利用規約</a>
+                <a href="privacy_policy.html">個人情報保護方針</a>
+            </nav>
+            <small>Tokimekilab&copy;2026</small>
+        </footer>
+        <nav class="bottom_nav" aria-label="下部ナビゲーション">
+            <a href="home.html" data-nav-icon
+                data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html">
+                <img src="assets/images/home-icon--outline.png" data-outline="assets/images/home-icon--outline.png"
+                    data-filled="assets/images/home-icon--filled.png" alt="" />
+                ホーム
+            </a>
+            <a href="favorites.html" data-favorite-nav>
+                <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+                <span class="bottom_nav__badge" data-favorite-count>0</span>
+                お気に入り
+            </a>
+            <a href="mypage.html" data-nav-icon data-pages="mypage.html">
+                <img src="assets/images/mypage-icon--outline.png" data-outline="assets/images/mypage-icon--outline.png"
+                    data-filled="assets/images/mypage-icon--filled.png" alt="" />
+                マイページ
+            </a>
+        </nav>
+    </main>
+    <script src="assets/js/product_data.js"></script>
+    <script src="assets/js/product_detail.js"></script>
+    <script src="assets/js/review.js"></script>
+</body>
+
+</html>

@@ -3095,9 +3095,14 @@ h3,
   height: 100%;
   object-fit: cover;
 }
+.search_choice__visual--artist img {
+  width: 76%;
+  height: 76%;
+  object-fit: contain;
+}
 .search_choice__visual--penlight img {
-  width: 50px;
-  height: 70px;
+  width: 44px;
+  height: 62px;
   object-fit: contain;
 }
 .search_choice__visual--artist {
@@ -3951,8 +3956,8 @@ h3,
   margin: 0;
 }
 .search_intro .search_choice__visual--penlight img {
-  width: 50px;
-  height: 70px;
+  width: 44px;
+  height: 62px;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -4092,8 +4097,8 @@ h3,
   object-fit: contain;
 }
 .goods_grid__penlight_image img {
-  width: 50px;
-  height: 70px;
+  width: 44px;
+  height: 62px;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -6172,4 +6177,262 @@ details[open] .notice_item__arrow::after {
   border: 1px solid #e5d8f6;
   color: #7957b8;
   background: #f4edfb;
+}
+
+.review_section {
+  padding-bottom: 30px;
+}
+
+.review_section .results_header {
+  margin: 0;
+  padding: 0;
+}
+
+.review_section .results_header__title {
+  position: relative;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eee3f2;
+  margin-bottom: 20px;
+}
+
+.review_section .results_header__title h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #5260a0;
+}
+
+.review_section .results_header__title button {
+  position: absolute;
+  left: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.review_section .results_header__title button img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.review_section .results_header__title h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #5260a0;
+}
+
+/* 総合評価 */
+.review_summary {
+  width: calc(100% - 88px);
+  margin: 25px auto 25px;
+  padding: 34px 20px 28px;
+  background: #fcf5fd;
+  border: 1px solid #f0d9f4;
+  border-radius: 14px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.review_summary__count {
+  margin: 0 0 18px;
+  font-size: 12px;
+  color: #5260a0;
+}
+
+.review_summary__rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.review_summary__stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  line-height: 1;
+}
+
+.review_summary__stars .star {
+  position: relative;
+  display: inline-block;
+  font-size: 31px;
+  line-height: 1;
+  color: #d9d9df;
+}
+
+/* 全部色がついている星 */
+.review_summary__stars .star.is_full {
+  color: #505d9d;
+}
+
+/* 半分だけ色がついている星 */
+.review_summary__stars .star.is_half {
+  color: #d9d9df;
+}
+
+.review_summary__stars .star.is_half::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #505d9d;
+}
+
+.review_summary__score {
+  font-size: 18px;
+  color: #505d9d;
+}
+
+/* レビュー一覧 */
+.review_list {
+  border-top: 1px solid #eee3f2;
+}
+
+.review_item {
+  padding: 18px 50px 16px;
+  border-bottom: 1px solid #eee3f2;
+}
+
+.review_item__header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 7px;
+}
+
+.review_item__stars {
+  font-size: 17px;
+  letter-spacing: -1px;
+  color: #505d9d;
+}
+
+.review_item__score,
+.review_item__header time {
+  font-size: 11px;
+  color: #5260a0;
+}
+
+.review_item__header time {
+  margin-left: 1px;
+}
+
+.review_item__text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #5260a0;
+  font-weight: 400;
+}
+
+.review_form {
+  margin: 0 44px 25px;
+  padding: 20px 18px 18px;
+  border: 1px solid #eee0f2;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.review_form__title {
+  margin: 0 0 17px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #505d9d;
+}
+
+/* 評価 */
+.review_form__rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.review_form__rating p {
+  margin: 0;
+  font-size: 12px;
+  color: #5260a0;
+}
+
+.review_form__stars {
+  display: flex;
+  gap: 2px;
+}
+
+.review_form__stars button {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  color: #d9d9df;
+  cursor: pointer;
+}
+
+/* 選択された星 */
+.review_form__stars button.is_selected {
+  color: #505d9d;
+}
+
+/* レビュー入力 */
+.review_form__textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 11px 12px;
+  box-sizing: border-box;
+  border: 1px solid #e7ddec;
+  border-radius: 9px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #5260a0;
+  resize: none;
+  outline: none;
+}
+
+.review_form__textarea::placeholder {
+  color: #b7b4c0;
+}
+
+.review_form__textarea:focus {
+  border-color: #a9add4;
+}
+
+/* 投稿ボタン */
+.review_form__button {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 20px;
+  background: #aeb5df;
+  color: #fff;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.review_form__button:hover {
+  opacity: 0.85;
 }
