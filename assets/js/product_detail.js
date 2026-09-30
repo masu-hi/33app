@@ -166,4 +166,107 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+  // ---------------------------------------------------------
+  // 3. 色変更ボタン & ハート選択
+  // ---------------------------------------------------------
+  const changeBtns = document.querySelectorAll(".changebtn");
+
+  changeBtns.forEach((changeBtn) => {
+    const colorOptions = changeBtn
+      .closest(".setbtn")
+      ?.parentElement.querySelector(".color_options");
+
+    if (!colorOptions) return;
+
+    changeBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      colorOptions.classList.toggle("active");
+    });
+
+    const colorHearts = colorOptions.querySelectorAll(".color_heart");
+
+    colorHearts.forEach((heart) => {
+
+      heart.addEventListener("click", (event) => {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+        const color = heart.dataset.color;
+
+        const colorText = changeBtn
+          .closest(".setbtn")
+          ?.querySelector("[data-product-price]");
+
+        // 英語の色名を日本語に変換
+        const colorNames = {
+          red: "赤",
+          pink: "ピンク",
+          orange: "オレンジ",
+          yellow: "黄色",
+          green: "緑",
+          blue: "青",
+          purple: "紫",
+          lightblue: "水色",
+          white: "白",
+          black: "黒"
+        };
+
+        if (colorText) {
+          colorText.textContent = colorNames[color];
+        }
+
+        // 色を選んだらハート一覧を閉じる
+        colorOptions.classList.remove("active");
+      });
+    });
+  });
+});
+
+// ---------------------------------------------------------
+// 4. うちわの文章選択
+// ---------------------------------------------------------
+const textChangeBtns = document.querySelectorAll(".changebtn");
+
+textChangeBtns.forEach((changeBtn) => {
+  const textOptions = changeBtn
+    .closest(".setbtn")
+    ?.parentElement.querySelector(".text_options");
+
+  // 文章選択がない商品はスキップ
+  if (!textOptions) return;
+
+  // 「変更」を押す
+  changeBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    textOptions.classList.toggle("active");
+  });
+
+  // 文章を選択
+  const textBtns = textOptions.querySelectorAll(".text_option");
+
+  textBtns.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const text = btn.dataset.text;
+
+      const textDisplay = changeBtn
+        .closest(".setbtn")
+        ?.querySelector("[data-product-price]");
+
+      if (textDisplay) {
+        textDisplay.textContent = text;
+      }
+
+      // 選択したら閉じる
+      textOptions.classList.remove("active");
+    });
+  });
 });
