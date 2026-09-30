@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. URLパラメータからの汎用商品データの読み込みと反映
   // ---------------------------------------------------------
   const params = new URLSearchParams(window.location.search);
-  const productId = params.get("id");
+  const productId = params.get("id") || params.get("category");
 
   if (productId && window.PRODUCTS && window.PRODUCTS[productId]) {
     const product = window.PRODUCTS[productId];

@@ -1,3 +1,36 @@
+const NOTICE_READ_STORAGE_KEY = "readNoticeIds";
+const DEFAULT_UNREAD_NOTICE_IDS = ["shipping-complete", "return-request"];
+
+const getReadNoticeIds = () => {
+  try {
+    const savedIds = JSON.parse(localStorage.getItem(NOTICE_READ_STORAGE_KEY) || "[]");
+    return Array.isArray(savedIds) ? savedIds : [];
+  } catch {
+    return [];
+  }
+};
+
+const getUnreadNoticeCount = () => {
+  const readIds = getReadNoticeIds();
+  return DEFAULT_UNREAD_NOTICE_IDS.filter((id) => !readIds.includes(id)).length;
+};
+
+const updateNoticeCount = () => {
+  const unreadCount = getUnreadNoticeCount();
+  document.querySelectorAll("[data-notice-count]").forEach((badge) => {
+    badge.textContent = unreadCount;
+    badge.hidden = unreadCount < 1;
+  });
+};
+
+const markNoticeAsRead = (noticeId) => {
+  const readIds = getReadNoticeIds();
+  if (!noticeId || readIds.includes(noticeId)) return;
+
+  localStorage.setItem(NOTICE_READ_STORAGE_KEY, JSON.stringify([...readIds, noticeId]));
+  updateNoticeCount();
+};
+
 document
   .querySelectorAll('.app_header a[href="cart.html"], .mypage_header a[href="cart.html"]')
   .forEach((link) => {
@@ -19,10 +52,10 @@ document
     badge.className = "app_header__notice_count";
     badge.dataset.noticeCount = "";
     badge.setAttribute("aria-label", "未読の通知数");
-    badge.textContent = "2";
     link.append(badge);
   });
 
+updateNoticeCount();
 
 const cartCountElements = document.querySelectorAll("[data-cart-count]");
 const savedCartCount = Number(localStorage.getItem("cartCount") || 0);
@@ -1233,6 +1266,21 @@ document.querySelector("[data-checkout-form]")?.addEventListener("submit", (even
 const noticeTabs = document.querySelectorAll("[data-notice-tab]");
 if (noticeTabs.length) {
   const emptyElement = document.querySelector("[data-notice-empty]");
+
+  document.querySelectorAll("[data-notice-id]").forEach((item) => {
+    const noticeId = item.dataset.noticeId;
+    if (getReadNoticeIds().includes(noticeId)) {
+      item.classList.remove("is_unread");
+    }
+
+    item.querySelector(".notice_item__details")?.addEventListener("toggle", (event) => {
+      if (!event.currentTarget.open || !item.classList.contains("is_unread")) return;
+
+      item.classList.remove("is_unread");
+      markNoticeAsRead(noticeId);
+    });
+  });
+
   noticeTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       noticeTabs.forEach((t) => {
@@ -1256,4 +1304,3 @@ if (noticeTabs.length) {
     });
   });
 }
-
