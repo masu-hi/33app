@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "product_detail";
 
 $main: var(--color-main, #f6ecf8);
 $soft: var(--color-soft, #fdf6ff);
@@ -206,7 +207,7 @@ h3,
 }
 
 .section__heading p,
-.page__heading > p {
+.page__heading>p {
   margin: 0 0 4px;
   color: #7d6b8a;
   font-size: 12px;
@@ -277,7 +278,7 @@ h3,
   background: $sub;
 }
 
-.steps > * {
+.steps>* {
   max-width: 1120px;
   margin-right: auto;
   margin-left: auto;
@@ -361,7 +362,7 @@ h3,
   font-size: 20px;
 }
 
-.filter_panel > label,
+.filter_panel>label,
 .filter_panel fieldset {
   display: grid;
   gap: 8px;
@@ -629,7 +630,7 @@ h3,
 
 .rental_calendar__frame {
   margin-top: 0;
-  padding: 14px 12px 12px;
+  padding: 14px 0px 12px;
   background: #f3f3f3;
 }
 
@@ -826,7 +827,7 @@ h3,
   margin: 0 0 8px;
 }
 
-.cart_item > strong {
+.cart_item>strong {
   grid-column: 2;
   justify-self: end;
 }
@@ -871,7 +872,7 @@ h3,
   gap: 24px;
 }
 
-.form_panel > section {
+.form_panel>section {
   padding: 24px;
   border: 1px solid $line;
   border-radius: 8px;
@@ -888,7 +889,7 @@ h3,
 }
 
 .form_grid label,
-.auth form > label {
+.auth form>label {
   display: grid;
   gap: 6px;
   font-weight: 700;
@@ -942,7 +943,7 @@ h3,
   box-shadow: 0 12px 40px rgba($text, 0.08);
 }
 
-.auth__panel > p:first-child {
+.auth__panel>p:first-child {
   margin: 0;
   color: #7d6b8a;
   font-size: 12px;
@@ -1077,7 +1078,7 @@ h3,
     width: 120px;
   }
 
-  .cart_item > strong {
+  .cart_item>strong {
     grid-column: auto;
   }
 
@@ -1159,12 +1160,12 @@ h3,
     border-bottom: 1px solid $text;
   }
 
-  form label + label {
+  form label+label {
     margin-top: 50px;
   }
 
   label,
-  .account_form > label {
+  .account_form>label {
     display: grid;
     gap: 10px;
   }
@@ -1178,7 +1179,7 @@ h3,
     background: $main;
   }
 
-  > .auth_secondary {
+  >.auth_secondary {
     margin-top: 50px;
   }
 }
@@ -1224,7 +1225,7 @@ h3,
   gap: 49px;
   padding: 68px 52px 100px;
 
-  > label {
+  >label {
     display: grid;
     gap: 10px;
   }
@@ -1483,6 +1484,7 @@ h3,
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .app_auth.is_leaving,
   .mobile_app.is_arriving {
     animation-duration: 1ms;
@@ -2080,11 +2082,11 @@ h3,
     content: "・";
   }
 
-  &__section p + ul {
+  &__section p+ul {
     margin-top: 4px;
   }
 
-  &__section ul + p {
+  &__section ul+p {
     margin-top: 12px;
   }
 }
@@ -2119,7 +2121,7 @@ h3,
     font-size: 11px;
   }
 
-  > p {
+  >p {
     margin: 0;
   }
 
@@ -2412,7 +2414,7 @@ h3,
     text-align: center;
   }
 
-  > p {
+  >p {
     margin: 27px 0 24px;
     font-size: 13px;
   }
@@ -2628,12 +2630,14 @@ h3,
 }
 
 @for $item from 1 through 8 {
-  $column: ($item - 1) % 4;
-  $row: math.floor(math.div($item - 1, 4));
+  $column: (
+    $item - 1) % 4;
+  $row: math.floor(math.div($item - 1, 4)
+  );
 
-  .artist_avatar--#{$item} {
-    background-position: $column * 33.333% $row * 100%;
-  }
+.artist_avatar--#{$item} {
+  background-position: $column * 33.333% $row * 100%;
+}
 }
 
 .goods_content {
@@ -2932,7 +2936,7 @@ h3,
     text-decoration: none;
   }
 
-  &__link > img {
+  &__link>img {
     width: 78px;
     height: 92px;
     object-fit: contain;
@@ -2995,7 +2999,7 @@ h3,
   transform: translateX(-50%);
   background: $main;
 
-  > button,
+  >button,
   &__back {
     display: grid;
     width: 34px;
@@ -3008,7 +3012,7 @@ h3,
     cursor: pointer;
   }
 
-  > button img,
+  >button img,
   &__back img {
     width: 20px;
     height: 20px;
@@ -3082,7 +3086,7 @@ h3,
     line-height: 23px;
   }
 
-  &__heading > span {
+  &__heading>span {
     font-family: sans-serif;
     font-size: 32px;
     font-weight: 200;
@@ -3096,14 +3100,14 @@ h3,
     text-align: center;
   }
 
-  &__statuses > span {
+  &__statuses>span {
     position: relative;
     display: grid;
     gap: 4px;
     justify-items: center;
   }
 
-  &__statuses > span:not(:last-child)::after {
+  &__statuses>span:not(:last-child)::after {
     position: absolute;
     right: -3px;
     bottom: 0;
@@ -3451,7 +3455,7 @@ h3,
     line-height: 26px;
   }
 
-  &__total > div {
+  &__total>div {
     display: grid;
     gap: 4px;
   }
@@ -3516,7 +3520,7 @@ h3,
   padding: 10px 0;
   border-bottom: 1px solid $theme_line;
 
-  > img {
+  >img {
     width: 82px;
     height: 98px;
     object-fit: contain;
@@ -3647,8 +3651,8 @@ h3,
     cursor: pointer;
   }
 
-  &__choice > input,
-  .payment_subchoice > input,
+  &__choice>input,
+  .payment_subchoice>input,
   .convenience_list input {
     width: 22px;
     height: 22px;
@@ -3657,12 +3661,12 @@ h3,
     accent-color: #ff2938;
   }
 
-  &__choice > span {
+  &__choice>span {
     font-size: 17px;
     line-height: 25px;
   }
 
-  &__choice > small {
+  &__choice>small {
     margin-left: auto;
     font-family: "Noto Sans JP", sans-serif;
     font-size: 11px;
@@ -3679,7 +3683,7 @@ h3,
     line-height: 20px;
   }
 
-  &__panel > p {
+  &__panel>p {
     margin: 8px 0;
   }
 
@@ -3714,7 +3718,7 @@ h3,
   gap: 12px;
   padding: 8px 0 18px;
 
-  > label {
+  >label {
     display: grid;
     gap: 5px;
     font-size: 11px;
@@ -3901,11 +3905,11 @@ h3,
   }
 
   p,
-  > span {
+  >span {
     font-family: "Noto Sans JP", sans-serif;
   }
 
-  > span {
+  >span {
     justify-self: end;
     font-size: 13px;
   }
