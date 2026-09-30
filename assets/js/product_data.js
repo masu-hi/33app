@@ -8,12 +8,7 @@ window.PRODUCTS = {
     extensionFee: 440,
     shippingFee: 440,
     images: ["assets/images/penlight.png"],
-    variants: [
-      { id: "penlight-pink", label: "ピンク", stock: 3 },
-      { id: "penlight-blue", label: "ブルー", stock: 3 },
-      { id: "penlight-purple", label: "パープル", stock: 3 },
-      { id: "penlight-white", label: "ホワイト", stock: 3 },
-    ],
+    variants: [{ id: "penlight-default", label: "ペンライト", stock: 3 }],
     searchTags: [
       "ペンライト",
       "ペンラ",
@@ -26,12 +21,7 @@ window.PRODUCTS = {
     ],
     description:
       "シンプルで使いやすい定番のペンライトです。どんな場面でも使いやすい汎用タイプなので、初めての方にもおすすめです。",
-    options: [
-      {
-        name: "カラー",
-        values: ["ピンク", "ブルー", "パープル", "ホワイト"],
-      },
-    ],
+    options: [],
   },
   bag: {
     id: "bag",
@@ -115,7 +105,7 @@ window.PRODUCTS = {
   fan: {
     id: "fan",
     category: "fan",
-    name: "ファンサうちわ",
+    name: "ファンサうちわセット",
     price: 2400,
     rentalDays: 3,
     extensionFee: 440,
@@ -135,7 +125,7 @@ window.PRODUCTS = {
     ],
     searchTags: [
       "うちわ",
-      "ファンサうちわ",
+      "ファンサうちわセット",
       "応援うちわ",
       "ファンサ",
       "ファンサービス",
@@ -143,10 +133,10 @@ window.PRODUCTS = {
       "コンサート",
     ],
     description:
-      "ライブでのファンサにぴったりなうちわです。大きく見やすい文字と、ステージからも見つけてもらいやすいデザインです。",
+      "ライブでのファンサにぴったりなうちわと、推しカラーを選べるうちわケースのセットです。大きく見やすい定番メッセージから、お好みの文字を選べます。",
     options: [
       {
-        name: "メッセージ",
+        name: "うちわの文字",
         values: [
           "ピースして",
           "投げキッスして",
@@ -170,6 +160,7 @@ window.PRODUCTS = {
     id: "fan_case",
     category: "fan_case",
     name: "うちわケース",
+    standalone: false,
     price: 2600,
     rentalDays: 3,
     extensionFee: 440,
@@ -206,9 +197,19 @@ window.PRODUCTS = {
     images: ["assets/images/setto.png"],
     inventoryMode: "shared",
     bundleComponents: [
-      { productId: "penlight", quantity: 1, name: "ペンライト", defaultVariant: "penlight-pink" },
+      {
+        productId: "penlight",
+        quantity: 1,
+        name: "ペンライト",
+        defaultVariant: "penlight-default",
+      },
       { productId: "bag", quantity: 1, name: "推し活バッグ", defaultVariant: "bag-red" },
-      { productId: "fan", quantity: 1, name: "ファンサうちわ", defaultVariant: "fan-peace" },
+      {
+        productId: "fan",
+        quantity: 1,
+        name: "ファンサうちわ",
+        defaultVariant: "fan-peace",
+      },
       { productId: "fan_case", quantity: 1, name: "うちわケース", defaultVariant: "fan-case-red" },
       { productId: "binoculars", quantity: 1, name: "双眼鏡", defaultVariant: "binoculars-8x" },
     ],
@@ -232,7 +233,7 @@ window.PRODUCTS = {
       "バッグ",
     ],
     description:
-      "推し活に必須のペンライト、推し活バッグ、ファンサうちわ、うちわケース、双眼鏡がひとつになったお得なセットです。単品の在庫と連携しており、お好みのバリエーションをお選びいただけます。",
+      "推し活に必須のペンライト、推し活バッグ、ケース付きファンサうちわ、双眼鏡がひとつになったお得なセットです。単品の在庫と連携しており、お好みのバリエーションをお選びいただけます。",
     options: [
       {
         name: "セット内容",
@@ -301,6 +302,66 @@ window.getProductAvailableStock = (productId) => {
   );
 };
 
+const orderOverlapsDate = (order, dateKey) =>
+  order.arrivalDate &&
+  order.returnDate &&
+  order.arrivalDate <= dateKey &&
+  dateKey <= order.returnDate;
+
+window.getVariantPhysicalStock = (productId, variantId) => {
+  const currentStock = window.getVariantStock(productId, variantId);
+  const activeOrders = JSON.parse(localStorage.getItem("rentalOrders") || "[]").filter(
+    (order) => order.status !== "キャンセル",
+  );
+  let allocatedTotal = 0;
+
+  activeOrders.forEach((order) => {
+    if (order.variantSelections?.[productId] !== variantId) return;
+    const quantity = Number(order.quantity) || 1;
+    allocatedTotal += quantity;
+  });
+
+  return currentStock + allocatedTotal;
+};
+
+window.getVariantStockForDate = (productId, variantId, dateKey) => {
+  const physicalStock = window.getVariantPhysicalStock(productId, variantId);
+  const activeOrders = JSON.parse(localStorage.getItem("rentalOrders") || "[]").filter(
+    (order) => order.status !== "キャンセル" && orderOverlapsDate(order, dateKey),
+  );
+  const allocatedOnDate = activeOrders.reduce((total, order) => {
+    if (order.variantSelections?.[productId] !== variantId) return total;
+    return total + (Number(order.quantity) || 1);
+  }, 0);
+
+  return Math.max(0, physicalStock - allocatedOnDate);
+};
+
+window.getProductAvailableStockForDate = (productId, dateKey) => {
+  const product = window.PRODUCTS[productId];
+  if (!product) return 0;
+
+  const totalForProduct = (targetId) =>
+    (window.PRODUCTS[targetId]?.variants || []).reduce(
+      (total, variant) => total + window.getVariantStockForDate(targetId, variant.id, dateKey),
+      0,
+    );
+
+  if (productId === "fan") {
+    return Math.min(totalForProduct("fan"), totalForProduct("fan_case"));
+  }
+
+  if (product.inventoryMode === "shared") {
+    return Math.min(
+      ...product.bundleComponents.map((component) =>
+        Math.floor(totalForProduct(component.productId) / component.quantity),
+      ),
+    );
+  }
+
+  return totalForProduct(productId);
+};
+
 window.getSetVariantAvailableStock = (selectedVariants = {}) => {
   const setProduct = window.PRODUCTS.set;
   if (!setProduct) return 0;
@@ -317,9 +378,16 @@ window.reduceStockForOrder = (order) => {
   if (!order) return;
   const quantity = Number(order.quantity) || 1;
 
+  if (order.variantSelections && Object.keys(order.variantSelections).length) {
+    Object.entries(order.variantSelections).forEach(([productId, variantId]) => {
+      window.changeVariantStock(productId, variantId, -quantity);
+    });
+    return;
+  }
+
   if (order.productId === "set" || order.isSet) {
     const bundle = order.bundleVariants || {
-      penlight: "penlight-pink",
+      penlight: "penlight-default",
       bag: "bag-red",
       fan: "fan-peace",
       fan_case: "fan-case-red",
@@ -331,6 +399,59 @@ window.reduceStockForOrder = (order) => {
   } else if (order.productId && order.variantId) {
     window.changeVariantStock(order.productId, order.variantId, -quantity);
   }
+};
+
+window.restoreStockForOrder = (order) => {
+  if (!order) return [];
+  const quantity = Number(order.quantity) || 1;
+  const selections = order.variantSelections || order.bundleVariants || {};
+  const restoredProductIds = [];
+
+  Object.entries(selections).forEach(([productId, variantId]) => {
+    window.changeVariantStock(productId, variantId, quantity);
+    restoredProductIds.push(productId);
+  });
+
+  if (!restoredProductIds.length && order.productId && order.variantId) {
+    window.changeVariantStock(order.productId, order.variantId, quantity);
+    restoredProductIds.push(order.productId);
+  }
+
+  return restoredProductIds;
+};
+
+window.notifyAvailableWaitlist = (changedProductIds = []) => {
+  const changedIds = new Set(changedProductIds);
+  const entries = JSON.parse(localStorage.getItem("waitlistProducts") || "[]");
+  const notifications = JSON.parse(localStorage.getItem("appNotifications") || "[]");
+  let changed = false;
+
+  entries.forEach((entry, index) => {
+    const relatesToChange =
+      changedIds.has(entry.productId) ||
+      (entry.productId === "set" &&
+        window.PRODUCTS.set.bundleComponents.some((component) =>
+          changedIds.has(component.productId),
+        ));
+    if (!relatesToChange || entry.notifiedAt || entry.notify === false) return;
+    if (window.getProductAvailableStock(entry.productId) < 1) return;
+
+    entry.notifiedAt = new Date().toISOString();
+    const product = window.PRODUCTS[entry.productId];
+    notifications.unshift({
+      id: `waitlist-${entry.productId}-${Date.now()}-${index}`,
+      title: `【空きが出ました】${product?.name || "登録商品"}`,
+      message: `${entry.startDate}からの希望期間に申し込める在庫が確保されました。商品詳細から空き状況をご確認ください。`,
+      createdAt: entry.notifiedAt,
+    });
+    changed = true;
+  });
+
+  if (changed) {
+    localStorage.setItem("waitlistProducts", JSON.stringify(entries));
+    localStorage.setItem("appNotifications", JSON.stringify(notifications));
+  }
+  return changed;
 };
 
 window.resetAllInventory = () => {

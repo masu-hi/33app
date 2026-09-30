@@ -45,6 +45,20 @@
         </div>
       </section>
 
+      <section class="admin_daily" aria-labelledby="admin-daily-title">
+        <div class="admin_daily__heading">
+          <div>
+            <h2 id="admin-daily-title">日付別の在庫</h2>
+            <p>確認したい日を選ぶと、その日に貸し出せる在庫が表示されます。</p>
+          </div>
+          <label>
+            確認日
+            <input type="date" data-admin-inventory-date />
+          </label>
+        </div>
+        <div class="admin_daily__list" data-admin-daily-inventory></div>
+      </section>
+
       <section class="admin_products" aria-labelledby="admin-products-title">
         <div class="admin_products__heading">
           <div>
@@ -96,6 +110,23 @@
               <option value="unavailable">貸出不可</option>
             </select>
           </label>
+          <section class="admin_inventory" aria-labelledby="admin-inventory-title">
+            <div class="admin_inventory__heading">
+              <div>
+                <h3 id="admin-inventory-title">種類別の在庫</h3>
+                <p>カラー・文字・倍率などの在庫数を設定します。</p>
+              </div>
+              <strong data-admin-inventory-total>0点</strong>
+            </div>
+            <div class="admin_inventory__groups" data-admin-variants></div>
+            <div class="admin_inventory__bulk">
+              <label>
+                全種類への追加数
+                <input type="number" min="1" value="1" data-admin-bulk-amount />
+              </label>
+              <button type="button" data-admin-bulk-add>全種類の在庫を一括で増やす</button>
+            </div>
+          </section>
           <div class="admin_editor__actions">
             <button type="button" data-admin-reset>初期値に戻す</button>
             <button type="submit">変更を保存</button>

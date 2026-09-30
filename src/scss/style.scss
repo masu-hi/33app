@@ -9,6 +9,7 @@
 $main: var(--color-main, #f6ecf8);
 $soft: var(--color-soft, #fdf6ff);
 $gradient_end: var(--color-gradient-end, #edeefa);
+$gradient_line: var(--color-gradient-line, #cfd3ea);
 $theme_line: var(--color-line, #ead5ee);
 $sub: #eff7ff;
 $text: #353b60;
@@ -61,6 +62,34 @@ h3,
 
 [hidden] {
   display: none !important;
+}
+
+.password_input {
+  position: relative;
+  display: block;
+  width: 100%;
+
+  input {
+    width: 100%;
+    padding-right: 48px !important;
+  }
+}
+
+.password_input__toggle {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  display: grid;
+  width: 40px;
+  height: 36px;
+  padding: 0;
+  place-items: center;
+  transform: translateY(-50%);
+  border: 0;
+  color: $text;
+  background: transparent;
+  font-size: 17px;
+  cursor: pointer;
 }
 
 .site_header {
@@ -688,8 +717,21 @@ h3,
   cursor: not-allowed;
 }
 
+.rental_calendar__day.is_waitlist {
+  border: 1px dashed #7382b8;
+  color: #46589a;
+  background: #f1f7ff;
+  cursor: pointer;
+}
+
+.rental_calendar__day.is_waitlist.is_selected {
+  color: $white;
+  background: #5667aa;
+}
+
 .rental_calendar__legend {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
   margin-top: 22px;
@@ -709,6 +751,10 @@ h3,
 
   .is_unavailable {
     background: #f1f7ff;
+  }
+
+  .is_waitlist {
+    background: #fff8e8;
   }
 
   span:last-child {
@@ -735,6 +781,11 @@ h3,
   &--selected {
     border: 0;
     background: #5667aa;
+  }
+
+  &--waitlist {
+    color: #8a6a22;
+    border-color: #c7a95d;
   }
 }
 
@@ -1620,7 +1671,7 @@ h3,
   align-content: center;
   justify-items: center;
   padding: 10px;
-  border: 1px solid #dcbbe8;
+  border: 1px solid $theme_line;
   border-radius: 16px;
   color: $text;
   background: $soft;
@@ -1628,8 +1679,8 @@ h3,
   text-decoration: none;
 
   &--goods {
-    border-color: #afd6f5;
-    background: $sub;
+    border-color: $gradient_line;
+    background: $gradient_end;
   }
 
   &__visual {
@@ -1818,7 +1869,7 @@ h3,
   padding: 36px 30px 104px;
   color: $text;
   background: $main;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 16px;
 
   nav {
@@ -1836,6 +1887,11 @@ h3,
   small {
     font-size: inherit;
   }
+}
+
+// Keep the space below every footer consistent with the privacy policy page.
+.app_shell:has(> .app_footer) {
+  padding-bottom: 0;
 }
 
 .is-dark-favorite {
@@ -1868,7 +1924,7 @@ h3,
   &__account_title {
     display: block;
     padding-bottom: 20px;
-    border-bottom: 1px solid #efdff3;
+    border-bottom: 1px solid $theme_line;
     text-decoration: none;
   }
 
@@ -1876,7 +1932,7 @@ h3,
     display: block;
     margin-top: 25px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #efdff3;
+    border-bottom: 1px solid $theme_line;
     color: #4f6097;
     font-family: inherit;
     font-size: 16px;
@@ -2040,7 +2096,7 @@ h3,
 
   &__mock b {
     margin-top: 14px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     text-align: center;
   }
@@ -2482,6 +2538,85 @@ h3,
   padding-bottom: 80px;
 }
 
+.cancellation_confirm {
+  min-height: 570px;
+  padding: 40px 30px 56px;
+  color: $text;
+
+  h1 {
+    margin: 0 0 28px;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  dl {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid $theme_line;
+    border-radius: 8px;
+    background: $sub;
+  }
+
+  dl div {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  dt,
+  dd,
+  p {
+    margin: 0;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  p {
+    margin-top: 20px;
+  }
+
+  &__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  &__actions a,
+  &__actions button,
+  &__complete a {
+    display: grid;
+    min-height: 48px;
+    padding: 0 12px;
+    border: 1px solid $theme_line;
+    border-radius: 8px;
+    place-items: center;
+    color: $text;
+    background: $main;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  &__actions button {
+    border-color: $theme_line;
+    color: $text;
+    background: $main;
+  }
+
+  &__complete {
+    padding-top: 48px;
+    text-align: center;
+  }
+
+  &__complete a {
+    margin-top: 32px;
+  }
+}
+
 .cancellation_refund {
   min-height: 570px;
   padding: 31px 30px 50px;
@@ -2547,7 +2682,7 @@ h3,
   background: $soft;
 
   &--goods {
-    background: $sub;
+    background: $gradient_end;
   }
 
   .search_choice__visual {
@@ -2649,7 +2784,7 @@ h3,
 }
 
 .goods_content {
-  background: $sub;
+  background: var(--color-gradient-end, #eff7ff);
 }
 
 .goods_grid {
@@ -2662,7 +2797,7 @@ h3,
     min-height: 150px;
     align-content: center;
     justify-items: center;
-    border: 1px solid #afd6f5;
+    border: 1px solid $theme_line;
     border-radius: 16px;
     color: $text;
     background: $white;
@@ -2942,7 +3077,6 @@ h3,
     text-decoration: none;
   }
 
-  &__link > img {
   &__link2 {
     display: grid;
     grid-template-columns: 86px 1fr;
@@ -2954,7 +3088,7 @@ h3,
     text-decoration: none;
   }
 
-  &__link>img {
+  &__link > img {
     width: 78px;
     height: 92px;
     object-fit: contain;
@@ -2994,7 +3128,6 @@ h3,
   &__favorite.is_favorite {
     color: #e98bb9;
   }
-}
 }
 
 // My page
@@ -3142,7 +3275,7 @@ h3,
   }
 
   &__statuses small {
-    font-size: 10px;
+    font-size: 12px;
     line-height: 15px;
     white-space: nowrap;
   }
@@ -4046,6 +4179,23 @@ h3,
   &__product p {
     font-family: "Noto Sans JP", sans-serif;
   }
+
+  &__cancel {
+    display: grid;
+    min-height: 44px;
+    margin-top: 16px;
+    border: 1px solid $theme_line;
+    border-radius: 8px;
+    place-items: center;
+    color: $text;
+    background: $main;
+    font-size: 13px;
+    text-decoration: none;
+  }
+
+  &.is_cancelled {
+    opacity: 0.68;
+  }
 }
 
 .product_detail_page {
@@ -4859,7 +5009,7 @@ h3,
     border-radius: 50%;
     color: #9da1b9;
     background: $soft;
-    font-size: 10px;
+    font-size: 12px;
     transition:
       transform 0.2s ease,
       background 0.2s ease;
@@ -4962,7 +5112,7 @@ h3,
   justify-content: center;
   padding: 3px 10px;
   border-radius: 12px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1.3;
 

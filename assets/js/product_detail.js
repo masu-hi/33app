@@ -1,12 +1,17 @@
-document.addEventListener("DOMContentLoaded", () => {
+(() => {
   // ---------------------------------------------------------
   // 1. URLパラメータからの汎用商品データの読み込みと反映
   // ---------------------------------------------------------
   const params = new URLSearchParams(window.location.search);
-  const productId = params.get("id") || params.get("category");
+  const requestedProductId = params.get("id") || params.get("category") || "penlight";
+  const productId =
+    window.PRODUCTS?.[requestedProductId]?.standalone === false ? "fan" : requestedProductId;
 
   if (productId && window.PRODUCTS && window.PRODUCTS[productId]) {
     const product = window.PRODUCTS[productId];
+
+    document.title = `${product.name} | おしりーす`;
+    document.body.dataset.productId = product.id || productId;
 
     // 商品名の更新
     const nameEl = document.querySelector("[data-product-detail-name]");
@@ -16,8 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 価格の更新
     const priceEl = document.querySelector("[data-product-detail-price]");
-    if (priceEl && product.price) {
-      priceEl.textContent = product.price;
+    if (priceEl && Number.isFinite(product.price)) {
+      const rentalDays = Number(product.rentalDays) || 4;
+      priceEl.textContent = `¥${product.price.toLocaleString("ja-JP")} / ${rentalDays}日間〜`;
     }
 
     // 説明の更新
@@ -33,28 +39,61 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 画像の更新
-    const galleryImages = document.querySelectorAll("[data-product-gallery-image]");
+    const galleryImages = [...document.querySelectorAll("[data-product-gallery-image]")];
     if (galleryImages.length > 0) {
-      if (product.image) {
-        galleryImages.forEach((img) => {
-          img.src = product.image;
-          img.alt = `${product.name || "商品"}の画像`;
-        });
-      } else if (Array.isArray(product.images) && product.images.length > 0) {
-        galleryImages.forEach((img, index) => {
-          const imgSrc = product.images[index] || product.images[0];
-          img.src = imgSrc;
-          img.alt = `${product.name || "商品"}の画像${index + 1}`;
-        });
-      }
+      const images =
+        Array.isArray(product.images) && product.images.length
+          ? product.images
+          : product.image
+            ? [product.image]
+            : [];
+
+      galleryImages.forEach((img, index) => {
+        const slide = img.closest(".product_detail__gallery_slide");
+        const hasImage = Boolean(images[index]);
+        slide.hidden = !hasImage;
+        if (!hasImage) return;
+        img.src = images[index];
+        img.alt = `${product.name || "商品"}の画像${images.length > 1 ? index + 1 : ""}`;
+      });
+
+      const galleryCount = document.querySelector("[data-gallery-count]");
+      if (galleryCount && images.length) galleryCount.textContent = `1 / ${images.length}`;
     }
 
     // 選択項目（options）の動的生成
     const optionsContainer = document.querySelector("[data-product-options]");
-    if (optionsContainer && product.options) {
+    let displayOptions = product.options;
+
+    if (Array.isArray(product.bundleComponents)) {
+      displayOptions = product.bundleComponents.flatMap((component) => {
+        const componentProduct = window.PRODUCTS[component.productId];
+        return (componentProduct?.options || [])
+          .filter(
+            (option) => component.productId !== "fan" || !option.name?.includes("うちわケース"),
+          )
+          .map((option) => ({
+            ...option,
+            name: `${component.name}：${option.name}`,
+            sourceProductId: component.productId,
+            sourceVariants: componentProduct.variants,
+          }));
+      });
+    } else if (product.id === "fan") {
+      displayOptions = (product.options || []).map((option) => {
+        if (!option.name?.includes("うちわケース")) return option;
+        return {
+          ...option,
+          sourceProductId: "fan_case",
+          sourceVariants: window.PRODUCTS.fan_case?.variants,
+        };
+      });
+    }
+
+    if (optionsContainer && displayOptions) {
       optionsContainer.innerHTML = "";
 
-      const createOptionSelect = (groupTitle, optionsList, index) => {
+      const createOptionSelect = (groupTitle, optionsList, index, optionConfig = {}) => {
         const group = document.createElement("div");
         group.className = "product_detail__option_group";
 
@@ -69,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         select.id = selectId;
         select.name = `option_${index}`;
         select.required = true;
+        select.dataset.sourceProductId = optionConfig.sourceProductId || product.id;
 
         const defaultOption = document.createElement("option");
         defaultOption.value = "";
@@ -87,6 +127,22 @@ document.addEventListener("DOMContentLoaded", () => {
               optionEl.value = String(item);
               optionEl.textContent = String(item);
             }
+
+            const matchingVariant = (optionConfig.sourceVariants || product.variants)?.find(
+              (variant) => variant.label === optionEl.textContent || variant.id === optionEl.value,
+            );
+            if (
+              matchingVariant &&
+              typeof window.getVariantPhysicalStock === "function" &&
+              window.getVariantPhysicalStock(
+                optionConfig.sourceProductId || product.id,
+                matchingVariant.id,
+              ) < 1
+            ) {
+              optionEl.disabled = true;
+              optionEl.textContent += "（在庫なし）";
+            }
+            if (matchingVariant) optionEl.dataset.variantId = matchingVariant.id;
             select.appendChild(optionEl);
           });
         }
@@ -96,23 +152,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return group;
       };
 
-      if (Array.isArray(product.options)) {
-        product.options.forEach((opt, idx) => {
+      if (Array.isArray(displayOptions)) {
+        displayOptions.forEach((opt, idx) => {
           if (typeof opt === "string") {
             const groupEl = createOptionSelect("オプション", [opt], idx);
             optionsContainer.appendChild(groupEl);
           } else if (typeof opt === "object" && opt !== null) {
             const title = opt.name || opt.label || opt.title || `選択項目${idx + 1}`;
             const list = opt.values || opt.options || opt.choices || opt.items || [];
-            const groupEl = createOptionSelect(title, list, idx);
+            const groupEl = createOptionSelect(title, list, idx, opt);
             optionsContainer.appendChild(groupEl);
           }
         });
-      } else if (typeof product.options === "object" && product.options !== null) {
-        Object.keys(product.options).forEach((key, idx) => {
-          const list = Array.isArray(product.options[key])
-            ? product.options[key]
-            : [product.options[key]];
+      } else if (typeof displayOptions === "object" && displayOptions !== null) {
+        Object.keys(displayOptions).forEach((key, idx) => {
+          const list = Array.isArray(displayOptions[key])
+            ? displayOptions[key]
+            : [displayOptions[key]];
           const groupEl = createOptionSelect(key, list, idx);
           optionsContainer.appendChild(groupEl);
         });
@@ -189,17 +245,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const colorHearts = colorOptions.querySelectorAll(".color_heart");
 
     colorHearts.forEach((heart) => {
-
       heart.addEventListener("click", (event) => {
-
         event.preventDefault();
 
         event.stopPropagation();
         const color = heart.dataset.color;
 
-        const colorText = changeBtn
-          .closest(".setbtn")
-          ?.querySelector("[data-product-price]");
+        const colorText = changeBtn.closest(".setbtn")?.querySelector("[data-product-price]");
 
         // 英語の色名を日本語に変換
         const colorNames = {
@@ -212,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
           purple: "紫",
           lightblue: "水色",
           white: "白",
-          black: "黒"
+          black: "黒",
         };
 
         if (colorText) {
@@ -224,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
-});
+})();
 
 // ---------------------------------------------------------
 // 4. うちわの文章選択
@@ -232,9 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const textChangeBtns = document.querySelectorAll(".changebtn");
 
 textChangeBtns.forEach((changeBtn) => {
-  const textOptions = changeBtn
-    .closest(".setbtn")
-    ?.parentElement.querySelector(".text_options");
+  const textOptions = changeBtn.closest(".setbtn")?.parentElement.querySelector(".text_options");
 
   // 文章選択がない商品はスキップ
   if (!textOptions) return;
@@ -257,9 +307,7 @@ textChangeBtns.forEach((changeBtn) => {
 
       const text = btn.dataset.text;
 
-      const textDisplay = changeBtn
-        .closest(".setbtn")
-        ?.querySelector("[data-product-price]");
+      const textDisplay = changeBtn.closest(".setbtn")?.querySelector("[data-product-price]");
 
       if (textDisplay) {
         textDisplay.textContent = text;

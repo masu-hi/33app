@@ -281,9 +281,10 @@
   color: #333333;
 }
 
-  &.is-selected {
-    transform: scale(1.15);
-  }
+.color_heart.is-selected {
+  transform: scale(1.15);
+}
+
 .text_options {
   display: none;
   margin-top: 10px;
