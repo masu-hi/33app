@@ -168,12 +168,13 @@
 }
 
 .changebtn {
-  background-color: #F8E4FD;
-  color: #4A5493;
   border: none;
-  padding: 2px 6px;
-  font-size: 16px;
-  border-radius: 50px;
+  border-radius: 20px;
+  padding: 6px 14px;
+  background-color: #f8dce8;
+  color: #655880;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .setbtn {
@@ -187,89 +188,135 @@
   }
 }
 
-.changebtn {
-  border: none;
-  border-radius: 20px;
-  padding: 6px 14px;
-  background-color: #f8dce8;
-  color: #655880;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-/* 色選択 */
 .color_options {
-  display: none;
-  gap: 14px;
-  overflow-x: auto;
-  padding: 12px 4px 8px;
 
-  /* 横スクロールバーを見せない */
+  display: none;
+
+  margin-top: 10px;
+
+  gap: 10px;
+
+  /* 横スクロール */
+
+  overflow-x: auto;
+
+  overflow-y: hidden;
+
+  white-space: nowrap;
+
+  padding-bottom: 5px;
+
+  /* ハート4個分くらいの幅 */
+
+  width: 240px;
+
+  /* スクロールバーを見えにくくする */
+
   scrollbar-width: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  &.is-open {
-    display: flex;
-  }
 }
 
+.color_options::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+/* 変更ボタンを押したとき */
+
+.color_options.active {
+
+  display: flex;
+
+}
+
+/* ハート */
 .color_heart {
-  flex: 0 0 48px;
-  width: 48px;
-  height: 48px;
-  padding: 0;
+  flex: 0 0 auto;
   border: none;
-  background: transparent;
-  font-size: 42px;
-  line-height: 1;
+  background: none;
+  font-size: 32px;
   cursor: pointer;
+  padding: 0;
+}
 
-  /* 10色 */
-  &:nth-child(1) {
-    color: #ff6b81;
-  }
+/* ハートの色 */
+.color_heart[data-color="red"] {
+  color: #E87678;
+}
 
-  &:nth-child(2) {
-    color: #ff9fbc;
-  }
+.color_heart[data-color="Blue"] {
+  color: #769EE8;
+}
 
-  &:nth-child(3) {
-    color: #ff9d5c;
-  }
+.color_heart[data-color="pink"] {
+  color: #E876DE;
+}
 
-  &:nth-child(4) {
-    color: #ffd65c;
-  }
+.color_heart[data-color="light blue"] {
+  color: #76DDE8;
+}
 
-  &:nth-child(5) {
-    color: #78c88a;
-  }
+.color_heart[data-color="orange"] {
+  color: #E8A476;
+}
 
-  &:nth-child(6) {
-    color: #70b8e8;
-  }
+.color_heart[data-color="purple"] {
+  color: #C676E8;
+}
 
-  &:nth-child(7) {
-    color: #a98de8;
-  }
+.color_heart[data-color="yellow"] {
+  color: #E8E476;
+}
 
-  &:nth-child(8) {
-    color: #91d9e8;
-  }
+.color_heart[data-color="green"] {
+  color: #76E87C;
+}
 
-  &:nth-child(9) {
-    color: #ffffff;
-    -webkit-text-stroke: 1px #aaa;
-  }
+.color_heart[data-color="white"] {
+  color: #ffffff;
+  -webkit-text-stroke: 1px #999;
+}
 
-  &:nth-child(10) {
-    color: #555555;
-  }
+.color_heart[data-color="black"] {
+  color: #333333;
+}
 
-  &.is-selected {
-    transform: scale(1.15);
-  }
+.text_options {
+  display: none;
+  margin-top: 10px;
+  gap: 8px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  white-space: nowrap;
+  padding-bottom: 5px;
+
+  width: 240px;
+
+  scrollbar-width: none;
+}
+
+.text_options::-webkit-scrollbar {
+  display: none;
+}
+
+.text_options.active {
+  display: flex;
+}
+
+.text_option {
+  flex: 0 0 auto;
+
+  border: none;
+  border-radius: 20px;
+
+  padding: 8px 14px;
+
+  background-color: #f8dce8;
+  color: #655880;
+
+  font-size: 13px;
+  cursor: pointer;
 }
