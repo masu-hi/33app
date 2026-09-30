@@ -92,8 +92,7 @@ window.PRODUCTS = {
     extensionFee: 440,
     shippingFee: 440,
     images: ["assets/images/penillust.png"],
-    description:
-      "ライブやイベントでの思い出を残すために必要なアイテムをまとめた撮影セットです。",
+    description: "ライブやイベントでの思い出を残すために必要なアイテムをまとめた撮影セットです。",
     options: [
       {
         name: "セット内容",
