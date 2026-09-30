@@ -1568,8 +1568,40 @@ h3,
   border: 0;
   color: #353b60;
   background: transparent;
-  font-size: 17px;
   cursor: pointer;
+}
+
+.password_input__icon {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 15px;
+  border: 2px solid currentcolor;
+  border-radius: 50%;
+}
+.password_input__icon::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: currentcolor;
+  content: "";
+}
+
+.password_input__toggle[aria-pressed=false] .password_input__icon::before {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 27px;
+  height: 2px;
+  transform: translate(-50%, -50%) rotate(42deg);
+  border-radius: 2px;
+  background: currentcolor;
+  content: "";
 }
 
 .site_header {
