@@ -11,6 +11,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/product_data.js" defer></script>
     <script src="assets/js/app.js" defer></script>
   </head>
   <body class="mobile_app">
@@ -51,7 +52,41 @@
         </div>
       </header>
 
-      <section class="cancellation_refund" aria-labelledby="cancellation-refund-title">
+      <section class="cancellation_confirm" data-cancellation-confirm hidden>
+        <div data-cancellation-prompt>
+          <h1>この商品をキャンセルしますか？</h1>
+          <dl>
+            <div>
+              <dt>注文番号</dt>
+              <dd data-cancellation-order-id></dd>
+            </div>
+            <div>
+              <dt>商品</dt>
+              <dd data-cancellation-product></dd>
+            </div>
+            <div>
+              <dt>レンタル期間</dt>
+              <dd data-cancellation-period></dd>
+            </div>
+          </dl>
+          <p>キャンセル規定に基づき、時期によってキャンセル料が発生する場合があります。</p>
+          <div class="cancellation_confirm__actions">
+            <a href="rental_history.html">戻る</a>
+            <button type="button" data-confirm-cancellation>キャンセルする</button>
+          </div>
+        </div>
+        <div class="cancellation_confirm__complete" data-cancellation-complete hidden>
+          <h1>キャンセルが完了しました。</h1>
+          <p>レンタル履歴と在庫へ反映しました。</p>
+          <a href="rental_history.html">レンタル履歴に戻る</a>
+        </div>
+      </section>
+
+      <section
+        class="cancellation_refund"
+        aria-labelledby="cancellation-refund-title"
+        data-cancellation-guide
+      >
         <h1 id="cancellation-refund-title">キャンセル・払い戻し</h1>
         <p class="cancellation_refund__intro">キャンセル・払い戻しに関する情報を確認できます。</p>
         <section class="cancellation_refund__card">

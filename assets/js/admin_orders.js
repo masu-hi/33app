@@ -64,17 +64,26 @@
       const customer = order.customer || {};
 
       article.className = "admin_order";
+      if (order.status === "キャンセル") article.classList.add("is_cancelled");
       heading.className = "admin_order__heading";
       orderId.textContent = order.id || "注文番号なし";
       placedDate.textContent = `受付日：${order.placedDate || "未登録"}`;
       statusLabel.textContent = "状況";
       statuses.forEach((status) => statusSelect.add(new Option(status, status)));
       statusSelect.value = order.status || "配送待ち";
+      statusSelect.disabled = order.status === "キャンセル";
       statusSelect.addEventListener("change", () => {
         const updatedOrders = getOrders();
         const target = updatedOrders.find((savedOrder) => savedOrder.id === order.id);
         if (!target) return;
+        const previousStatus = target.status || "配送待ち";
         target.status = statusSelect.value;
+        if (statusSelect.value === "キャンセル" && previousStatus !== "キャンセル") {
+          const restoredProductIds = window.restoreStockForOrder?.(target) || [];
+          window.notifyAvailableWaitlist?.(restoredProductIds);
+        } else if (previousStatus === "キャンセル" && statusSelect.value !== "キャンセル") {
+          window.reduceStockForOrder?.(target);
+        }
         saveOrders(updatedOrders);
         render();
       });
@@ -98,6 +107,12 @@
         ),
       );
       article.append(heading, details);
+      if (order.status === "キャンセル") {
+        const cancelledOverlay = document.createElement("div");
+        cancelledOverlay.className = "admin_order__cancelled";
+        cancelledOverlay.textContent = "キャンセルしました。";
+        article.append(cancelledOverlay);
+      }
       list.append(article);
     });
   };
