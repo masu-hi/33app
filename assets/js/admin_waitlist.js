@@ -2,6 +2,7 @@
   const storageKey = "waitlistProducts";
   const list = document.querySelector("[data-admin-waitlist]");
   const empty = document.querySelector("[data-admin-waitlist-empty]");
+  const statusMessage = document.querySelector("[data-admin-waitlist-status]");
   const products = window.PRODUCTS || {};
 
   if (!list || !empty) return;
@@ -43,6 +44,7 @@
       const button = document.createElement("button");
       const selectedOptions = Object.values(entry.selectedOptions || {}).filter(Boolean);
       const wantsNotification = entry.notify !== false;
+      const isAvailable = window.isWaitlistEntryAvailable?.(entry) ?? false;
 
       article.className = "admin_waitlist_item";
       name.textContent = product.name || entry.productId;
@@ -57,15 +59,18 @@
         ? "通知不要"
         : entry.notifiedAt
           ? "通知済み"
-          : "通知待ち";
+          : isAvailable
+            ? "通知可能"
+            : "入荷待ち";
       state.className = entry.notifiedAt ? "is_notified" : "is_pending";
       button.type = "button";
-      button.textContent = entry.notifiedAt ? "未通知に戻す" : "通知済みにする";
-      button.disabled = !wantsNotification;
+      button.textContent = entry.notifiedAt ? "通知済み" : "通知する";
+      button.disabled = !wantsNotification || Boolean(entry.notifiedAt) || !isAvailable;
       button.addEventListener("click", () => {
-        const updatedEntries = getEntries();
-        updatedEntries[index].notifiedAt = entry.notifiedAt ? "" : new Date().toISOString();
-        saveEntries(updatedEntries);
+        const sent = window.notifyAvailableWaitlist?.([entry.productId], [index]);
+        statusMessage.textContent = sent
+          ? `${product.name || entry.productId}の空き待ち通知を送信しました。`
+          : "希望期間の在庫を確認できなかったため、通知できませんでした。";
         render();
       });
 
@@ -75,5 +80,6 @@
     });
   };
 
+  window.notifyAvailableWaitlist?.(Object.keys(products));
   render();
 })();

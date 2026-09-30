@@ -1,7 +1,21 @@
+window.ARTISTS = [
+  { id: "lumina", name: "LUMINA" },
+  { id: "sora-note", name: "SORA NOTE" },
+  { id: "mint-parade", name: "MINT PARADE" },
+  { id: "vivid-loop", name: "VIVID LOOP" },
+  { id: "nocturne", name: "NOCTURNE" },
+  { id: "snow-drop", name: "SNOW DROP" },
+  { id: "coral-beat", name: "CORAL BEAT" },
+  { id: "sunny-days", name: "SUNNY DAYS" },
+];
+
+const ALL_ARTIST_IDS = window.ARTISTS.map((artist) => artist.id);
+
 window.PRODUCTS = {
   penlight: {
     id: "penlight",
     category: "penlight",
+    artistIds: [...ALL_ARTIST_IDS],
     name: "ペンライト",
     price: 800,
     rentalDays: 4,
@@ -26,6 +40,7 @@ window.PRODUCTS = {
   bag: {
     id: "bag",
     category: "bag",
+    artistIds: [...ALL_ARTIST_IDS],
     name: "推し活バッグ",
     price: 2400,
     rentalDays: 3,
@@ -65,6 +80,7 @@ window.PRODUCTS = {
   binoculars: {
     id: "binoculars",
     category: "binoculars",
+    artistIds: [...ALL_ARTIST_IDS],
     name: "双眼鏡",
     price: 2400,
     rentalDays: 3,
@@ -105,6 +121,7 @@ window.PRODUCTS = {
   fan: {
     id: "fan",
     category: "fan",
+    artistIds: [...ALL_ARTIST_IDS],
     name: "ファンサうちわセット",
     price: 2400,
     rentalDays: 3,
@@ -159,6 +176,7 @@ window.PRODUCTS = {
   fan_case: {
     id: "fan_case",
     category: "fan_case",
+    artistIds: [...ALL_ARTIST_IDS],
     name: "うちわケース",
     standalone: false,
     price: 2600,
@@ -189,6 +207,7 @@ window.PRODUCTS = {
   set: {
     id: "set",
     category: "set",
+    artistIds: [...ALL_ARTIST_IDS],
     name: "推し活セット",
     price: 3200,
     rentalDays: 3,
@@ -241,6 +260,18 @@ window.PRODUCTS = {
       },
     ],
   },
+};
+
+window.getProductData = (productId) => {
+  const product = window.PRODUCTS[productId];
+  if (!product) return null;
+  let overrides = {};
+  try {
+    overrides = JSON.parse(localStorage.getItem("productOverrides") || "{}");
+  } catch {
+    overrides = {};
+  }
+  return { ...product, ...(overrides[productId] || {}), id: product.id };
 };
 
 const INVENTORY_STORAGE_KEY = "productVariantInventory";
@@ -420,13 +451,35 @@ window.restoreStockForOrder = (order) => {
   return restoredProductIds;
 };
 
-window.notifyAvailableWaitlist = (changedProductIds = []) => {
+window.isWaitlistEntryAvailable = (entry) => {
+  if (!entry?.productId) return false;
+  if (!entry.startDate || !entry.endDate) {
+    return window.getProductAvailableStock(entry.productId) > 0;
+  }
+
+  const currentDate = new Date(`${entry.startDate}T00:00:00`);
+  const endDate = new Date(`${entry.endDate}T00:00:00`);
+  while (currentDate <= endDate) {
+    const dateKey = [
+      currentDate.getFullYear(),
+      String(currentDate.getMonth() + 1).padStart(2, "0"),
+      String(currentDate.getDate()).padStart(2, "0"),
+    ].join("-");
+    if (window.getProductAvailableStockForDate(entry.productId, dateKey) < 1) return false;
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return true;
+};
+
+window.notifyAvailableWaitlist = (changedProductIds = [], targetIndexes = null) => {
   const changedIds = new Set(changedProductIds);
+  const targetedEntries = targetIndexes ? new Set(targetIndexes) : null;
   const entries = JSON.parse(localStorage.getItem("waitlistProducts") || "[]");
   const notifications = JSON.parse(localStorage.getItem("appNotifications") || "[]");
   let changed = false;
 
   entries.forEach((entry, index) => {
+    if (targetedEntries && !targetedEntries.has(index)) return;
     const relatesToChange =
       changedIds.has(entry.productId) ||
       (entry.productId === "set" &&
@@ -434,7 +487,7 @@ window.notifyAvailableWaitlist = (changedProductIds = []) => {
           changedIds.has(component.productId),
         ));
     if (!relatesToChange || entry.notifiedAt || entry.notify === false) return;
-    if (window.getProductAvailableStock(entry.productId) < 1) return;
+    if (!window.isWaitlistEntryAvailable(entry)) return;
 
     entry.notifiedAt = new Date().toISOString();
     const product = window.PRODUCTS[entry.productId];

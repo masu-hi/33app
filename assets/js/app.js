@@ -484,8 +484,11 @@ document.querySelectorAll("[data-artist-select]").forEach((button) => {
     });
 
     const artist = button.textContent.trim();
+    const artistId = button.dataset.artistId;
     recordPopularSearch(artist);
-    window.location.href = `search.html?artist=${encodeURIComponent(artist)}`;
+    const params = new URLSearchParams({ artist });
+    if (artistId) params.set("artistId", artistId);
+    window.location.href = `search.html?${params.toString()}`;
   });
 });
 
@@ -493,28 +496,83 @@ const resultsPage = document.querySelector("[data-results-page]");
 
 if (resultsPage) {
   const params = new URLSearchParams(window.location.search);
+  const products = window.PRODUCTS || {};
   const categoryNames = {
     penlight: "ペンライト",
     fan: "ファンサうちわセット",
     binoculars: "双眼鏡",
     bag: "バッグ",
     set: "推し活セット",
-    photo: "撮影セット",
   };
   const category = params.get("category");
+  const artistName = params.get("artist");
+  const requestedArtistId = params.get("artistId");
+  const artistId =
+    requestedArtistId ||
+    window.ARTISTS?.find((artist) => artist.name.toLowerCase() === artistName?.toLowerCase())?.id;
   const searchTerm =
-    params.get("artist") || params.get("keyword") || categoryNames[category] || "ペンライト";
-  const itemName = params.get("artist")
-    ? `${searchTerm} デモグッズ`
-    : categoryNames[category] || searchTerm;
+    artistName || params.get("keyword") || categoryNames[category] || "すべての商品";
   const resultsTitle = document.querySelector("[data-results-title]");
   const resultsInput = document.querySelector("[data-results-input]");
   const resultList = document.querySelector(".result_list");
-  const resultItems = [...document.querySelectorAll("[data-result-item]")];
+  const normalizedKeyword = (params.get("keyword") || "").trim().toLowerCase();
+
+  const displayProducts = Object.values(products)
+    .filter((product) => product.standalone !== false)
+    .map((product) => window.getProductData?.(product.id) || product)
+    .filter((product) => product.isPublic !== false)
+    .filter((product) => !category || product.category === category)
+    .filter((product) => !artistName || (artistId && product.artistIds?.includes(artistId)))
+    .filter((product) => {
+      if (!normalizedKeyword) return true;
+      return [product.name, categoryNames[product.category], ...(product.searchTags || [])]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(normalizedKeyword));
+    });
 
   resultsTitle.textContent = searchTerm;
   document.title = `${searchTerm}の検索結果 | おしりーす`;
   resultsInput.placeholder = `${searchTerm}から検索`;
+  resultList.replaceChildren();
+
+  displayProducts.forEach((product, index) => {
+    const article = document.createElement("article");
+    const link = document.createElement("a");
+    const image = document.createElement("img");
+    const details = document.createElement("div");
+    const name = document.createElement("h2");
+    const price = document.createElement("p");
+    const favoriteButton = document.createElement("button");
+
+    article.className = "result_item";
+    article.dataset.resultItem = "";
+    article.dataset.price = String(product.price || 0);
+    article.dataset.order = String(index + 1);
+    link.className = "result_item__link";
+    link.href = `product_detail.html?id=${encodeURIComponent(product.id)}`;
+    image.src = product.images?.[0] || "assets/images/penlight.png";
+    image.alt = `${product.name}の商品画像`;
+    name.textContent = product.name;
+    price.textContent = `¥${Number(product.price || 0).toLocaleString("ja-JP")} / ${product.rentalDays || 4}日間〜`;
+    favoriteButton.className = "result_item__favorite";
+    favoriteButton.type = "button";
+    favoriteButton.dataset.favoriteId = product.id;
+    favoriteButton.setAttribute("aria-label", "お気に入りに追加");
+    favoriteButton.textContent = "♡";
+
+    details.append(name, price);
+    link.append(image, details);
+    article.append(link, favoriteButton);
+    resultList.append(article);
+  });
+
+  if (!displayProducts.length) {
+    const empty = document.createElement("p");
+    empty.className = "result_list__empty";
+    empty.textContent = "条件に合う商品がありません。";
+    resultList.append(empty);
+  }
+  resultList.hidden = false;
 
   const binocularFilter = document.querySelector("[data-binocular-filter]");
 
@@ -545,39 +603,10 @@ if (resultsPage) {
     });
   }
 
-  document.querySelectorAll("[data-product-name]").forEach((name, index) => {
-    const variants = [
-      "シンプルタイプ",
-      "スタンダード",
-      "2点セット",
-      "カラーバリエーション",
-      "ライトタイプ",
-      "ロングタイプ",
-    ];
-    name.textContent = `${itemName}（${variants[index]}）`;
-  });
-
-  if (["penlight", "fan", "binoculars", "bag", "set"].includes(category)) {
-    const categoryImages = {
-      penlight: "assets/images/penlight.png",
-      fan: "assets/images/fan_hero.png",
-      binoculars: "assets/images/binoculars_hero.png",
-      bag: "assets/images/bag_hero.png",
-      set: "assets/images/setto.png",
-    };
-
-    document.querySelectorAll(".result_item__link").forEach((link) => {
-      link.href = `product_detail.html?id=${category}`;
-    });
-    document.querySelectorAll(".result_item__link > img").forEach((image) => {
-      image.src = categoryImages[category];
-      image.alt = `${categoryNames[category]}の商品画像`;
-    });
-  }
-
   document.querySelectorAll("[data-sort]").forEach((button) => {
     button.addEventListener("click", () => {
       const sort = button.dataset.sort;
+      const resultItems = [...resultList.querySelectorAll("[data-result-item]")];
       const sortedItems = [...resultItems].sort((itemA, itemB) => {
         if (sort === "low") return Number(itemA.dataset.price) - Number(itemB.dataset.price);
         if (sort === "high") return Number(itemB.dataset.price) - Number(itemA.dataset.price);
@@ -689,6 +718,7 @@ if (rentalCalendar) {
   const lastMonth = new Date(today.getFullYear(), today.getMonth() + 5, 1);
   let visibleMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   let selectedDateKey = "";
+  let selectedReturnDateKey = "";
   const productParams = new URLSearchParams(window.location.search);
   const currentProductId = productParams.get("id") || productParams.get("category") || "penlight";
 
@@ -706,22 +736,11 @@ if (rentalCalendar) {
     return `${date.getMonth() + 1}月${date.getDate()}日(${weekdays[date.getDay()]})`;
   };
 
-  const demoBookedDateKeys = new Set(
-    [4, 9, 16].map((daysLater) => {
-      const date = new Date(today);
-      date.setDate(date.getDate() + daysLater);
-      return toDateKey(date);
-    }),
-  );
-
-  const bookedDateKeys = new Set(demoBookedDateKeys);
-
   const overlapsBookedPeriod = (arrivalDate) => {
     for (let dayOffset = 0; dayOffset < 4; dayOffset += 1) {
       const rentalDate = new Date(arrivalDate);
       rentalDate.setDate(rentalDate.getDate() + dayOffset);
       const dateKey = toDateKey(rentalDate);
-      if (bookedDateKeys.has(dateKey)) return true;
       if (window.getProductAvailableStockForDate?.(currentProductId, dateKey) < 1) return true;
     }
     return false;
@@ -759,7 +778,9 @@ if (rentalCalendar) {
       button.className = "rental_calendar__day";
       button.textContent = String(day);
       button.setAttribute("aria-label", `${year}年${month + 1}月${day}日`);
-      button.setAttribute("aria-pressed", String(dateKey === selectedDateKey));
+      const isSelectedPeriod =
+        selectedDateKey && selectedDateKey <= dateKey && dateKey <= selectedReturnDateKey;
+      button.setAttribute("aria-pressed", String(Boolean(isSelectedPeriod)));
 
       if (blocked || waitlistOnly) {
         button.classList.add("is_unavailable");
@@ -771,7 +792,7 @@ if (rentalCalendar) {
         button.setAttribute("aria-label", `${year}年${month + 1}月${day}日、空き待ち可能`);
       }
 
-      if (dateKey === selectedDateKey) {
+      if (isSelectedPeriod) {
         button.classList.add("is_selected");
       }
 
@@ -779,6 +800,7 @@ if (rentalCalendar) {
         const returnDate = new Date(date);
         returnDate.setDate(returnDate.getDate() + 3);
         selectedDateKey = dateKey;
+        selectedReturnDateKey = toDateKey(returnDate);
         const reservation = {
           arrivalDate: dateKey,
           returnDate: toDateKey(returnDate),
@@ -864,7 +886,7 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
 
   if (selectedReservation) {
     const productId = document.body.dataset.productId || selectedReservation.productId;
-    const product = window.PRODUCTS?.[productId];
+    const product = window.getProductData?.(productId) || window.PRODUCTS?.[productId];
     selectedReservation.productId = productId;
     selectedReservation.price = product?.price || 0;
     selectedReservation.image = product?.images?.[0] || "assets/images/penlight.png";
@@ -939,14 +961,17 @@ const legacyFavoriteProducts = {
 };
 
 const dataFavoriteProducts = Object.fromEntries(
-  Object.entries(window.PRODUCTS || {}).map(([productId, product]) => [
-    productId,
-    {
-      name: product.name,
-      price: `¥${Number(product.price || 0).toLocaleString("ja-JP")} / ${product.rentalDays || 4}日間〜`,
-      image: product.images?.[0] || "assets/images/penlight.png",
-    },
-  ]),
+  Object.entries(window.PRODUCTS || {}).map(([productId, baseProduct]) => {
+    const product = window.getProductData?.(productId) || baseProduct;
+    return [
+      productId,
+      {
+        name: product.name,
+        price: `¥${Number(product.price || 0).toLocaleString("ja-JP")} / ${product.rentalDays || 4}日間〜`,
+        image: product.images?.[0] || "assets/images/penlight.png",
+      },
+    ];
+  }),
 );
 const favoriteProducts = { ...legacyFavoriteProducts, ...dataFavoriteProducts };
 
@@ -1002,6 +1027,7 @@ const updateFavoriteCount = () => {
   document.querySelectorAll("[data-favorite-count]").forEach((badge) => {
     badge.textContent = savedFavorites.size;
     badge.hidden = savedFavorites.size < 1;
+    badge.classList.toggle("is_visible", savedFavorites.size > 0);
   });
 };
 
@@ -1087,7 +1113,11 @@ document.addEventListener("click", (event) => {
 const cartPage = document.querySelector("[data-cart-page]");
 
 if (cartPage) {
-  const unitPrice = 800;
+  const pendingReservation = JSON.parse(localStorage.getItem("pendingReservation") || "{}");
+  const cartProductData =
+    window.getProductData?.(pendingReservation.productId || "penlight") ||
+    window.PRODUCTS?.[pendingReservation.productId || "penlight"];
+  const unitPrice = Number(cartProductData?.price ?? pendingReservation.price ?? 800);
   const roundTripShipping = 440;
   const product = document.querySelector("[data-cart-product]");
   const quantityElement = document.querySelector("[data-cart-quantity]");
@@ -1097,6 +1127,13 @@ if (cartPage) {
   const checkout = document.querySelector("[data-cart-checkout]");
   const emptyMessage = document.querySelector("[data-cart-empty]");
   let quantity = Number(localStorage.getItem("cartCount") || 0);
+
+  product.querySelector("img").src =
+    pendingReservation.image || cartProductData?.images?.[0] || "assets/images/penlight.png";
+  product.querySelector("h2").textContent =
+    pendingReservation.product || cartProductData?.name || "ペンライト";
+  product.querySelector(".cart_product__details p").textContent =
+    `¥${unitPrice.toLocaleString("ja-JP")} / ${cartProductData?.rentalDays || 4}日間〜`;
 
   const renderCart = () => {
     const isEmpty = quantity < 1;
@@ -1141,11 +1178,28 @@ if (cartPage) {
 const paymentPage = document.querySelector("[data-payment-page]");
 
 if (paymentPage) {
+  const extensionOrderId = new URLSearchParams(window.location.search).get("extension");
   const paymentFees = { credit: 0, paypay: 0, deferred: 250, convenience: 220 };
   const paymentMethods = [...document.querySelectorAll("[data-payment-method]")];
   const cardFieldGroups = [...document.querySelectorAll("[data-card-fields]")];
   const paymentRadios = [...document.querySelectorAll('input[name="payment"]')];
   const cardRadios = [...document.querySelectorAll('input[name="credit_card"]')];
+
+  if (extensionOrderId) {
+    paymentPage.dataset.extensionOrderId = extensionOrderId;
+    document.querySelector(".payment_page__header_title").textContent = "レンタル延長";
+    document.querySelector(".payment_form h1").textContent = "延長料金の決済方法";
+    document.querySelector(".mypage_header__back").href =
+      `rental_extension.html?order=${encodeURIComponent(extensionOrderId)}`;
+    document
+      .querySelectorAll('[data-payment-method="deferred"], [data-payment-method="convenience"]')
+      .forEach((method) => {
+        method.hidden = true;
+        method.querySelectorAll("input, select, button").forEach((control) => {
+          control.disabled = true;
+        });
+      });
+  }
 
   const setControlsEnabled = (container, enabled) => {
     container.querySelectorAll("input, select, button").forEach((control) => {
@@ -1210,6 +1264,28 @@ const formatStoredDate = (dateKey) => {
   return `${year}年${month}月${day}日`;
 };
 
+const addDaysToStoredDate = (dateKey, days) => {
+  const date = new Date(`${dateKey}T00:00:00`);
+  date.setDate(date.getDate() + days);
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+};
+
+const canExtendRentalOrder = (order) => {
+  if (!order?.returnDate || order.status === "キャンセル") return false;
+  const nextDateKey = addDaysToStoredDate(order.returnDate, 1);
+  const selections = Object.entries(order.variantSelections || order.bundleVariants || {});
+  return selections.length
+    ? selections.every(
+        ([productId, variantId]) =>
+          window.getVariantStockForDate?.(productId, variantId, nextDateKey) > 0,
+      )
+    : window.getProductAvailableStockForDate?.(order.productId, nextDateKey) > 0;
+};
+
 const createOrderId = () => {
   const now = new Date();
   const date = [
@@ -1226,10 +1302,13 @@ const getOrderDraft = () => {
   const accountProfile = getActiveAccount()?.profile || {};
   const customer = { ...registration, ...accountProfile };
   const reservation = JSON.parse(localStorage.getItem("pendingReservation") || "{}");
+  const currentProduct =
+    window.getProductData?.(reservation.productId || "penlight") ||
+    window.PRODUCTS?.[reservation.productId || "penlight"];
   const quantity = Math.max(1, Number(localStorage.getItem("cartCount") || 0));
   const payment = localStorage.getItem("selectedPaymentMethod") || "credit";
   const paymentFee = Number(localStorage.getItem("paymentFee") || 0);
-  const subtotal = Number(reservation.price || 800) * quantity;
+  const subtotal = Number(currentProduct?.price ?? reservation.price ?? 800) * quantity;
   const shipping = 440;
 
   let orderId = localStorage.getItem("pendingOrderId");
@@ -1241,8 +1320,8 @@ const getOrderDraft = () => {
   return {
     id: orderId,
     productId: reservation.productId || "penlight",
-    product: reservation.product || "ペンライト（シンプルタイプ）",
-    image: reservation.image || "assets/images/penlight.png",
+    product: currentProduct?.name || reservation.product || "ペンライト（シンプルタイプ）",
+    image: currentProduct?.images?.[0] || reservation.image || "assets/images/penlight.png",
     selectedOptions: reservation.selectedOptions || [],
     variantSelections: reservation.variantSelections || {},
     quantity,
@@ -1277,10 +1356,73 @@ const getOrderDraft = () => {
   };
 };
 
+const extensionPage = document.querySelector("[data-extension-page]");
+
+if (extensionPage) {
+  const orderId = new URLSearchParams(window.location.search).get("order");
+  const order = JSON.parse(localStorage.getItem("rentalOrders") || "[]").find(
+    (item) => item.id === orderId,
+  );
+  const availableContent = document.querySelector("[data-extension-available]");
+  const unavailableContent = document.querySelector("[data-extension-unavailable]");
+
+  if (!order || !canExtendRentalOrder(order)) {
+    availableContent.hidden = true;
+    unavailableContent.hidden = false;
+  } else {
+    const nextReturnDate = addDaysToStoredDate(order.returnDate, 1);
+    document.querySelector("[data-extension-order-id]").textContent = order.id;
+    document.querySelector("[data-extension-product]").textContent = order.product;
+    document.querySelector("[data-extension-current-period]").textContent = order.period;
+    document.querySelector("[data-extension-new-period]").textContent =
+      `${formatStoredDate(order.arrivalDate)}〜${formatStoredDate(nextReturnDate)}`;
+    document.querySelector("[data-extension-payment]").href =
+      `checkout.html?extension=${encodeURIComponent(order.id)}`;
+  }
+}
+
 const orderConfirmPage = document.querySelector("[data-order-confirm]");
 
 if (orderConfirmPage) {
-  const draft = getOrderDraft();
+  const extensionOrderId = new URLSearchParams(window.location.search).get("extension");
+  const savedOrders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+  const extensionOrder = extensionOrderId
+    ? savedOrders.find((order) => order.id === extensionOrderId)
+    : null;
+  const draft = extensionOrder
+    ? {
+        ...extensionOrder,
+        subtotal: 440,
+        shipping: 0,
+        paymentFee: 0,
+        total: 440,
+        payment: localStorage.getItem("selectedPaymentMethod") || "credit",
+        paymentName: paymentNames[localStorage.getItem("selectedPaymentMethod") || "credit"],
+        period: `${formatStoredDate(extensionOrder.arrivalDate)}〜${formatStoredDate(
+          addDaysToStoredDate(extensionOrder.returnDate, 1),
+        )}`,
+      }
+    : getOrderDraft();
+
+  if (extensionOrder) {
+    document.title = "延長内容の確認 | おしりーす";
+    document.querySelector(".order_page__header_title").textContent = "レンタル延長";
+    document.querySelector(".order_confirm h1").textContent = "延長内容の確認";
+    document.querySelector(".mypage_header__back").href =
+      `checkout.html?extension=${encodeURIComponent(extensionOrder.id)}`;
+    document.querySelector(".order_product h2").textContent = extensionOrder.product;
+    document.querySelector(".order_product img").src =
+      extensionOrder.image || "assets/images/penlight.png";
+    document.querySelector(".order_product p").textContent = "延長料金 1日440円";
+    document.querySelector("[data-order-shipping]").parentElement.hidden = true;
+    document.querySelector("[data-place-order]").textContent = "延長を確定する";
+  } else {
+    document.querySelector(".order_product h2").textContent = draft.product;
+    document.querySelector(".order_product img").src = draft.image;
+    document.querySelector(".order_product p").textContent =
+      `¥${Number(draft.subtotal / draft.quantity).toLocaleString("ja-JP")} / 3泊4日〜`;
+  }
+
   document.querySelector("[data-order-id]").textContent = draft.id;
   document.querySelector("[data-order-address]").textContent = draft.address;
   document.querySelector("[data-order-period]").textContent = draft.period;
@@ -1295,6 +1437,27 @@ if (orderConfirmPage) {
     `¥${draft.total.toLocaleString("ja-JP")}`;
 
   document.querySelector("[data-place-order]").addEventListener("click", () => {
+    if (extensionOrder) {
+      const orders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+      const target = orders.find((order) => order.id === extensionOrder.id);
+      if (!target || !canExtendRentalOrder(target)) {
+        showToast("在庫状況が変わったため延長できませんでした。");
+        return;
+      }
+      target.returnDate = addDaysToStoredDate(target.returnDate, 1);
+      target.period = `${formatStoredDate(target.arrivalDate)}〜${formatStoredDate(target.returnDate)}`;
+      target.extensionCount = (Number(target.extensionCount) || 0) + 1;
+      target.extensionTotal = (Number(target.extensionTotal) || 0) + 440;
+      target.lastExtensionPayment = draft.paymentName;
+      localStorage.setItem("rentalOrders", JSON.stringify(orders));
+      localStorage.setItem(
+        "latestExtension",
+        JSON.stringify({ ...target, total: 440, paymentName: draft.paymentName }),
+      );
+      window.location.href = `order_complete.html?extension=${encodeURIComponent(target.id)}`;
+      return;
+    }
+
     const placedAt = new Date();
     const order = {
       ...draft,
@@ -1317,7 +1480,23 @@ if (orderConfirmPage) {
 const orderCompletePage = document.querySelector("[data-order-complete]");
 
 if (orderCompletePage) {
-  const order = JSON.parse(localStorage.getItem("latestOrder") || "null") || getOrderDraft();
+  const extensionOrderId = new URLSearchParams(window.location.search).get("extension");
+  const order = extensionOrderId
+    ? JSON.parse(localStorage.getItem("latestExtension") || "null")
+    : JSON.parse(localStorage.getItem("latestOrder") || "null") || getOrderDraft();
+  if (!order) window.location.href = "rental_history.html";
+
+  if (extensionOrderId) {
+    document.title = "延長完了 | おしりーす";
+    document.querySelector(".order_page__header_title").textContent = "レンタル延長";
+    document.querySelector(".order_complete h1").textContent = "延長完了";
+    document.querySelector(".order_complete__thanks").textContent = "レンタル期間を延長しました";
+    document.querySelector(".order_complete__message").textContent =
+      "延長手続きが完了しました。新しい返却期限までに商品をご返却ください。";
+    const returnLink = document.querySelector(".order_page__primary");
+    returnLink.href = "rental_history.html";
+    returnLink.textContent = "レンタル履歴に戻る";
+  }
   document.querySelector("[data-complete-id]").textContent = order.id;
   document.querySelector("[data-complete-date]").textContent = order.placedDate || "本日";
   document.querySelector("[data-complete-period]").textContent = order.period;
@@ -1346,6 +1525,7 @@ if (rentalHistoryPage) {
     const details = document.createElement("div");
     const name = document.createElement("h2");
     const price = document.createElement("p");
+    const extensionLink = document.createElement("a");
     const cancelLink = document.createElement("a");
 
     article.className = "rental_history_item";
@@ -1363,6 +1543,17 @@ if (rentalHistoryPage) {
     details.append(name, price);
     product.append(image, details);
     article.append(orderId, status, period, product);
+    const canExtend = canExtendRentalOrder(order);
+
+    if (canExtend) {
+      extensionLink.href = `rental_extension.html?order=${encodeURIComponent(order.id)}`;
+      extensionLink.textContent = "延長する";
+    } else {
+      extensionLink.setAttribute("aria-disabled", "true");
+      extensionLink.textContent = "こちらの商品は延長できません";
+    }
+    extensionLink.className = "rental_history_item__extension";
+    article.append(extensionLink);
     cancelLink.className = "rental_history_item__cancel";
     cancelLink.href = `cancellation_refund.html?order=${encodeURIComponent(order.id)}`;
     cancelLink.textContent = "キャンセルする";
@@ -1436,7 +1627,10 @@ document.querySelector("[data-filter-button]")?.addEventListener("click", () => 
 document.querySelector("[data-checkout-form]")?.addEventListener("submit", (event) => {
   event.preventDefault();
   if (paymentPage) {
-    window.location.href = "order_confirm.html";
+    const extensionOrderId = paymentPage.dataset.extensionOrderId;
+    window.location.href = extensionOrderId
+      ? `order_confirm.html?extension=${encodeURIComponent(extensionOrderId)}`
+      : "order_confirm.html";
     return;
   }
 

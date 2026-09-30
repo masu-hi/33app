@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>レンタル期間の延長 | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/product_data.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell cancellation_refund_page" data-extension-page>
+      <header class="app_header">
+        <a class="app_header__icon" href="color_change.html" aria-label="設定">
+          <img src="assets/images/setting-icon--outline.png" alt="" />
+        </a>
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="notice.html" aria-label="通知">
+            <img src="assets/images/notice-icon--outline.png" alt="" />
+          </a>
+          <a href="cart.html" aria-label="カート">
+            <img src="assets/images/cart-icon--outline.png" alt="" />
+          </a>
+        </div>
+      </header>
+
+      <section class="cancellation_confirm">
+        <div data-extension-available>
+          <h1>この商品のレンタル期間を延長しますか？</h1>
+          <dl>
+            <div>
+              <dt>注文番号</dt>
+              <dd data-extension-order-id></dd>
+            </div>
+            <div>
+              <dt>商品</dt>
+              <dd data-extension-product></dd>
+            </div>
+            <div>
+              <dt>現在の期間</dt>
+              <dd data-extension-current-period></dd>
+            </div>
+            <div>
+              <dt>延長後</dt>
+              <dd data-extension-new-period></dd>
+            </div>
+            <div>
+              <dt>延長料金</dt>
+              <dd>1日 440円（税込）</dd>
+            </div>
+          </dl>
+          <p>※決済方法はクレジットカードとPayPayのみです。</p>
+          <div class="cancellation_confirm__actions">
+            <a href="rental_history.html">戻る</a>
+            <a data-extension-payment>決済方法を選ぶ</a>
+          </div>
+        </div>
+        <div class="cancellation_confirm__complete" data-extension-unavailable hidden>
+          <h1>こちらの商品は延長できません</h1>
+          <p>次の日に別の予約が入っているため、レンタル期間を延長できません。</p>
+          <a href="rental_history.html">レンタル履歴に戻る</a>
+        </div>
+      </section>
+
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="about.html">お店について</a>
+          <a href="usage_guide.html">使い方ガイド</a>
+          <a href="terms.html">利用規約</a>
+          <a href="privacy_policy.html">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a href="home.html" data-nav-icon data-pages="home.html">
+          <img src="assets/images/home-icon--outline.png" alt="" />
+          ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
+        </a>
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html,rental_history.html">
+          <img src="assets/images/mypage-icon--outline.png" alt="" />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>
