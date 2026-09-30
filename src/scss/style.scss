@@ -2943,6 +2943,18 @@ h3,
   }
 
   &__link > img {
+  &__link2 {
+    display: grid;
+    grid-template-columns: 86px 1fr;
+    column-gap: 15px;
+    min-height: 110px;
+    align-items: center;
+    padding: 8px 0;
+    color: $text;
+    text-decoration: none;
+  }
+
+  &__link>img {
     width: 78px;
     height: 92px;
     object-fit: contain;
@@ -2982,6 +2994,7 @@ h3,
   &__favorite.is_favorite {
     color: #e98bb9;
   }
+}
 }
 
 // My page
