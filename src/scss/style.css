@@ -3092,9 +3092,15 @@ h3,
   -o-object-fit: cover;
      object-fit: cover;
 }
+.search_choice__visual--artist img {
+  width: 76%;
+  height: 76%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
 .search_choice__visual--penlight img {
-  width: 50px;
-  height: 70px;
+  width: 44px;
+  height: 62px;
   -o-object-fit: contain;
      object-fit: contain;
 }
@@ -3946,8 +3952,8 @@ h3,
   margin: 0;
 }
 .search_intro .search_choice__visual--penlight img {
-  width: 50px;
-  height: 70px;
+  width: 44px;
+  height: 62px;
   max-width: 100%;
   max-height: 100%;
   -o-object-fit: contain;
@@ -4089,8 +4095,8 @@ h3,
      object-fit: contain;
 }
 .goods_grid__penlight_image img {
-  width: 50px;
-  height: 70px;
+  width: 44px;
+  height: 62px;
   max-width: 100%;
   max-height: 100%;
   -o-object-fit: contain;

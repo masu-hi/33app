@@ -1701,9 +1701,15 @@ h3,
     object-fit: cover;
   }
 
+  &__visual--artist img {
+    width: 76%;
+    height: 76%;
+    object-fit: contain;
+  }
+
   &__visual--penlight img {
-    width: 50px;
-    height: 70px;
+    width: 44px;
+    height: 62px;
     object-fit: contain;
   }
 
@@ -2691,8 +2697,8 @@ h3,
   }
 
   .search_choice__visual--penlight img {
-    width: 50px;
-    height: 70px;
+    width: 44px;
+    height: 62px;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -2821,8 +2827,8 @@ h3,
   }
 
   &__penlight_image img {
-    width: 50px;
-    height: 70px;
+    width: 44px;
+    height: 62px;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
