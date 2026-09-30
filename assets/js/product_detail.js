@@ -8,7 +8,7 @@
     window.PRODUCTS?.[requestedProductId]?.standalone === false ? "fan" : requestedProductId;
 
   if (productId && window.PRODUCTS && window.PRODUCTS[productId]) {
-    const product = window.PRODUCTS[productId];
+    const product = window.getProductData?.(productId) || window.PRODUCTS[productId];
 
     document.title = `${product.name} | おしりーす`;
     document.body.dataset.productId = product.id || productId;
@@ -67,7 +67,8 @@
 
     if (Array.isArray(product.bundleComponents)) {
       displayOptions = product.bundleComponents.flatMap((component) => {
-        const componentProduct = window.PRODUCTS[component.productId];
+        const componentProduct =
+          window.getProductData?.(component.productId) || window.PRODUCTS[component.productId];
         return (componentProduct?.options || [])
           .filter(
             (option) => component.productId !== "fan" || !option.name?.includes("うちわケース"),

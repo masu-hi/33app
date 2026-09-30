@@ -717,6 +717,11 @@ h3,
   cursor: not-allowed;
 }
 
+.rental_calendar__day.is_unavailable.is_selected {
+  color: $white;
+  background: #5667aa;
+}
+
 .rental_calendar__day.is_waitlist {
   border: 1px dashed #7382b8;
   color: #46589a;
@@ -1548,6 +1553,8 @@ h3,
 
 .app_shell {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 390px;
   min-height: 100vh;
@@ -1843,7 +1850,7 @@ h3,
     position: absolute;
     top: 8px;
     left: calc(50% + 10px);
-    display: grid;
+    display: none;
     min-width: 19px;
     height: 19px;
     padding: 0 5px;
@@ -1858,14 +1865,19 @@ h3,
     line-height: 1;
   }
 
+  &__badge.is_visible {
+    display: grid;
+  }
+
   [data-favorite-nav].is_current &__favorite_icon {
-    color: #5968a8;
+    color: #86a1d3;
     -webkit-text-stroke: 0;
   }
 }
 
 .app_footer {
   min-height: 120px;
+  margin-top: auto;
   padding: 36px 30px 104px;
   color: $text;
   background: $main;
@@ -2797,7 +2809,7 @@ h3,
     min-height: 150px;
     align-content: center;
     justify-items: center;
-    border: 1px solid $theme_line;
+    border: 1px solid $gradient_line;
     border-radius: 16px;
     color: $text;
     background: $white;
@@ -2978,8 +2990,8 @@ h3,
   }
 
   .app_search {
-    border-color: #afd6f5;
-    background: $sub;
+    border-color: $gradient_line;
+    background: $gradient_end;
   }
 }
 
@@ -3056,6 +3068,14 @@ h3,
 
 .result_list {
   padding: 0 30px 20px;
+
+  &__empty {
+    margin: 0;
+    padding: 48px 12px;
+    color: #697087;
+    font-size: 14px;
+    text-align: center;
+  }
 }
 
 .result_item {
@@ -3262,7 +3282,7 @@ h3,
   &__statuses > span:not(:last-child)::after {
     position: absolute;
     right: -3px;
-    bottom: 0;
+    bottom: 1px;
     content: "›";
     font-size: 18px;
     line-height: 15px;
@@ -4180,7 +4200,8 @@ h3,
     font-family: "Noto Sans JP", sans-serif;
   }
 
-  &__cancel {
+  &__cancel,
+  &__extension {
     display: grid;
     min-height: 44px;
     margin-top: 16px;
@@ -4191,6 +4212,16 @@ h3,
     background: $main;
     font-size: 13px;
     text-decoration: none;
+  }
+
+  &__extension {
+    background: $gradient_end;
+  }
+
+  &__extension[aria-disabled="true"] {
+    color: #8f94a8;
+    background: #f2f3f7;
+    pointer-events: none;
   }
 
   &.is_cancelled {

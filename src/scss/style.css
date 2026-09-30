@@ -377,6 +377,14 @@
   opacity: 0.5;
 }
 
+.admin_waitlist__status {
+  min-height: 24px;
+  margin: 0;
+  padding: 12px 20px 16px;
+  color: #176b45;
+  font-size: 13px;
+}
+
 .admin_products__heading {
   display: flex;
   align-items: center;
@@ -2174,6 +2182,11 @@ h3,
   cursor: not-allowed;
 }
 
+.rental_calendar__day.is_unavailable.is_selected {
+  color: #fff;
+  background: #5667aa;
+}
+
 .rental_calendar__day.is_waitlist {
   border: 1px dashed #7382b8;
   color: #46589a;
@@ -2943,6 +2956,8 @@ h3,
 }
 .app_shell {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 390px;
   min-height: 100vh;
@@ -3209,7 +3224,7 @@ h3,
   position: absolute;
   top: 8px;
   left: calc(50% + 10px);
-  display: grid;
+  display: none;
   min-width: 19px;
   height: 19px;
   padding: 0 5px;
@@ -3223,13 +3238,17 @@ h3,
   font-weight: 700;
   line-height: 1;
 }
+.bottom_nav__badge.is_visible {
+  display: grid;
+}
 [data-favorite-nav].is_current .bottom_nav__favorite_icon {
-  color: #5968a8;
+  color: #86a1d3;
   -webkit-text-stroke: 0;
 }
 
 .app_footer {
   min-height: 120px;
+  margin-top: auto;
   padding: 36px 30px 104px;
   color: #353b60;
   background: var(--color-main, #f6ecf8);
@@ -4055,7 +4074,7 @@ h3,
   min-height: 150px;
   align-content: center;
   justify-items: center;
-  border: 1px solid var(--color-line, #ead5ee);
+  border: 1px solid var(--color-gradient-line, #cfd3ea);
   border-radius: 16px;
   color: #353b60;
   background: #fff;
@@ -4219,8 +4238,8 @@ h3,
   line-height: 26px;
 }
 .results_header .app_search {
-  border-color: #afd6f5;
-  background: #eff7ff;
+  border-color: var(--color-gradient-line, #cfd3ea);
+  background: var(--color-gradient-end, #edeefa);
 }
 
 .sort_tabs {
@@ -4289,6 +4308,13 @@ h3,
 
 .result_list {
   padding: 0 30px 20px;
+}
+.result_list__empty {
+  margin: 0;
+  padding: 48px 12px;
+  color: #697087;
+  font-size: 14px;
+  text-align: center;
 }
 
 .result_item {
@@ -4470,7 +4496,7 @@ h3,
 .rental_summary__statuses > span:not(:last-child)::after {
   position: absolute;
   right: -3px;
-  bottom: 0;
+  bottom: 1px;
   content: "›";
   font-size: 18px;
   line-height: 15px;
@@ -5281,7 +5307,7 @@ h3,
 .rental_history_item__product p {
   font-family: "Noto Sans JP", sans-serif;
 }
-.rental_history_item__cancel {
+.rental_history_item__cancel, .rental_history_item__extension {
   display: grid;
   min-height: 44px;
   margin-top: 16px;
@@ -5292,6 +5318,14 @@ h3,
   background: var(--color-main, #f6ecf8);
   font-size: 13px;
   text-decoration: none;
+}
+.rental_history_item__extension {
+  background: var(--color-gradient-end, #edeefa);
+}
+.rental_history_item__extension[aria-disabled=true] {
+  color: #8f94a8;
+  background: #f2f3f7;
+  pointer-events: none;
 }
 .rental_history_item.is_cancelled {
   opacity: 0.68;

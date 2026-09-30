@@ -306,7 +306,7 @@
       );
       const nextStock = Math.max(0, Number(input.value) || 0);
       window.setVariantStock(input.dataset.productId, input.dataset.variantId, input.value);
-      if (previousStock < 1 && nextStock > 0) restockedProductIds.add(input.dataset.productId);
+      if (nextStock > previousStock) restockedProductIds.add(input.dataset.productId);
     });
     if (restockedProductIds.size) {
       window.notifyAvailableWaitlist?.([...restockedProductIds]);
