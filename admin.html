@@ -11,16 +11,20 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/scss/style.css" />
+    <script type="module" src="assets/js/admin_auth_guard.js"></script>
     <script src="assets/js/product_data.js" defer></script>
-    <script src="assets/js/admin.js" defer></script>
+    <script type="module" src="assets/js/admin.js"></script>
   </head>
-  <body class="admin_page">
+  <body class="admin_page is_auth_pending">
     <header class="admin_header">
       <div>
         <p>おしりーす</p>
         <h1>商品管理</h1>
       </div>
-      <a href="home.html">利用者画面</a>
+      <div class="admin_header__actions">
+        <a href="home.html">利用者画面</a>
+        <button type="button" data-admin-logout>ログアウト</button>
+      </div>
     </header>
 
     <nav class="admin_nav" aria-label="管理メニュー">
