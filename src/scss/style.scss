@@ -1989,6 +1989,13 @@ h3,
   }
 }
 
+html.is-dark-favorite .app_shell button,
+html.is-dark-favorite .app_shell input[type="button"],
+html.is-dark-favorite .app_shell input[type="submit"],
+html.is-dark-favorite .app_shell .button {
+  color: #86a1d3;
+}
+
 .color_change_page {
   min-height: 550px;
   padding: 25px 30px 44px;
@@ -4475,10 +4482,6 @@ h3,
   }
 }
 
-.is-dark-favorite .packing_checklist__add button {
-  color: $white;
-}
-
 .packing_checklist {
   border-top: 1px solid $theme_line;
 }
@@ -4564,6 +4567,22 @@ h3,
   &:focus-visible {
     outline: 2px solid var(--color-main, #86a1d3);
   }
+}
+
+html.is-dark-favorite .packing_checklist_page__content,
+html.is-dark-favorite .packing_checklist_page__content * {
+  color: #86a1d3;
+}
+
+html.is-dark-favorite .packing_checklist_page button {
+  color: #86a1d3;
+}
+
+html.is-dark-favorite
+  .packing_checklist_page__content
+  .packing_checklist__item
+  input:checked + span {
+  color: #86a1d3;
 }
 
 .packing_checklist__confetti {
