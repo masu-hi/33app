@@ -706,6 +706,7 @@ if (productGallery) {
 const rentalCalendar = document.querySelector("[data-rental-calendar]");
 let selectedReservation = null;
 let selectedWaitlistReservation = null;
+let selectedProductQuantity = 1;
 
 if (rentalCalendar) {
   const monthLabel = document.querySelector("[data-calendar-month]");
@@ -721,6 +722,27 @@ if (rentalCalendar) {
   let selectedReturnDateKey = "";
   const productParams = new URLSearchParams(window.location.search);
   const currentProductId = productParams.get("id") || productParams.get("category") || "penlight";
+  const quantityOutput = document.querySelector("[data-product-quantity]");
+  const quantityDecrease = document.querySelector("[data-product-quantity-decrease]");
+  const quantityIncrease = document.querySelector("[data-product-quantity-increase]");
+  const quantityProduct = window.PRODUCTS?.[currentProductId];
+  const maximumVariantStock = (productId) =>
+    Math.max(
+      0,
+      ...(window.PRODUCTS?.[productId]?.variants || []).map((variant) =>
+        Number(window.getVariantPhysicalStock?.(productId, variant.id) || 0),
+      ),
+    );
+  const selectableStock =
+    currentProductId === "fan"
+      ? Math.min(maximumVariantStock("fan"), maximumVariantStock("fan_case"))
+      : quantityProduct?.inventoryMode === "shared"
+        ? Number(window.getProductAvailableStock?.(currentProductId))
+        : maximumVariantStock(currentProductId);
+  const maximumQuantity = Math.max(
+    1,
+    selectableStock || 1,
+  );
 
   today.setHours(0, 0, 0, 0);
 
@@ -741,7 +763,12 @@ if (rentalCalendar) {
       const rentalDate = new Date(arrivalDate);
       rentalDate.setDate(rentalDate.getDate() + dayOffset);
       const dateKey = toDateKey(rentalDate);
-      if (window.getProductAvailableStockForDate?.(currentProductId, dateKey) < 1) return true;
+      if (
+        window.getProductAvailableStockForDate?.(currentProductId, dateKey) <
+        selectedProductQuantity
+      ) {
+        return true;
+      }
     }
     return false;
   };
@@ -835,6 +862,40 @@ if (rentalCalendar) {
     renderCalendar();
   });
 
+  const resetSelectedPeriod = () => {
+    selectedReservation = null;
+    selectedWaitlistReservation = null;
+    selectedDateKey = "";
+    selectedReturnDateKey = "";
+    selectedPeriod.textContent = "商品が届く日を選択してください";
+    cartButton.disabled = true;
+    cartButton.dataset.cartState = "ready";
+    cartButton.classList.remove("is_added");
+    cartButton.textContent = "カートに入れる";
+    renderCalendar();
+  };
+
+  const renderQuantity = () => {
+    quantityOutput.textContent = String(selectedProductQuantity);
+    quantityDecrease.disabled = selectedProductQuantity <= 1;
+    quantityIncrease.disabled = selectedProductQuantity >= maximumQuantity;
+  };
+
+  quantityDecrease?.addEventListener("click", () => {
+    if (selectedProductQuantity <= 1) return;
+    selectedProductQuantity -= 1;
+    renderQuantity();
+    resetSelectedPeriod();
+  });
+
+  quantityIncrease?.addEventListener("click", () => {
+    if (selectedProductQuantity >= maximumQuantity) return;
+    selectedProductQuantity += 1;
+    renderQuantity();
+    resetSelectedPeriod();
+  });
+
+  renderQuantity();
   renderCalendar();
 }
 
@@ -873,6 +934,7 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
       startDate: selectedWaitlistReservation.arrivalDate,
       endDate: selectedWaitlistReservation.returnDate,
       selectedOptions,
+      quantity: selectedProductQuantity,
       notify: true,
       createdAt: new Date().toISOString(),
     });
@@ -888,6 +950,7 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
     const productId = document.body.dataset.productId || selectedReservation.productId;
     const product = window.getProductData?.(productId) || window.PRODUCTS?.[productId];
     selectedReservation.productId = productId;
+    selectedReservation.quantity = selectedProductQuantity;
     selectedReservation.price = product?.price || 0;
     selectedReservation.image = product?.images?.[0] || "assets/images/penlight.png";
     selectedReservation.selectedOptions = optionSelects.map((select) => ({
@@ -913,8 +976,7 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
     localStorage.setItem("pendingReservation", JSON.stringify(selectedReservation));
   }
 
-  const currentCartCount = Number(localStorage.getItem("cartCount") || 0);
-  updateCartCount(currentCartCount + 1);
+  updateCartCount(selectedProductQuantity);
   button.dataset.cartState = "added";
   button.classList.add("is_added");
   button.textContent = "カートを見る";

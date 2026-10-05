@@ -1260,6 +1260,54 @@
   border-color: #353b60;
 }
 
+.product_detail__quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+.product_detail__quantity p {
+  margin: 0;
+  color: #353b60;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.product_detail__quantity_control {
+  display: grid;
+  grid-template-columns: 36px 40px 36px;
+  height: 36px;
+  overflow: hidden;
+  border: 1px solid var(--color-line, #ead5ee);
+  border-radius: 8px;
+}
+.product_detail__quantity_control button,
+.product_detail__quantity_control output {
+  display: grid;
+  padding: 0;
+  border: 0;
+  place-items: center;
+  color: #353b60;
+  background: #ffffff;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 16px;
+  line-height: 1;
+}
+.product_detail__quantity_control button {
+  cursor: pointer;
+}
+.product_detail__quantity_control button:disabled {
+  color: #b8bbca;
+  cursor: not-allowed;
+}
+.product_detail__quantity_control output {
+  border-right: 1px solid var(--color-line, #ead5ee);
+  border-left: 1px solid var(--color-line, #ead5ee);
+  font-size: 14px;
+  font-weight: 700;
+}
+
 /* カレンダーエリア */
 .set_calendar {
   margin-top: 12px;
