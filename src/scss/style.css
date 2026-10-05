@@ -1473,35 +1473,35 @@
 
 /* ハートの色 */
 .color_heart[data-color=red] {
-  color: #E87678;
+  color: #e87678;
 }
 
 .color_heart[data-color=Blue] {
-  color: #769EE8;
+  color: #769ee8;
 }
 
 .color_heart[data-color=pink] {
-  color: #E876DE;
+  color: #e876de;
 }
 
 .color_heart[data-color="light blue"] {
-  color: #76DDE8;
+  color: #76dde8;
 }
 
 .color_heart[data-color=orange] {
-  color: #E8A476;
+  color: #e8a476;
 }
 
 .color_heart[data-color=purple] {
-  color: #C676E8;
+  color: #c676e8;
 }
 
 .color_heart[data-color=yellow] {
-  color: #E8E476;
+  color: #e8e476;
 }
 
 .color_heart[data-color=green] {
-  color: #76E87C;
+  color: #76e87c;
 }
 
 .color_heart[data-color=white] {

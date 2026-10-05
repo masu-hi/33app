@@ -23,6 +23,67 @@
       </header>
 
       <form class="payment_form" data-checkout-form>
+        <section class="checkout_shipping_section" data-shipping-section>
+          <h2>お届け先情報</h2>
+          <p class="checkout_shipping_note">
+            マイページに登録されている情報は自動表示されます。未登録の項目を入力してください。
+          </p>
+          <div class="checkout_shipping_fields">
+            <label>
+              お名前
+              <input
+                name="shipping_name"
+                required
+                autocomplete="name"
+                placeholder="例：山田 太郎"
+              />
+            </label>
+            <fieldset class="postal_fields checkout_postal_fields">
+              <legend>郵便番号</legend>
+              <div>
+                <input
+                  name="shipping_postal_first"
+                  required
+                  inputmode="numeric"
+                  maxlength="3"
+                  aria-label="郵便番号の前半"
+                  placeholder="123"
+                />
+                <span>-</span>
+                <input
+                  name="shipping_postal_last"
+                  required
+                  inputmode="numeric"
+                  maxlength="4"
+                  aria-label="郵便番号の後半"
+                  placeholder="4567"
+                />
+                <button type="button" data-checkout-address-search>住所検索</button>
+              </div>
+              <p class="postal_status" data-checkout-postal-status role="status"></p>
+            </fieldset>
+            <label>
+              都道府県
+              <select name="shipping_prefecture" required data-checkout-prefecture>
+                <option value="">選択してください</option>
+              </select>
+            </label>
+            <label>
+              市区町村番地
+              <input
+                name="shipping_address"
+                required
+                autocomplete="street-address"
+                placeholder="例：千代田区1-1-1"
+              />
+            </label>
+            <label>
+              建物名・部屋番号（任意）
+              <input name="shipping_building" placeholder="例：〇〇ビル 101号室" />
+            </label>
+          </div>
+        </section>
+
         <h1>決済方法</h1>
 
         <section class="payment_method is_selected" data-payment-method="credit">
