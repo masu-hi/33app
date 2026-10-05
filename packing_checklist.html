@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>持ち物チェックリスト | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/app.js" defer></script>
+    <script src="assets/js/packing_checklist.js" defer></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell packing_checklist_page">
+      <header class="mypage_header">
+        <a class="mypage_header__back" href="mypage.html" aria-label="マイページへ戻る">
+          <img src="assets/images/back.png" alt="" />
+        </a>
+        <div class="mypage_header__actions">
+          <a href="notice.html" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+
+      <section class="packing_checklist_page__content">
+        <header class="packing_checklist__header">
+          <p class="packing_checklist__eyebrow">
+            <span aria-hidden="true">✦</span>
+            LIVE DAY
+          </p>
+          <h1>持ち物チェックリスト</h1>
+          <p class="packing_checklist__tagline">準備もライブの楽しみのひとつ。</p>
+          <div
+            class="packing_checklist__progress"
+            role="progressbar"
+            aria-label="持ち物の準備状況"
+            aria-valuemin="0"
+            aria-valuemax="34"
+            aria-valuenow="0"
+            data-checklist-progress
+          >
+            <span data-checklist-progress-fill></span>
+          </div>
+          <div class="packing_checklist__summary">
+            <p aria-live="polite">
+              <strong data-checklist-count>0</strong>
+              <span>
+                /
+                <span data-checklist-total>34</span>
+                個チェック済み
+              </span>
+            </p>
+            <button class="packing_checklist__reset" type="button" data-checklist-reset>
+              すべて解除
+            </button>
+          </div>
+          <p class="packing_checklist__feedback" aria-live="polite" data-checklist-message>
+            推しに会う準備、はじめよう！
+          </p>
+        </header>
+
+        <form class="packing_checklist__add" data-checklist-add-form>
+          <label class="visually_hidden" for="checklist-new-item">持ち物を追加</label>
+          <input
+            id="checklist-new-item"
+            type="text"
+            name="new_item"
+            maxlength="40"
+            placeholder="持ち物を追加"
+            data-checklist-new-item
+            required
+          />
+          <button type="submit">
+            <span aria-hidden="true">+</span>
+            追加
+          </button>
+        </form>
+        <p class="visually_hidden" aria-live="polite" data-checklist-status></p>
+        <div class="packing_checklist" aria-label="持ち物一覧" data-checklist-list>
+          <label class="packing_checklist__item" for="checklist-ticket">
+            <input
+              id="checklist-ticket"
+              type="checkbox"
+              name="packing_item"
+              value="ticket"
+              data-checklist-item
+            />
+            <span>チケット・電子チケット</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-phone">
+            <input
+              id="checklist-phone"
+              type="checkbox"
+              name="packing_item"
+              value="phone"
+              data-checklist-item
+            />
+            <span>スマートフォン</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-wallet">
+            <input
+              id="checklist-wallet"
+              type="checkbox"
+              name="packing_item"
+              value="wallet"
+              data-checklist-item
+            />
+            <span>財布・現金</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-id">
+            <input
+              id="checklist-id"
+              type="checkbox"
+              name="packing_item"
+              value="id"
+              data-checklist-item
+            />
+            <span>身分証明書</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-battery">
+            <input
+              id="checklist-battery"
+              type="checkbox"
+              name="packing_item"
+              value="battery"
+              data-checklist-item
+            />
+            <span>モバイルバッテリー</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-cable">
+            <input
+              id="checklist-cable"
+              type="checkbox"
+              name="packing_item"
+              value="cable"
+              data-checklist-item
+            />
+            <span>充電ケーブル</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-drink">
+            <input
+              id="checklist-drink"
+              type="checkbox"
+              name="packing_item"
+              value="drink"
+              data-checklist-item
+            />
+            <span>飲み物</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-handkerchief">
+            <input
+              id="checklist-handkerchief"
+              type="checkbox"
+              name="packing_item"
+              value="handkerchief"
+              data-checklist-item
+            />
+            <span>ハンカチ・ティッシュ</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-penlight">
+            <input
+              id="checklist-penlight"
+              type="checkbox"
+              name="packing_item"
+              value="penlight"
+              data-checklist-item
+            />
+            <span>ペンライト</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-penlight-battery">
+            <input
+              id="checklist-penlight-battery"
+              type="checkbox"
+              name="packing_item"
+              value="penlight-battery"
+              data-checklist-item
+            />
+            <span>ペンライト用電池・予備電池</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-uchiwa">
+            <input
+              id="checklist-uchiwa"
+              type="checkbox"
+              name="packing_item"
+              value="uchiwa"
+              data-checklist-item
+            />
+            <span>うちわ</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-fan-service-uchiwa">
+            <input
+              id="checklist-fan-service-uchiwa"
+              type="checkbox"
+              name="packing_item"
+              value="fan-service-uchiwa"
+              data-checklist-item
+            />
+            <span>ファンサうちわ</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-acrylic-stand">
+            <input
+              id="checklist-acrylic-stand"
+              type="checkbox"
+              name="packing_item"
+              value="acrylic-stand"
+              data-checklist-item
+            />
+            <span>アクリルスタンド</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-can-badge">
+            <input
+              id="checklist-can-badge"
+              type="checkbox"
+              name="packing_item"
+              value="can-badge"
+              data-checklist-item
+            />
+            <span>缶バッジ</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-trading-card">
+            <input
+              id="checklist-trading-card"
+              type="checkbox"
+              name="packing_item"
+              value="trading-card"
+              data-checklist-item
+            />
+            <span>トレカ</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-plush">
+            <input
+              id="checklist-plush"
+              type="checkbox"
+              name="packing_item"
+              value="plush"
+              data-checklist-item
+            />
+            <span>推しぬい・ぬいぐるみ</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-towel">
+            <input
+              id="checklist-towel"
+              type="checkbox"
+              name="packing_item"
+              value="towel"
+              data-checklist-item
+            />
+            <span>タオル</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-oshi-bag">
+            <input
+              id="checklist-oshi-bag"
+              type="checkbox"
+              name="packing_item"
+              value="oshi-bag"
+              data-checklist-item
+            />
+            <span>推し活バッグ</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-binoculars">
+            <input
+              id="checklist-binoculars"
+              type="checkbox"
+              name="packing_item"
+              value="binoculars"
+              data-checklist-item
+            />
+            <span>双眼鏡</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-goods-bag">
+            <input
+              id="checklist-goods-bag"
+              type="checkbox"
+              name="packing_item"
+              value="goods-bag"
+              data-checklist-item
+            />
+            <span>グッズを入れる袋</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-makeup">
+            <input
+              id="checklist-makeup"
+              type="checkbox"
+              name="packing_item"
+              value="makeup"
+              data-checklist-item
+            />
+            <span>メイク直し用品</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-lip">
+            <input
+              id="checklist-lip"
+              type="checkbox"
+              name="packing_item"
+              value="lip"
+              data-checklist-item
+            />
+            <span>リップ</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-mirror">
+            <input
+              id="checklist-mirror"
+              type="checkbox"
+              name="packing_item"
+              value="mirror"
+              data-checklist-item
+            />
+            <span>鏡</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-hair">
+            <input
+              id="checklist-hair"
+              type="checkbox"
+              name="packing_item"
+              value="hair"
+              data-checklist-item
+            />
+            <span>ヘアゴム・ヘアピン</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-sweat-sheet">
+            <input
+              id="checklist-sweat-sheet"
+              type="checkbox"
+              name="packing_item"
+              value="sweat-sheet"
+              data-checklist-item
+            />
+            <span>汗拭きシート</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-hand-fan">
+            <input
+              id="checklist-hand-fan"
+              type="checkbox"
+              name="packing_item"
+              value="hand-fan"
+              data-checklist-item
+            />
+            <span>ハンディファン</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-folding-umbrella">
+            <input
+              id="checklist-folding-umbrella"
+              type="checkbox"
+              name="packing_item"
+              value="folding-umbrella"
+              data-checklist-item
+            />
+            <span>折りたたみ傘</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-id-copy">
+            <input
+              id="checklist-id-copy"
+              type="checkbox"
+              name="packing_item"
+              value="id-copy"
+              data-checklist-item
+            />
+            <span>身分証明書のコピー</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-entry-code">
+            <input
+              id="checklist-entry-code"
+              type="checkbox"
+              name="packing_item"
+              value="entry-code"
+              data-checklist-item
+            />
+            <span>入場に必要なQRコード・整理番号</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-venue-binoculars">
+            <input
+              id="checklist-venue-binoculars"
+              type="checkbox"
+              name="packing_item"
+              value="venue-binoculars"
+              data-checklist-item
+            />
+            <span>双眼鏡</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-rain-gear">
+            <input
+              id="checklist-rain-gear"
+              type="checkbox"
+              name="packing_item"
+              value="rain-gear"
+              data-checklist-item
+            />
+            <span>雨具</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-warm-clothes">
+            <input
+              id="checklist-warm-clothes"
+              type="checkbox"
+              name="packing_item"
+              value="warm-clothes"
+              data-checklist-item
+            />
+            <span>防寒具</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-eco-bag">
+            <input
+              id="checklist-eco-bag"
+              type="checkbox"
+              name="packing_item"
+              value="eco-bag"
+              data-checklist-item
+            />
+            <span>エコバッグ</span>
+          </label>
+          <label class="packing_checklist__item" for="checklist-goods-cash">
+            <input
+              id="checklist-goods-cash"
+              type="checkbox"
+              name="packing_item"
+              value="goods-cash"
+              data-checklist-item
+            />
+            <span>グッズ購入用の現金</span>
+          </label>
+        </div>
+      </section>
+
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
+        </a>
+        <a
+          href="mypage.html"
+          data-nav-icon
+          data-pages="mypage.html,rental_history.html,recently_viewed.html,waitlist.html,contact.html,packing_checklist.html"
+        >
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>
