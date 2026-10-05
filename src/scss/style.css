@@ -7,6 +7,10 @@
   font-family: "Noto Sans JP", sans-serif;
 }
 
+.admin_page.is_auth_pending > * {
+  visibility: hidden;
+}
+
 .admin_header {
   display: flex;
   min-height: 76px;
@@ -31,9 +35,130 @@
   font-size: 21px;
 }
 
-.admin_header a {
+.admin_header a,
+.admin_header__actions button {
   color: #405795;
   font-size: 14px;
+}
+
+.admin_header__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin_header__actions button {
+  padding: 7px 12px;
+  border: 1px solid #cfd4df;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.admin_login_page {
+  min-height: 100vh;
+  margin: 0;
+  color: #353b60;
+  background: #f6ecf8;
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.admin_login {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 32px 20px;
+}
+
+.admin_login__panel {
+  width: min(100%, 420px);
+  padding: 32px;
+  border: 1px solid #e1d7e5;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(53, 59, 96, 0.1);
+}
+
+.admin_login__brand,
+.admin_login__panel h1,
+.admin_login__description {
+  margin-top: 0;
+}
+
+.admin_login__brand {
+  margin-bottom: 8px;
+  color: #68708a;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin_login__panel h1 {
+  margin-bottom: 8px;
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-size: 24px;
+}
+
+.admin_login__description {
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.admin_login__form {
+  display: grid;
+  gap: 18px;
+}
+
+.admin_login__form label {
+  display: grid;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin_login__form input {
+  width: 100%;
+  min-height: 46px;
+  padding: 8px 12px;
+  border: 1px solid #cfd4df;
+  border-radius: 5px;
+  color: #353b60;
+  font: inherit;
+}
+
+.admin_login__form input:focus {
+  border-color: #788dbf;
+  outline: 2px solid rgba(120, 141, 191, 0.18);
+}
+
+.admin_login__form button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  background: #405795;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin_login__form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.admin_login__status {
+  min-height: 20px;
+  margin: -4px 0;
+  color: #b3261e;
+  font-size: 13px;
+}
+
+.admin_login__back {
+  display: block;
+  margin-top: 20px;
+  color: #405795;
+  font-size: 13px;
+  text-align: center;
 }
 
 .admin_nav {
@@ -1473,35 +1598,35 @@
 
 /* ハートの色 */
 .color_heart[data-color=red] {
-  color: #E87678;
+  color: #e87678;
 }
 
 .color_heart[data-color=Blue] {
-  color: #769EE8;
+  color: #769ee8;
 }
 
 .color_heart[data-color=pink] {
-  color: #E876DE;
+  color: #e876de;
 }
 
 .color_heart[data-color="light blue"] {
-  color: #76DDE8;
+  color: #76dde8;
 }
 
 .color_heart[data-color=orange] {
-  color: #E8A476;
+  color: #e8a476;
 }
 
 .color_heart[data-color=purple] {
-  color: #C676E8;
+  color: #c676e8;
 }
 
 .color_heart[data-color=yellow] {
-  color: #E8E476;
+  color: #e8e476;
 }
 
 .color_heart[data-color=green] {
-  color: #76E87C;
+  color: #76e87c;
 }
 
 .color_heart[data-color=white] {
@@ -2939,6 +3064,25 @@ h3,
   font-size: 12px;
   line-height: 18px;
   text-align: center;
+}
+
+.firebase_seed__status {
+  min-height: 42px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 5px;
+  color: #b43d5c;
+  background: #fff5f7;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: left;
+}
+.firebase_seed__status:empty {
+  visibility: hidden;
+}
+.firebase_seed__status.is_success {
+  color: #356b4a;
+  background: #f1faf4;
 }
 
 .account_form__submit {

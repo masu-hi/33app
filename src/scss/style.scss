@@ -1477,6 +1477,27 @@ h3,
   text-align: center;
 }
 
+.firebase_seed__status {
+  min-height: 42px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 5px;
+  color: #b43d5c;
+  background: #fff5f7;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: left;
+
+  &:empty {
+    visibility: hidden;
+  }
+
+  &.is_success {
+    color: #356b4a;
+    background: #f1faf4;
+  }
+}
+
 .account_form__submit {
   width: 176px;
   margin: 0 auto;

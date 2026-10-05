@@ -739,10 +739,7 @@ if (rentalCalendar) {
       : quantityProduct?.inventoryMode === "shared"
         ? Number(window.getProductAvailableStock?.(currentProductId))
         : maximumVariantStock(currentProductId);
-  const maximumQuantity = Math.max(
-    1,
-    selectableStock || 1,
-  );
+  const maximumQuantity = Math.max(1, selectableStock || 1);
 
   today.setHours(0, 0, 0, 0);
 

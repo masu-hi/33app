@@ -1,4 +1,14 @@
-(() => {
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import {
+  collection,
+  doc,
+  getDocs,
+  serverTimestamp,
+  writeBatch,
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { auth, db } from "./firebase_config.js";
+
+(async () => {
   const products = window.PRODUCTS || {};
   const storageKey = "productOverrides";
   const productContainer = document.querySelector("[data-admin-products]");
@@ -13,8 +23,85 @@
   const dailyInventory = document.querySelector("[data-admin-daily-inventory]");
   const bulkAmount = document.querySelector("[data-admin-bulk-amount]");
   const bulkAdd = document.querySelector("[data-admin-bulk-add]");
+  let firebaseLoaded = false;
 
   if (!productContainer || !empty || !editor || !form) return;
+
+  const waitForAuth = () =>
+    new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe();
+        resolve(user);
+      });
+    });
+
+  const loadFirestoreProducts = async () => {
+    const user = await waitForAuth();
+    if (!user) return;
+
+    const productSnapshots = await getDocs(collection(db, "products"));
+    await Promise.all(
+      productSnapshots.docs.map(async (productSnapshot) => {
+        const firebaseProduct = productSnapshot.data();
+        const productId = productSnapshot.id;
+        const variantSnapshots = await getDocs(collection(db, "products", productId, "variants"));
+        const variants = variantSnapshots.docs
+          .map((variantSnapshot) => ({
+            id: variantSnapshot.id,
+            label: variantSnapshot.data().label,
+            stock: Number(variantSnapshot.data().totalStock) || 0,
+            sortOrder: Number(variantSnapshot.data().sortOrder) || 0,
+          }))
+          .sort((a, b) => a.sortOrder - b.sortOrder)
+          .map(({ sortOrder, ...variant }) => variant);
+
+        products[productId] = {
+          ...(products[productId] || {}),
+          ...firebaseProduct,
+          id: productId,
+          isPublic: firebaseProduct.isPublished !== false,
+          variants: variants.length ? variants : products[productId]?.variants || [],
+        };
+
+        variants.forEach((variant) => {
+          window.setVariantStock(productId, variant.id, variant.stock);
+        });
+      }),
+    );
+    firebaseLoaded = true;
+  };
+
+  const saveProductToFirestore = async (values, variantInputs) => {
+    const batch = writeBatch(db);
+    const productReference = doc(db, "products", values.id);
+
+    batch.set(
+      productReference,
+      {
+        name: values.name.trim(),
+        price: Number(values.price),
+        isPublished: values.isPublic === "true",
+        stockStatus: values.stockStatus,
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true },
+    );
+
+    variantInputs.forEach((input) => {
+      const nextStock = Math.max(0, Number(input.value) || 0);
+      batch.set(
+        doc(db, "products", input.dataset.productId, "variants", input.dataset.variantId),
+        {
+          totalStock: nextStock,
+          isAvailable: nextStock > 0,
+          updatedAt: serverTimestamp(),
+        },
+        { merge: true },
+      );
+    });
+
+    await batch.commit();
+  };
 
   const getOverrides = () => {
     try {
@@ -35,7 +122,7 @@
       ...base,
       isPublic: base.isPublic ?? true,
       stockStatus: base.stockStatus || "available",
-      ...getOverrides()[id],
+      ...(firebaseLoaded ? {} : getOverrides()[id]),
     };
   };
 
@@ -288,8 +375,9 @@
     editor.hidden = true;
     render();
   });
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const submitButton = form.querySelector('button[type="submit"]');
     const values = Object.fromEntries(new FormData(form).entries());
     const overrides = getOverrides();
     overrides[values.id] = {
@@ -298,8 +386,9 @@
       isPublic: values.isPublic === "true",
       stockStatus: values.stockStatus,
     };
+    const variantInputs = [...variantsContainer.querySelectorAll("[data-variant-stock]")];
     const restockedProductIds = new Set();
-    variantsContainer.querySelectorAll("[data-variant-stock]").forEach((input) => {
+    variantInputs.forEach((input) => {
       const previousStock = window.getVariantStock(
         input.dataset.productId,
         input.dataset.variantId,
@@ -311,10 +400,33 @@
     if (restockedProductIds.size) {
       window.notifyAvailableWaitlist?.([...restockedProductIds]);
     }
-    saveOverrides(overrides);
-    status.textContent = "変更を保存しました。";
-    render();
+
+    submitButton.disabled = true;
+    status.textContent = "Firebaseへ保存しています…";
+    try {
+      await saveProductToFirestore(values, variantInputs);
+      products[values.id] = {
+        ...products[values.id],
+        ...overrides[values.id],
+      };
+      saveOverrides(overrides);
+      status.textContent = "変更をFirebaseへ保存しました。";
+      render();
+    } catch (error) {
+      console.error("商品データを保存できませんでした。", error);
+      status.textContent = "保存できませんでした。再度ログインしてお試しください。";
+    } finally {
+      submitButton.disabled = false;
+    }
   });
 
+  status.textContent = "Firebaseから商品データを読み込んでいます…";
+  try {
+    await loadFirestoreProducts();
+    status.textContent = "";
+  } catch (error) {
+    console.error("商品データを読み込めませんでした。", error);
+    status.textContent = "Firebaseへ接続できないため、端末内のデータを表示しています。";
+  }
   render();
 })();
