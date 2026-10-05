@@ -103,6 +103,18 @@
           シンプルで使いやすい定番のペンライトです。どんな場面でも使いやすい汎用タイプなので、初めての方でも使いやすいペンライトです。
         </p>
         <div class="product_detail__options" data-product-options></div>
+        <div class="product_detail__quantity">
+          <p id="product-quantity-label">レンタル個数</p>
+          <div class="product_detail__quantity_control" role="group" aria-labelledby="product-quantity-label">
+            <button type="button" aria-label="レンタル個数を1減らす" data-product-quantity-decrease>
+              −
+            </button>
+            <output data-product-quantity aria-live="polite">1</output>
+            <button type="button" aria-label="レンタル個数を1増やす" data-product-quantity-increase>
+              ＋
+            </button>
+          </div>
+        </div>
       </div>
 
       <section class="rental_calendar" aria-labelledby="rental-calendar-title">
