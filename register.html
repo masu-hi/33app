@@ -21,79 +21,6 @@
       </header>
       <form class="account_form" data-register-form>
         <label>
-          お名前
-          <input name="name" required autocomplete="name" />
-        </label>
-        <label>
-          フリガナ
-          <input name="kana" required />
-        </label>
-        <fieldset class="birth_fields">
-          <legend>生年月日</legend>
-          <div>
-            <input
-              name="birth_year"
-              required
-              inputmode="numeric"
-              maxlength="4"
-              aria-label="生年月日の年"
-            />
-            <span>年</span>
-            <input
-              name="birth_month"
-              required
-              inputmode="numeric"
-              maxlength="2"
-              aria-label="生年月日の月"
-            />
-            <span>月</span>
-            <input
-              name="birth_day"
-              required
-              inputmode="numeric"
-              maxlength="2"
-              aria-label="生年月日の日"
-            />
-            <span>日</span>
-          </div>
-        </fieldset>
-        <fieldset class="postal_fields">
-          <legend>郵便番号</legend>
-          <div>
-            <input
-              name="postal_first"
-              required
-              inputmode="numeric"
-              maxlength="3"
-              aria-label="郵便番号の前半"
-            />
-            <span>-</span>
-            <input
-              name="postal_last"
-              required
-              inputmode="numeric"
-              maxlength="4"
-              aria-label="郵便番号の後半"
-            />
-            <button type="button" data-address-search>住所検索</button>
-          </div>
-          <p class="postal_status" data-postal-status role="status"></p>
-        </fieldset>
-        <label>
-          都道府県
-          <select name="prefecture" required data-prefecture>
-            <option value="">選択してください</option>
-          </select>
-        </label>
-        <label>
-          市区町村番地
-          <input name="address" required autocomplete="street-address" />
-        </label>
-        <label>
-          建物名/部屋番号（任意）
-          <input name="building" />
-        </label>
-        <label>
           メールアドレス
           <input name="email" type="email" required autocomplete="email" />
         </label>
@@ -118,22 +45,6 @@
             minlength="8"
             autocomplete="new-password"
           />
-        </label>
-        <label>
-          推しカラー
-          <select name="favorite_color" required>
-            <option value="">選択してください</option>
-            <option>赤</option>
-            <option>青</option>
-            <option>ピンク</option>
-            <option>紫</option>
-            <option>緑</option>
-            <option>黄色</option>
-            <option>オレンジ</option>
-            <option>水色</option>
-            <option>白</option>
-            <option>黒</option>
-          </select>
         </label>
         <section class="terms_section">
           <h2>利用規約・プライバシーについて</h2>

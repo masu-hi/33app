@@ -293,12 +293,14 @@ const memberInfo = document.querySelector("[data-member-info]");
 
 if (memberInfo) {
   let profile = getActiveAccount()?.profile || {};
-  const memberList = memberInfo.querySelector(".member_info__list");
+  const memberDisplay = memberInfo.querySelector("[data-member-display]");
   const editButton = memberInfo.querySelector("[data-member-edit]");
   const editForm = memberInfo.querySelector("[data-member-edit-form]");
   const memberIntro = memberInfo.querySelector("[data-member-intro]");
+  const formError = memberInfo.querySelector("[data-member-form-error]");
 
   const renderMemberInfo = () => {
+    profile = getActiveAccount()?.profile || profile;
     const memberValues = {
       ...profile,
       birthday: profile.birth_year
@@ -307,6 +309,7 @@ if (memberInfo) {
       postal: profile.postal_first ? `${profile.postal_first}-${profile.postal_last}` : "未登録",
       address: [profile.prefecture, profile.address].filter(Boolean).join(" "),
       building: profile.building || "なし",
+      email: profile.email || activeAccountEmail || "未登録",
     };
 
     memberInfo.querySelectorAll("[data-member-value]").forEach((element) => {
@@ -315,50 +318,133 @@ if (memberInfo) {
   };
 
   const showEditForm = () => {
+    if (formError) formError.textContent = "";
     Object.entries(profile).forEach(([name, value]) => {
       const field = editForm.elements.namedItem(name);
       if (field) field.value = value;
     });
-    memberList.hidden = true;
-    editButton.hidden = true;
+    if (editForm.elements.current_password) editForm.elements.current_password.value = "";
+    if (editForm.elements.new_password) editForm.elements.new_password.value = "";
+    if (editForm.elements.new_password_confirm) editForm.elements.new_password_confirm.value = "";
+    if (memberDisplay) memberDisplay.hidden = true;
     editForm.hidden = false;
-    memberIntro.textContent = "登録されている会員情報を変更できます。";
+    memberIntro.textContent = "登録情報・パスワードの変更を行えます。";
   };
 
   renderMemberInfo();
 
-  editButton.addEventListener("click", showEditForm);
-  memberInfo.querySelector("[data-member-edit-cancel]").addEventListener("click", () => {
+  editButton?.addEventListener("click", showEditForm);
+  memberInfo.querySelector("[data-member-edit-cancel]")?.addEventListener("click", () => {
     editForm.hidden = true;
-    memberList.hidden = false;
-    editButton.hidden = false;
-    memberIntro.textContent = "登録されている会員情報を確認できます。";
+    if (memberDisplay) memberDisplay.hidden = false;
+    memberIntro.textContent = "登録されている会員情報の確認・編集、パスワード変更を行えます。";
   });
+
+  const memberAddressSearchBtn = memberInfo.querySelector("[data-member-address-search]");
+  if (memberAddressSearchBtn) {
+    const memberPostalStatus = memberInfo.querySelector("[data-member-postal-status]");
+    memberAddressSearchBtn.addEventListener("click", async () => {
+      const first = editForm.elements.postal_first.value.replace(/\D/g, "");
+      const last = editForm.elements.postal_last.value.replace(/\D/g, "");
+      const zipcode = `${first}${last}`;
+
+      if (!/^\d{7}$/.test(zipcode)) {
+        if (memberPostalStatus)
+          memberPostalStatus.textContent = "郵便番号を7桁で入力してください。";
+        return;
+      }
+
+      memberAddressSearchBtn.disabled = true;
+      if (memberPostalStatus) memberPostalStatus.textContent = "住所を検索しています。";
+
+      try {
+        const response = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipcode}`);
+        if (!response.ok) throw new Error("request failed");
+        const data = await response.json();
+        const result = data.results?.[0];
+
+        if (!result) {
+          if (memberPostalStatus)
+            memberPostalStatus.textContent = "該当する住所が見つかりませんでした。";
+          return;
+        }
+
+        editForm.elements.prefecture.value = result.address1;
+        editForm.elements.address.value = `${result.address2}${result.address3}`;
+        if (memberPostalStatus)
+          memberPostalStatus.textContent = "住所を入力しました。番地以降を確認してください。";
+        editForm.elements.address.focus();
+      } catch {
+        if (memberPostalStatus)
+          memberPostalStatus.textContent =
+            "住所を検索できませんでした。通信環境を確認して再度お試しください。";
+      } finally {
+        memberAddressSearchBtn.disabled = false;
+      }
+    });
+  }
+
   editForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    const profileChanges = Object.fromEntries(new FormData(editForm).entries());
+    if (formError) formError.textContent = "";
+
+    const formData = new FormData(editForm);
+    const values = Object.fromEntries(formData.entries());
     const activeAccount = getActiveAccount();
 
-    profile = { ...profile, ...profileChanges };
-    profile.email = activeAccountEmail;
-    saveActiveAccount({ ...activeAccount, profile });
+    const currentPassword = String(values.current_password || "").trim();
+    const newPassword = String(values.new_password || "").trim();
+    const newPasswordConfirm = String(values.new_password_confirm || "").trim();
+
+    let passwordToSave = activeAccount?.password || "";
+
+    if (currentPassword || newPassword || newPasswordConfirm) {
+      if (!currentPassword) {
+        if (formError) formError.textContent = "現在のパスワードを入力してください。";
+        return;
+      }
+
+      if (activeAccount && activeAccount.password !== currentPassword) {
+        if (formError) formError.textContent = "現在のパスワードが正しくありません。";
+        return;
+      }
+
+      if (!newPassword) {
+        if (formError) formError.textContent = "新しいパスワードを入力してください。";
+        return;
+      }
+
+      if (newPassword.length < 8) {
+        if (formError) formError.textContent = "新しいパスワードは8文字以上で入力してください。";
+        return;
+      }
+
+      if (newPassword !== newPasswordConfirm) {
+        if (formError)
+          formError.textContent = "新しいパスワードと確認用パスワードが一致していません。";
+        return;
+      }
+
+      passwordToSave = newPassword;
+    }
+
+    const { current_password, new_password, new_password_confirm, ...profileChanges } = values;
+
+    profile = { ...profile, ...profileChanges, email: profile.email || activeAccountEmail };
+    saveActiveAccount({ ...activeAccount, password: passwordToSave, profile });
+
     localStorage.setItem("memberProfile", JSON.stringify(profile));
-    localStorage.setItem("accountName", profile.name);
-    localStorage.setItem("favoriteColor", profile.favorite_color);
-    localStorage.setItem(
-      "registeredAccount",
-      JSON.stringify({
-        ...legacyAccount,
-        name: profile.name,
-        email: profile.email.toLowerCase(),
-      }),
-    );
-    applyFavoriteColor(profile.favorite_color);
+    if (profile.name) localStorage.setItem("accountName", profile.name);
+    if (profile.favorite_color) {
+      localStorage.setItem("favoriteColor", profile.favorite_color);
+      applyFavoriteColor(profile.favorite_color);
+    }
+
     renderMemberInfo();
     editForm.hidden = true;
-    memberList.hidden = false;
-    editButton.hidden = false;
-    memberIntro.textContent = "登録されている会員情報を確認できます。";
+    if (memberDisplay) memberDisplay.hidden = false;
+    memberIntro.textContent = "登録されている会員情報の確認・編集、パスワード変更を行えます。";
+    showToast("会員情報を更新しました。");
   });
 }
 
@@ -739,10 +825,7 @@ if (rentalCalendar) {
       : quantityProduct?.inventoryMode === "shared"
         ? Number(window.getProductAvailableStock?.(currentProductId))
         : maximumVariantStock(currentProductId);
-  const maximumQuantity = Math.max(
-    1,
-    selectableStock || 1,
-  );
+  const maximumQuantity = Math.max(1, selectableStock || 1);
 
   today.setHours(0, 0, 0, 0);
 
@@ -1231,7 +1314,17 @@ if (cartPage) {
   });
 
   checkout.addEventListener("click", (event) => {
-    if (quantity < 1) event.preventDefault();
+    if (quantity < 1) {
+      event.preventDefault();
+      return;
+    }
+    if (sessionStorage.getItem("isLoggedIn") !== "true") {
+      event.preventDefault();
+      showToast("購入にはログインが必要です。");
+      window.setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1000);
+    }
   });
 
   renderCart();
@@ -1240,6 +1333,126 @@ if (cartPage) {
 const paymentPage = document.querySelector("[data-payment-page]");
 
 if (paymentPage) {
+  if (sessionStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+
+  const checkoutPrefectureSelect = document.querySelector("[data-checkout-prefecture]");
+  if (checkoutPrefectureSelect && checkoutPrefectureSelect.options.length <= 1) {
+    const prefecturesList = [
+      "北海道",
+      "青森県",
+      "岩手県",
+      "宮城県",
+      "秋田県",
+      "山形県",
+      "福島県",
+      "茨城県",
+      "栃木県",
+      "群馬県",
+      "埼玉県",
+      "千葉県",
+      "東京都",
+      "神奈川県",
+      "新潟県",
+      "富山県",
+      "石川県",
+      "福井県",
+      "山梨県",
+      "長野県",
+      "岐阜県",
+      "静岡県",
+      "愛知県",
+      "三重県",
+      "滋賀県",
+      "京都府",
+      "大阪府",
+      "兵庫県",
+      "奈良県",
+      "和歌山県",
+      "鳥取県",
+      "島根県",
+      "岡山県",
+      "広島県",
+      "山口県",
+      "徳島県",
+      "香川県",
+      "愛媛県",
+      "高知県",
+      "福岡県",
+      "佐賀県",
+      "長崎県",
+      "熊本県",
+      "大分県",
+      "宮崎県",
+      "鹿児島県",
+      "沖縄県",
+    ];
+    prefecturesList.forEach((p) => checkoutPrefectureSelect.add(new Option(p, p)));
+  }
+
+  const profile = getActiveAccount()?.profile || {};
+  const checkoutForm = document.querySelector("[data-checkout-form]");
+  if (checkoutForm) {
+    if (profile.name) checkoutForm.elements.shipping_name.value = profile.name;
+    if (profile.postal_first)
+      checkoutForm.elements.shipping_postal_first.value = profile.postal_first;
+    if (profile.postal_last) checkoutForm.elements.shipping_postal_last.value = profile.postal_last;
+    if (profile.prefecture) checkoutForm.elements.shipping_prefecture.value = profile.prefecture;
+    if (profile.address) checkoutForm.elements.shipping_address.value = profile.address;
+    if (profile.building) checkoutForm.elements.shipping_building.value = profile.building;
+
+    const checkoutAddressSearchBtn = document.querySelector("[data-checkout-address-search]");
+    if (checkoutAddressSearchBtn) {
+      const postalStatus = document.querySelector("[data-checkout-postal-status]");
+      checkoutAddressSearchBtn.addEventListener("click", async () => {
+        const first = checkoutForm.elements.shipping_postal_first.value.replace(/\D/g, "");
+        const last = checkoutForm.elements.shipping_postal_last.value.replace(/\D/g, "");
+        const zipcode = `${first}${last}`;
+        if (!/^\d{7}$/.test(zipcode)) {
+          if (postalStatus) postalStatus.textContent = "郵便番号を7桁で入力してください。";
+          return;
+        }
+        checkoutAddressSearchBtn.disabled = true;
+        if (postalStatus) postalStatus.textContent = "住所を検索しています。";
+        try {
+          const response = await fetch(
+            `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipcode}`,
+          );
+          if (!response.ok) throw new Error("failed");
+          const data = await response.json();
+          const result = data.results?.[0];
+          if (!result) {
+            if (postalStatus) postalStatus.textContent = "該当する住所が見つかりませんでした。";
+            return;
+          }
+          checkoutForm.elements.shipping_prefecture.value = result.address1;
+          checkoutForm.elements.shipping_address.value = `${result.address2}${result.address3}`;
+          if (postalStatus)
+            postalStatus.textContent = "住所を入力しました。番地以降を確認してください。";
+          checkoutForm.elements.shipping_address.focus();
+        } catch {
+          if (postalStatus)
+            postalStatus.textContent = "住所を検索できませんでした。通信環境を確認してください。";
+        } finally {
+          checkoutAddressSearchBtn.disabled = false;
+        }
+      });
+    }
+
+    checkoutForm.addEventListener("submit", () => {
+      const shippingInfo = {
+        name: checkoutForm.elements.shipping_name?.value || "",
+        postal_first: checkoutForm.elements.shipping_postal_first?.value || "",
+        postal_last: checkoutForm.elements.shipping_postal_last?.value || "",
+        prefecture: checkoutForm.elements.shipping_prefecture?.value || "",
+        address: checkoutForm.elements.shipping_address?.value || "",
+        building: checkoutForm.elements.shipping_building?.value || "",
+      };
+      sessionStorage.setItem("checkoutShippingInfo", JSON.stringify(shippingInfo));
+    });
+  }
+
   const extensionOrderId = new URLSearchParams(window.location.search).get("extension");
   const paymentFees = { credit: 0, paypay: 0, deferred: 250, convenience: 220 };
   const paymentMethods = [...document.querySelectorAll("[data-payment-method]")];
@@ -1360,9 +1573,10 @@ const createOrderId = () => {
 };
 
 const getOrderDraft = () => {
+  const checkoutShipping = JSON.parse(sessionStorage.getItem("checkoutShippingInfo") || "{}");
   const registration = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
   const accountProfile = getActiveAccount()?.profile || {};
-  const customer = { ...registration, ...accountProfile };
+  const customer = { ...registration, ...accountProfile, ...checkoutShipping };
   const reservation = JSON.parse(localStorage.getItem("pendingReservation") || "{}");
   const currentProduct =
     window.getProductData?.(reservation.productId || "penlight") ||
@@ -1379,6 +1593,26 @@ const getOrderDraft = () => {
     localStorage.setItem("pendingOrderId", orderId);
   }
 
+  const shippingPostalFirst = customer.shipping_postal_first || customer.postal_first;
+  const shippingPostalLast = customer.shipping_postal_last || customer.postal_last;
+  const shippingPrefecture = customer.shipping_prefecture || customer.prefecture;
+  const shippingAddressStr = customer.shipping_address || customer.address;
+  const shippingBuildingStr = customer.shipping_building || customer.building;
+  const customerNameStr = customer.shipping_name || customer.name || "会員様";
+
+  const formattedAddress = [
+    shippingPostalFirst && shippingPostalLast
+      ? `〒${shippingPostalFirst}-${shippingPostalLast}`
+      : customer.postal
+        ? `〒${customer.postal}`
+        : "",
+    shippingPrefecture,
+    shippingAddressStr,
+    shippingBuildingStr,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return {
     id: orderId,
     productId: reservation.productId || "penlight",
@@ -1394,7 +1628,7 @@ const getOrderDraft = () => {
     payment,
     paymentName: paymentNames[payment],
     customer: {
-      name: customer.name || "未登録",
+      name: customerNameStr,
       email: customer.email || activeAccountEmail || "未登録",
       phone: customer.phone || customer.tel || "未登録",
     },
@@ -1404,17 +1638,7 @@ const getOrderDraft = () => {
       reservation.arrivalDate && reservation.returnDate
         ? `${formatStoredDate(reservation.arrivalDate)}〜${formatStoredDate(reservation.returnDate)}`
         : "3泊4日",
-    address:
-      [
-        customer.postal_first && customer.postal_last
-          ? `〒${customer.postal_first}-${customer.postal_last}`
-          : "",
-        customer.prefecture,
-        customer.address,
-        customer.building,
-      ]
-        .filter(Boolean)
-        .join(" ") || "登録済みのお届け先",
+    address: formattedAddress || "登録済みのお届け先",
   };
 };
 
@@ -1562,6 +1786,12 @@ if (orderCompletePage) {
   document.querySelector("[data-complete-id]").textContent = order.id;
   document.querySelector("[data-complete-date]").textContent = order.placedDate || "本日";
   document.querySelector("[data-complete-period]").textContent = order.period;
+  const returnDeadlineElements = document.querySelectorAll("[data-complete-return-deadline]");
+  returnDeadlineElements.forEach((element) => {
+    element.textContent = order.returnDate
+      ? `${formatStoredDate(order.returnDate)} 24:00まで`
+      : "未設定";
+  });
   document.querySelector("[data-complete-payment]").textContent = order.paymentName;
   document.querySelector("[data-complete-total]").textContent =
     `¥${order.total.toLocaleString("ja-JP")}`;
