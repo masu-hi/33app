@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/app.js" defer></script>
   </head>
+
   <body class="mobile_app">
     <main class="app_shell order_page" data-order-complete>
       <header class="mypage_header">
@@ -46,6 +47,10 @@
             <dd data-complete-period></dd>
           </div>
           <div>
+            <dt>返却期限：</dt>
+            <dd data-complete-return-deadline></dd>
+          </div>
+          <div>
             <dt>支払い方法：</dt>
             <dd data-complete-payment></dd>
           </div>
@@ -54,6 +59,20 @@
             <dd data-complete-total></dd>
           </div>
         </dl>
+        <div class="order_complete__return">
+          <p class="order_complete__return-title">返却方法</p>
+          <p class="order_complete__return-text">
+            届いた箱に商品を入れ、同封されている着払い伝票を貼ってください。
+            <br />
+            郵便局またはコンビニから発送してください。
+          </p>
+          <dl>
+            <div class="order_complete__return-deadline">
+              <dt>返却期限：</dt>
+              <dd data-complete-return-deadline></dd>
+            </div>
+          </dl>
+        </div>
         <p class="order_complete__message">
           レンタルのお申し込みが確定しました。
           <br />

@@ -142,12 +142,9 @@ registerForm?.addEventListener("submit", (event) => {
   const values = Object.fromEntries(formData.entries());
   values.email = normalizeEmail(values.email);
   sessionStorage.setItem("registrationData", JSON.stringify(values));
-  localStorage.setItem("favoriteColor", values.favorite_color);
-  localStorage.setItem("accountName", values.name);
   localStorage.setItem(
     "registeredAccount",
     JSON.stringify({
-      name: values.name,
       email: values.email.toLowerCase(),
       password: values.password,
     }),
@@ -161,14 +158,7 @@ if (confirmContent) {
   const values = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
   const displayValues = {
     ...values,
-    birthday: values.birth_year
-      ? `${values.birth_year}年${values.birth_month}月${values.birth_day}日`
-      : "未入力",
-    postal: values.postal_first ? `${values.postal_first}-${values.postal_last}` : "未入力",
     password: values.password ? "●".repeat(values.password.length) : "未入力",
-    password_confirm: values.password_confirm
-      ? "●".repeat(values.password_confirm.length)
-      : "未入力",
   };
 
   document.querySelectorAll("[data-value]").forEach((element) => {
@@ -178,29 +168,17 @@ if (confirmContent) {
 
 document.querySelector("[data-registration-submit]")?.addEventListener("click", () => {
   const values = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
-  const { password, password_confirm, ...memberProfile } = values;
-
   saveAccount(values);
-  localStorage.setItem("memberProfile", JSON.stringify(memberProfile));
 });
 
 if (document.querySelector("[data-registration-complete]")) {
   const values = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
 
-  if (values.favorite_color) {
-    localStorage.setItem("favoriteColor", values.favorite_color);
-  }
-
-  if (values.name) {
-    localStorage.setItem("accountName", values.name);
-  }
-
-  if (values.name && values.email) {
+  if (values.email) {
     saveAccount(values);
     localStorage.setItem(
       "registeredAccount",
       JSON.stringify({
-        name: values.name,
         email: values.email.toLowerCase(),
         password: values.password,
       }),
@@ -240,7 +218,7 @@ loginForm?.addEventListener("submit", (event) => {
     return;
   }
 
-  const loggedInName = account.profile.name || "ゲスト";
+  const loggedInName = account.profile.name || "会員様";
 
   sessionStorage.setItem("isLoggedIn", "true");
   sessionStorage.setItem("activeAccountEmail", email);
