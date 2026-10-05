@@ -271,7 +271,11 @@ window.getProductData = (productId) => {
   } catch {
     overrides = {};
   }
-  return { ...product, ...(overrides[productId] || {}), id: product.id };
+  return {
+    ...product,
+    ...(window.FIREBASE_PRODUCTS_LOADED ? {} : overrides[productId] || {}),
+    id: product.id,
+  };
 };
 
 const INVENTORY_STORAGE_KEY = "productVariantInventory";
