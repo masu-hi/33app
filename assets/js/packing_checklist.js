@@ -103,11 +103,9 @@ const renderChecklistItems = () => {
       if (checkbox.checked) {
         checkedChecklistIds.add(item.id);
         row.classList.add("is_checked", "is_checking");
-        row.addEventListener(
-          "animationend",
-          () => row.classList.remove("is_checking"),
-          { once: true },
-        );
+        row.addEventListener("animationend", () => row.classList.remove("is_checking"), {
+          once: true,
+        });
       } else {
         checkedChecklistIds.delete(item.id);
         row.classList.remove("is_checked", "is_checking");
@@ -147,32 +145,30 @@ const renderChecklistItems = () => {
   updateChecklistProgress();
 };
 
-  const celebrateChecklist = () => {
-    const confettiLayer = document.createElement("div");
-    confettiLayer.className = "packing_checklist__confetti";
-    confettiLayer.setAttribute("aria-hidden", "true");
-    document.body.append(confettiLayer);
+const celebrateChecklist = () => {
+  const confettiLayer = document.createElement("div");
+  confettiLayer.className = "packing_checklist__confetti";
+  confettiLayer.setAttribute("aria-hidden", "true");
+  document.body.append(confettiLayer);
 
-    ["✦", "♥", "✧", "✦", "♥", "✧", "✦", "♥", "✧", "✦", "♥", "✧"].forEach(
-      (symbol) => {
-        const particle = document.createElement("span");
-        particle.className = "packing_checklist__confetti_piece";
-        particle.textContent = symbol;
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.setProperty("--confetti-drift", `${Math.random() * 120 - 60}px`);
-        particle.style.animationDelay = `${Math.random() * 180}ms`;
-        particle.addEventListener(
-          "animationend",
-          () => {
-            particle.remove();
-            if (!confettiLayer.childElementCount) confettiLayer.remove();
-          },
-          { once: true },
-        );
-        confettiLayer.append(particle);
+  ["✦", "♥", "✧", "✦", "♥", "✧", "✦", "♥", "✧", "✦", "♥", "✧"].forEach((symbol) => {
+    const particle = document.createElement("span");
+    particle.className = "packing_checklist__confetti_piece";
+    particle.textContent = symbol;
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.setProperty("--confetti-drift", `${Math.random() * 120 - 60}px`);
+    particle.style.animationDelay = `${Math.random() * 180}ms`;
+    particle.addEventListener(
+      "animationend",
+      () => {
+        particle.remove();
+        if (!confettiLayer.childElementCount) confettiLayer.remove();
       },
+      { once: true },
     );
-  };
+    confettiLayer.append(particle);
+  });
+};
 
 checklistAddForm?.addEventListener("submit", (event) => {
   event.preventDefault();

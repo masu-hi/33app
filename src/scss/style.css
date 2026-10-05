@@ -5198,6 +5198,54 @@ html.is-dark-favorite .app_shell .button {
   font-size: 12px;
 }
 
+.checkout_shipping_section {
+  padding: 0 34px 24px;
+}
+.checkout_shipping_section h2 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  line-height: 25px;
+}
+
+.checkout_shipping_note {
+  margin: 0 0 16px;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.checkout_shipping_fields {
+  display: grid;
+  gap: 16px;
+}
+.checkout_shipping_fields > label {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+.checkout_shipping_fields > label input,
+.checkout_shipping_fields > label select {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #dfe1ec;
+  border-radius: 5px;
+  background: #fff;
+  font-size: 14px;
+}
+.checkout_shipping_fields > label select {
+  font-size: 14px;
+}
+.checkout_shipping_fields .checkout_postal_fields {
+  min-width: 0;
+}
+.checkout_shipping_fields .checkout_postal_fields input {
+  height: 36px;
+  border-radius: 5px;
+  background: #fff;
+}
+
 .payment_method {
   border-bottom: 1px solid var(--color-line, #ead5ee);
 }
