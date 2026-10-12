@@ -1,3 +1,5 @@
+const themeStorage = window.userStorage;
+
 (() => {
   const colors = {
     赤: ["#f6cbd3", "#fff6f7", "#eaf2ff", "#adc3e8", "#f2cbd4", "#353b60"],
@@ -15,11 +17,11 @@
   const activeEmail = String(sessionStorage.getItem("activeAccountEmail") || "")
     .trim()
     .toLowerCase();
-  let favoriteColor = localStorage.getItem("favoriteColor");
+  let favoriteColor = themeStorage.getItem("favoriteColor");
 
   if (activeEmail) {
     try {
-      const accounts = JSON.parse(localStorage.getItem("accounts") || "{}");
+      const accounts = JSON.parse(themeStorage.getItem("accounts") || "{}");
       favoriteColor = accounts[activeEmail]?.profile?.favorite_color || favoriteColor;
     } catch {
       // 従来の保存値を使用します。

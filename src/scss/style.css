@@ -1710,6 +1710,20 @@ body {
   font-weight: 500;
 }
 
+.checkout_profile {
+  padding: 24px;
+  color: #353b60;
+}
+.checkout_profile h1 {
+  font-size: 20px;
+}
+.checkout_profile > p {
+  font-size: 14px;
+}
+.checkout_profile .member_info__form {
+  margin-top: 24px;
+}
+
 .product_data_loading__spinner {
   width: 22px;
   height: 22px;
@@ -3178,6 +3192,28 @@ h3,
 .complete_content .auth_secondary {
   width: 200px;
   min-height: 70px;
+}
+
+.registration_complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 32px 24px;
+}
+.registration_complete h1 {
+  margin: 0;
+  color: #353b60;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: center;
+}
+.registration_complete__login {
+  width: min(100%, 280px);
+  min-height: 56px;
+  border: 1px solid var(--color-line, #ead5ee);
+  font-weight: 700;
 }
 
 .mobile_app {

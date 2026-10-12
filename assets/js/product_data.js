@@ -1,3 +1,5 @@
+const productStorage = window.userStorage;
+
 window.ARTISTS = [
   { id: "lumina", name: "LUMINA" },
   { id: "sora-note", name: "SORA NOTE" },
@@ -267,7 +269,7 @@ window.getProductData = (productId) => {
   if (!product) return null;
   let overrides = {};
   try {
-    overrides = JSON.parse(localStorage.getItem("productOverrides") || "{}");
+    overrides = JSON.parse(productStorage.getItem("productOverrides") || "{}");
   } catch {
     overrides = {};
   }
@@ -282,7 +284,7 @@ const INVENTORY_STORAGE_KEY = "productVariantInventory";
 
 window.getSavedInventory = () => {
   try {
-    return JSON.parse(localStorage.getItem(INVENTORY_STORAGE_KEY) || "{}");
+    return JSON.parse(productStorage.getItem(INVENTORY_STORAGE_KEY) || "{}");
   } catch {
     return {};
   }
@@ -307,7 +309,7 @@ window.setVariantStock = (productId, variantId, stock) => {
   const inventory = window.getSavedInventory();
   const nextStock = Math.max(0, Number(stock) || 0);
   inventory[productId] = { ...inventory[productId], [variantId]: nextStock };
-  localStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(inventory));
+  productStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(inventory));
   return nextStock;
 };
 
@@ -345,9 +347,9 @@ const orderOverlapsDate = (order, dateKey) =>
 
 window.getVariantPhysicalStock = (productId, variantId) => {
   const currentStock = window.getVariantStock(productId, variantId);
-  const activeOrders = JSON.parse(localStorage.getItem("rentalOrders") || "[]").filter(
-    (order) => order.status !== "キャンセル",
-  );
+  const activeOrders = JSON.parse(
+    window.sharedAccountStorage.getItem("rentalOrders") || "[]",
+  ).filter((order) => order.status !== "キャンセル");
   let allocatedTotal = 0;
 
   activeOrders.forEach((order) => {
@@ -361,9 +363,9 @@ window.getVariantPhysicalStock = (productId, variantId) => {
 
 window.getVariantStockForDate = (productId, variantId, dateKey) => {
   const physicalStock = window.getVariantPhysicalStock(productId, variantId);
-  const activeOrders = JSON.parse(localStorage.getItem("rentalOrders") || "[]").filter(
-    (order) => order.status !== "キャンセル" && orderOverlapsDate(order, dateKey),
-  );
+  const activeOrders = JSON.parse(
+    window.sharedAccountStorage.getItem("rentalOrders") || "[]",
+  ).filter((order) => order.status !== "キャンセル" && orderOverlapsDate(order, dateKey));
   const allocatedOnDate = activeOrders.reduce((total, order) => {
     if (order.variantSelections?.[productId] !== variantId) return total;
     return total + (Number(order.quantity) || 1);
@@ -478,8 +480,7 @@ window.isWaitlistEntryAvailable = (entry) => {
 window.notifyAvailableWaitlist = (changedProductIds = [], targetIndexes = null) => {
   const changedIds = new Set(changedProductIds);
   const targetedEntries = targetIndexes ? new Set(targetIndexes) : null;
-  const entries = JSON.parse(localStorage.getItem("waitlistProducts") || "[]");
-  const notifications = JSON.parse(localStorage.getItem("appNotifications") || "[]");
+  const entries = JSON.parse(window.sharedAccountStorage.getItem("waitlistProducts") || "[]");
   let changed = false;
 
   entries.forEach((entry, index) => {
@@ -495,22 +496,24 @@ window.notifyAvailableWaitlist = (changedProductIds = [], targetIndexes = null) 
 
     entry.notifiedAt = new Date().toISOString();
     const product = window.PRODUCTS[entry.productId];
+    const notificationKey = entry.__storageKey.replace(/waitlistProducts$/, "appNotifications");
+    const notifications = JSON.parse(localStorage.getItem(notificationKey) || "[]");
     notifications.unshift({
       id: `waitlist-${entry.productId}-${Date.now()}-${index}`,
       title: `【空きが出ました】${product?.name || "登録商品"}`,
       message: `${entry.startDate}からの希望期間に申し込める在庫が確保されました。商品詳細から空き状況をご確認ください。`,
       createdAt: entry.notifiedAt,
     });
+    localStorage.setItem(notificationKey, JSON.stringify(notifications));
     changed = true;
   });
 
   if (changed) {
-    localStorage.setItem("waitlistProducts", JSON.stringify(entries));
-    localStorage.setItem("appNotifications", JSON.stringify(notifications));
+    window.sharedAccountStorage.setItem("waitlistProducts", JSON.stringify(entries));
   }
   return changed;
 };
 
 window.resetAllInventory = () => {
-  localStorage.removeItem(INVENTORY_STORAGE_KEY);
+  productStorage.removeItem(INVENTORY_STORAGE_KEY);
 };

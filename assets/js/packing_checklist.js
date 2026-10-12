@@ -1,3 +1,5 @@
+const checklistStorage = window.userStorage;
+
 const checklistStorageKey = "packingChecklistCheckedItems";
 const checklistList = document.querySelector("[data-checklist-list]");
 const checklistPage = document.querySelector(".packing_checklist_page");
@@ -27,7 +29,7 @@ updateChecklistHeader();
 let savedChecklistState = null;
 
 try {
-  savedChecklistState = JSON.parse(localStorage.getItem(checklistStorageKey) || "null");
+  savedChecklistState = JSON.parse(checklistStorage.getItem(checklistStorageKey) || "null");
 } catch {
   savedChecklistState = null;
 }
@@ -72,7 +74,7 @@ const updateChecklistProgress = () => {
 };
 
 const saveChecklistState = () => {
-  localStorage.setItem(
+  checklistStorage.setItem(
     checklistStorageKey,
     JSON.stringify({ items: checklistItems, checkedIds: [...checkedChecklistIds] }),
   );

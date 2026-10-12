@@ -1,9 +1,11 @@
+const appStorage = window.userStorage;
+
 const NOTICE_READ_STORAGE_KEY = "readNoticeIds";
 const DEFAULT_UNREAD_NOTICE_IDS = ["shipping-complete", "return-request"];
 
 const getReadNoticeIds = () => {
   try {
-    const savedIds = JSON.parse(localStorage.getItem(NOTICE_READ_STORAGE_KEY) || "[]");
+    const savedIds = JSON.parse(appStorage.getItem(NOTICE_READ_STORAGE_KEY) || "[]");
     return Array.isArray(savedIds) ? savedIds : [];
   } catch {
     return [];
@@ -12,7 +14,7 @@ const getReadNoticeIds = () => {
 
 const getUnreadNoticeCount = () => {
   const readIds = getReadNoticeIds();
-  const dynamicIds = JSON.parse(localStorage.getItem("appNotifications") || "[]").map(
+  const dynamicIds = JSON.parse(appStorage.getItem("appNotifications") || "[]").map(
     (notice) => notice.id,
   );
   return [...DEFAULT_UNREAD_NOTICE_IDS, ...dynamicIds].filter((id) => !readIds.includes(id)).length;
@@ -30,7 +32,7 @@ const markNoticeAsRead = (noticeId) => {
   const readIds = getReadNoticeIds();
   if (!noticeId || readIds.includes(noticeId)) return;
 
-  localStorage.setItem(NOTICE_READ_STORAGE_KEY, JSON.stringify([...readIds, noticeId]));
+  appStorage.setItem(NOTICE_READ_STORAGE_KEY, JSON.stringify([...readIds, noticeId]));
   updateNoticeCount();
 };
 
@@ -63,13 +65,13 @@ document.querySelectorAll('a[aria-label="通知"]').forEach((link) => {
 updateNoticeCount();
 
 const cartCountElements = document.querySelectorAll("[data-cart-count]");
-const savedCartCount = Number(localStorage.getItem("cartCount") || 0);
+const savedCartCount = Number(appStorage.getItem("cartCount") || 0);
 const normalizeEmail = (email) =>
   String(email || "")
     .trim()
     .toLowerCase();
-const getAccounts = () => JSON.parse(localStorage.getItem("accounts") || "{}");
-const legacyAccount = JSON.parse(localStorage.getItem("registeredAccount") || "{}");
+const getAccounts = () => JSON.parse(appStorage.getItem("accounts") || "{}");
+const legacyAccount = JSON.parse(appStorage.getItem("registeredAccount") || "{}");
 const activeAccountEmail = normalizeEmail(
   sessionStorage.getItem("activeAccountEmail") ||
     (sessionStorage.getItem("isLoggedIn") === "true" ? legacyAccount.email : ""),
@@ -77,7 +79,7 @@ const activeAccountEmail = normalizeEmail(
 
 if (activeAccountEmail && !getAccounts()[activeAccountEmail]) {
   const accounts = getAccounts();
-  const legacyProfile = JSON.parse(localStorage.getItem("memberProfile") || "{}");
+  const legacyProfile = JSON.parse(appStorage.getItem("memberProfile") || "{}");
   accounts[activeAccountEmail] = {
     password: legacyAccount.password || "",
     profile: {
@@ -86,7 +88,7 @@ if (activeAccountEmail && !getAccounts()[activeAccountEmail]) {
       email: activeAccountEmail,
     },
   };
-  localStorage.setItem("accounts", JSON.stringify(accounts));
+  appStorage.setItem("accounts", JSON.stringify(accounts));
   sessionStorage.setItem("activeAccountEmail", activeAccountEmail);
 }
 
@@ -95,10 +97,10 @@ const saveActiveAccount = (account) => {
   if (!activeAccountEmail) return;
   const accounts = getAccounts();
   accounts[activeAccountEmail] = account;
-  localStorage.setItem("accounts", JSON.stringify(accounts));
+  appStorage.setItem("accounts", JSON.stringify(accounts));
 };
 let favoriteColor =
-  getActiveAccount()?.profile?.favorite_color || localStorage.getItem("favoriteColor");
+  getActiveAccount()?.profile?.favorite_color || appStorage.getItem("favoriteColor");
 
 const showToast = (message) => {
   let toast = document.querySelector("[data-toast]");
@@ -215,7 +217,7 @@ if (!favoriteColor) {
   favoriteColor = registrationData.favorite_color;
 
   if (favoriteColor) {
-    localStorage.setItem("favoriteColor", favoriteColor);
+    appStorage.setItem("favoriteColor", favoriteColor);
   }
 }
 
@@ -263,7 +265,7 @@ favoriteColorButtons.forEach((button) => {
       });
     }
 
-    localStorage.setItem("favoriteColor", favoriteColor);
+    appStorage.setItem("favoriteColor", favoriteColor);
     applyFavoriteColor(favoriteColor);
     updateFavoriteColorButtons(favoriteColor);
   });
@@ -294,7 +296,7 @@ if (accountNameElement) {
 const rentalStatusCounts = document.querySelectorAll("[data-rental-status-count]");
 
 if (rentalStatusCounts.length) {
-  const orders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+  const orders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
   const counts = orders.reduce((result, order) => {
     const status = order.status || "配送待ち";
     result[status] = (result[status] || 0) + 1;
@@ -450,10 +452,10 @@ if (memberInfo) {
     profile = { ...profile, ...profileChanges, email: profile.email || activeAccountEmail };
     saveActiveAccount({ ...activeAccount, password: passwordToSave, profile });
 
-    localStorage.setItem("memberProfile", JSON.stringify(profile));
-    if (profile.name) localStorage.setItem("accountName", profile.name);
+    appStorage.setItem("memberProfile", JSON.stringify(profile));
+    if (profile.name) appStorage.setItem("accountName", profile.name);
     if (profile.favorite_color) {
-      localStorage.setItem("favoriteColor", profile.favorite_color);
+      appStorage.setItem("favoriteColor", profile.favorite_color);
       applyFavoriteColor(profile.favorite_color);
     }
 
@@ -518,7 +520,7 @@ const categorySearchNames = {
 
 const getPopularSearchCounts = () => {
   try {
-    const counts = JSON.parse(localStorage.getItem(popularSearchStorageKey) || "{}");
+    const counts = JSON.parse(appStorage.getItem(popularSearchStorageKey) || "{}");
     return counts && typeof counts === "object" ? counts : {};
   } catch {
     return {};
@@ -535,7 +537,7 @@ const recordPopularSearch = (term) => {
       .sort(([, countA], [, countB]) => Number(countB) - Number(countA))
       .slice(0, 30),
   );
-  localStorage.setItem(popularSearchStorageKey, JSON.stringify(trimmedCounts));
+  appStorage.setItem(popularSearchStorageKey, JSON.stringify(trimmedCounts));
 };
 
 document.querySelectorAll('form[action="search.html"]').forEach((form) => {
@@ -726,7 +728,7 @@ if (resultsPage) {
 }
 
 const updateCartCount = (count) => {
-  localStorage.setItem("cartCount", String(count));
+  appStorage.setItem("cartCount", String(count));
   cartCountElements.forEach((element) => {
     element.textContent = count;
     element.hidden = count < 1;
@@ -1022,7 +1024,7 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
   }
 
   if (button.dataset.cartState === "waitlist") {
-    const entries = JSON.parse(localStorage.getItem("waitlistProducts") || "[]");
+    const entries = JSON.parse(appStorage.getItem("waitlistProducts") || "[]");
     const selectedOptions = Object.fromEntries(
       optionSelects.map((select) => [
         select.previousElementSibling?.textContent.trim() || "オプション",
@@ -1038,7 +1040,7 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
       notify: true,
       createdAt: new Date().toISOString(),
     });
-    localStorage.setItem("waitlistProducts", JSON.stringify(entries));
+    appStorage.setItem("waitlistProducts", JSON.stringify(entries));
     button.dataset.cartState = "waitlist-added";
     button.classList.add("is_added");
     button.textContent = "空き待ちリストを見る";
@@ -1073,7 +1075,7 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
         selectedReservation.variantSelections[component.productId] = component.defaultVariant;
       }
     });
-    localStorage.setItem("pendingReservation", JSON.stringify(selectedReservation));
+    appStorage.setItem("pendingReservation", JSON.stringify(selectedReservation));
   }
 
   updateCartCount(selectedProductQuantity);
@@ -1087,7 +1089,7 @@ document.querySelector("[data-show-reviews]")?.addEventListener("click", () => {
   window.alert("レビューは現在準備中です。\n評価 4.5 / 5.0");
 });
 
-const savedFavorites = new Set(JSON.parse(localStorage.getItem("favoriteProducts") || "[]"));
+const savedFavorites = new Set(JSON.parse(appStorage.getItem("favoriteProducts") || "[]"));
 
 const legacyFavoriteProducts = {
   "penlight-simple": {
@@ -1145,19 +1147,19 @@ if (productDetailPage) {
     new URLSearchParams(window.location.search).get("id") ||
     new URLSearchParams(window.location.search).get("category") ||
     "penlight";
-  const recentlyViewed = JSON.parse(localStorage.getItem(recentlyViewedKey) || "[]");
+  const recentlyViewed = JSON.parse(appStorage.getItem(recentlyViewedKey) || "[]");
   const updatedRecentlyViewed = [
     productId,
     ...recentlyViewed.filter((savedProductId) => savedProductId !== productId),
   ].slice(0, 10);
-  localStorage.setItem(recentlyViewedKey, JSON.stringify(updatedRecentlyViewed));
+  appStorage.setItem(recentlyViewedKey, JSON.stringify(updatedRecentlyViewed));
 }
 
 const recentlyViewedList = document.querySelector("[data-recently-viewed-list]");
 const recentlyViewedEmpty = document.querySelector("[data-recently-viewed-empty]");
 
 if (recentlyViewedList && recentlyViewedEmpty) {
-  const recentlyViewed = JSON.parse(localStorage.getItem(recentlyViewedKey) || "[]").filter(
+  const recentlyViewed = JSON.parse(appStorage.getItem(recentlyViewedKey) || "[]").filter(
     (productId) => favoriteProducts[productId],
   );
   recentlyViewedEmpty.hidden = recentlyViewed.length > 0;
@@ -1263,7 +1265,7 @@ document.addEventListener("click", (event) => {
     savedFavorites.delete(productId);
   }
 
-  localStorage.setItem("favoriteProducts", JSON.stringify([...savedFavorites]));
+  appStorage.setItem("favoriteProducts", JSON.stringify([...savedFavorites]));
   document.querySelectorAll(`[data-favorite-id="${productId}"]`).forEach((matchingButton) => {
     updateFavoriteButton(matchingButton, isFavorite);
   });
@@ -1275,7 +1277,7 @@ document.addEventListener("click", (event) => {
 const cartPage = document.querySelector("[data-cart-page]");
 
 if (cartPage) {
-  const pendingReservation = JSON.parse(localStorage.getItem("pendingReservation") || "{}");
+  const pendingReservation = JSON.parse(appStorage.getItem("pendingReservation") || "{}");
   const cartProductData =
     window.getProductData?.(pendingReservation.productId || "penlight") ||
     window.PRODUCTS?.[pendingReservation.productId || "penlight"];
@@ -1288,12 +1290,19 @@ if (cartPage) {
   const summary = document.querySelector("[data-cart-summary]");
   const checkout = document.querySelector("[data-cart-checkout]");
   const emptyMessage = document.querySelector("[data-cart-empty]");
-  let quantity = Number(localStorage.getItem("cartCount") || 0);
+  const availabilityMessage = document.querySelector("[data-cart-availability]");
+  const isUnavailable =
+    !cartProductData ||
+    cartProductData.isPublic === false ||
+    cartProductData.stockStatus === "unavailable";
+  let quantity = Number(appStorage.getItem("cartCount") || 0);
 
   product.querySelector("img").src =
-    pendingReservation.image || cartProductData?.images?.[0] || "assets/images/penlight.png";
+    cartProductData?.images?.[0] || pendingReservation.image || "assets/images/penlight.png";
   product.querySelector("h2").textContent =
-    pendingReservation.product || cartProductData?.name || "ペンライト";
+    cartProductData?.name || pendingReservation.product || "ペンライト";
+  product.querySelector("img").alt =
+    `${cartProductData?.name || pendingReservation.product || "商品"}の商品画像`;
   product.querySelector(".cart_product__details p").textContent =
     `¥${unitPrice.toLocaleString("ja-JP")} / ${cartProductData?.rentalDays || 4}日間〜`;
 
@@ -1308,9 +1317,12 @@ if (cartPage) {
     product.hidden = isEmpty;
     summary.hidden = isEmpty;
     emptyMessage.hidden = !isEmpty;
-    checkout.classList.toggle("is_disabled", isEmpty);
-    checkout.setAttribute("aria-disabled", String(isEmpty));
-    checkout.tabIndex = isEmpty ? -1 : 0;
+    const cannotCheckout = isEmpty || isUnavailable;
+    checkout.classList.toggle("is_disabled", cannotCheckout);
+    checkout.setAttribute("aria-disabled", String(cannotCheckout));
+    checkout.tabIndex = cannotCheckout ? -1 : 0;
+    availabilityMessage.hidden = isEmpty || !isUnavailable;
+    availabilityMessage.textContent = "この商品は現在お申し込みいただけません。";
     updateCartCount(quantity);
   };
 
@@ -1331,12 +1343,14 @@ if (cartPage) {
   });
 
   checkout.addEventListener("click", (event) => {
-    if (quantity < 1) {
+    if (quantity < 1 || isUnavailable) {
       event.preventDefault();
       return;
     }
     if (sessionStorage.getItem("isLoggedIn") !== "true") {
       event.preventDefault();
+      sessionStorage.setItem("checkoutReturnPath", "checkout.html");
+      sessionStorage.setItem("loginReturnToCheckout", "true");
       showToast("購入にはログインが必要です。");
       window.setTimeout(() => {
         window.location.href = "login.html";
@@ -1418,6 +1432,28 @@ if (paymentPage) {
     if (profile.prefecture) checkoutForm.elements.shipping_prefecture.value = profile.prefecture;
     if (profile.address) checkoutForm.elements.shipping_address.value = profile.address;
     if (profile.building) checkoutForm.elements.shipping_building.value = profile.building;
+
+    if (profile.name && profile.address && profile.phone) {
+      const shippingSection = document.querySelector("[data-shipping-section]");
+      shippingSection.hidden = true;
+      const shippingSummary = document.createElement("section");
+      shippingSummary.className = "checkout_shipping_section";
+      const heading = document.createElement("h2");
+      heading.textContent = "お届け先";
+      const details = document.createElement("p");
+      details.textContent = [
+        profile.name,
+        `〒${profile.postal_first}-${profile.postal_last}`,
+        profile.prefecture,
+        profile.address,
+        profile.building,
+        profile.phone,
+      ]
+        .filter(Boolean)
+        .join(" ");
+      shippingSummary.append(heading, details);
+      shippingSection.after(shippingSummary);
+    }
 
     const checkoutAddressSearchBtn = document.querySelector("[data-checkout-address-search]");
     if (checkoutAddressSearchBtn) {
@@ -1531,8 +1567,8 @@ if (paymentPage) {
     });
 
     if (selectedPayment === "credit") updateCardFields();
-    localStorage.setItem("selectedPaymentMethod", selectedPayment || "credit");
-    localStorage.setItem("paymentFee", String(paymentFees[selectedPayment] || 0));
+    appStorage.setItem("selectedPaymentMethod", selectedPayment || "credit");
+    appStorage.setItem("paymentFee", String(paymentFees[selectedPayment] || 0));
   };
 
   paymentRadios.forEach((radio) => radio.addEventListener("change", updatePaymentMethod));
@@ -1594,20 +1630,20 @@ const getOrderDraft = () => {
   const registration = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
   const accountProfile = getActiveAccount()?.profile || {};
   const customer = { ...registration, ...accountProfile, ...checkoutShipping };
-  const reservation = JSON.parse(localStorage.getItem("pendingReservation") || "{}");
+  const reservation = JSON.parse(appStorage.getItem("pendingReservation") || "{}");
   const currentProduct =
     window.getProductData?.(reservation.productId || "penlight") ||
     window.PRODUCTS?.[reservation.productId || "penlight"];
-  const quantity = Math.max(1, Number(localStorage.getItem("cartCount") || 0));
-  const payment = localStorage.getItem("selectedPaymentMethod") || "credit";
-  const paymentFee = Number(localStorage.getItem("paymentFee") || 0);
+  const quantity = Math.max(1, Number(appStorage.getItem("cartCount") || 0));
+  const payment = appStorage.getItem("selectedPaymentMethod") || "credit";
+  const paymentFee = Number(appStorage.getItem("paymentFee") || 0);
   const subtotal = Number(currentProduct?.price ?? reservation.price ?? 800) * quantity;
   const shipping = 440;
 
-  let orderId = localStorage.getItem("pendingOrderId");
+  let orderId = appStorage.getItem("pendingOrderId");
   if (!orderId) {
     orderId = createOrderId();
-    localStorage.setItem("pendingOrderId", orderId);
+    appStorage.setItem("pendingOrderId", orderId);
   }
 
   const shippingPostalFirst = customer.shipping_postal_first || customer.postal_first;
@@ -1663,7 +1699,7 @@ const extensionPage = document.querySelector("[data-extension-page]");
 
 if (extensionPage) {
   const orderId = new URLSearchParams(window.location.search).get("order");
-  const order = JSON.parse(localStorage.getItem("rentalOrders") || "[]").find(
+  const order = JSON.parse(appStorage.getItem("rentalOrders") || "[]").find(
     (item) => item.id === orderId,
   );
   const availableContent = document.querySelector("[data-extension-available]");
@@ -1688,7 +1724,7 @@ const orderConfirmPage = document.querySelector("[data-order-confirm]");
 
 if (orderConfirmPage) {
   const extensionOrderId = new URLSearchParams(window.location.search).get("extension");
-  const savedOrders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+  const savedOrders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
   const extensionOrder = extensionOrderId
     ? savedOrders.find((order) => order.id === extensionOrderId)
     : null;
@@ -1699,13 +1735,25 @@ if (orderConfirmPage) {
         shipping: 0,
         paymentFee: 0,
         total: 440,
-        payment: localStorage.getItem("selectedPaymentMethod") || "credit",
-        paymentName: paymentNames[localStorage.getItem("selectedPaymentMethod") || "credit"],
+        payment: appStorage.getItem("selectedPaymentMethod") || "credit",
+        paymentName: paymentNames[appStorage.getItem("selectedPaymentMethod") || "credit"],
         period: `${formatStoredDate(extensionOrder.arrivalDate)}〜${formatStoredDate(
           addDaysToStoredDate(extensionOrder.returnDate, 1),
         )}`,
       }
     : getOrderDraft();
+  const currentOrderProduct = window.getProductData?.(draft.productId);
+  const cannotPlaceOrder =
+    !extensionOrder &&
+    (!currentOrderProduct ||
+      currentOrderProduct.isPublic === false ||
+      currentOrderProduct.stockStatus === "unavailable" ||
+      Number(appStorage.getItem("cartCount") || 0) < 1);
+  const availabilityMessage = document.querySelector("[data-order-availability]");
+  availabilityMessage.hidden = !cannotPlaceOrder;
+  availabilityMessage.textContent =
+    "この商品は現在お申し込みいただけません。カートをご確認ください。";
+  document.querySelector("[data-place-order]").disabled = cannotPlaceOrder;
 
   if (extensionOrder) {
     document.title = "延長内容の確認 | おしりーす";
@@ -1722,6 +1770,7 @@ if (orderConfirmPage) {
   } else {
     document.querySelector(".order_product h2").textContent = draft.product;
     document.querySelector(".order_product img").src = draft.image;
+    document.querySelector(".order_product img").alt = `${draft.product}の商品画像`;
     document.querySelector(".order_product p").textContent =
       `¥${Number(draft.subtotal / draft.quantity).toLocaleString("ja-JP")} / 3泊4日〜`;
   }
@@ -1740,8 +1789,9 @@ if (orderConfirmPage) {
     `¥${draft.total.toLocaleString("ja-JP")}`;
 
   document.querySelector("[data-place-order]").addEventListener("click", () => {
+    if (cannotPlaceOrder) return;
     if (extensionOrder) {
-      const orders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+      const orders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
       const target = orders.find((order) => order.id === extensionOrder.id);
       if (!target || !canExtendRentalOrder(target)) {
         showToast("在庫状況が変わったため延長できませんでした。");
@@ -1752,8 +1802,8 @@ if (orderConfirmPage) {
       target.extensionCount = (Number(target.extensionCount) || 0) + 1;
       target.extensionTotal = (Number(target.extensionTotal) || 0) + 440;
       target.lastExtensionPayment = draft.paymentName;
-      localStorage.setItem("rentalOrders", JSON.stringify(orders));
-      localStorage.setItem(
+      appStorage.setItem("rentalOrders", JSON.stringify(orders));
+      appStorage.setItem(
         "latestExtension",
         JSON.stringify({ ...target, total: 440, paymentName: draft.paymentName }),
       );
@@ -1768,14 +1818,14 @@ if (orderConfirmPage) {
       placedDate: `${placedAt.getFullYear()}年${placedAt.getMonth() + 1}月${placedAt.getDate()}日`,
       status: "配送待ち",
     };
-    const orders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+    const orders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
     orders.unshift(order);
-    localStorage.setItem("rentalOrders", JSON.stringify(orders));
+    appStorage.setItem("rentalOrders", JSON.stringify(orders));
     window.reduceStockForOrder?.(order);
-    localStorage.setItem("latestOrder", JSON.stringify(order));
-    localStorage.setItem("cartCount", "0");
-    localStorage.removeItem("pendingReservation");
-    localStorage.removeItem("pendingOrderId");
+    appStorage.setItem("latestOrder", JSON.stringify(order));
+    appStorage.setItem("cartCount", "0");
+    appStorage.removeItem("pendingReservation");
+    appStorage.removeItem("pendingOrderId");
     window.location.href = "order_complete.html";
   });
 }
@@ -1785,8 +1835,8 @@ const orderCompletePage = document.querySelector("[data-order-complete]");
 if (orderCompletePage) {
   const extensionOrderId = new URLSearchParams(window.location.search).get("extension");
   const order = extensionOrderId
-    ? JSON.parse(localStorage.getItem("latestExtension") || "null")
-    : JSON.parse(localStorage.getItem("latestOrder") || "null") || getOrderDraft();
+    ? JSON.parse(appStorage.getItem("latestExtension") || "null")
+    : JSON.parse(appStorage.getItem("latestOrder") || "null") || getOrderDraft();
   if (!order) window.location.href = "rental_history.html";
 
   if (extensionOrderId) {
@@ -1818,7 +1868,7 @@ if (orderCompletePage) {
 const rentalHistoryPage = document.querySelector("[data-rental-history]");
 
 if (rentalHistoryPage) {
-  const orders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+  const orders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
   const activeOrders = orders.filter((order) => order.status !== "キャンセル");
   const list = document.querySelector("[data-rental-history-list]");
   const empty = document.querySelector("[data-rental-history-empty]");
@@ -1881,7 +1931,7 @@ if (cancellationConfirm) {
   const confirmButton = document.querySelector("[data-confirm-cancellation]");
 
   if (orderId) {
-    const orders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+    const orders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
     const order = orders.find((item) => item.id === orderId);
 
     if (order) {
@@ -1900,7 +1950,7 @@ if (cancellationConfirm) {
       if (order.status === "キャンセル") showComplete();
 
       confirmButton.addEventListener("click", () => {
-        const savedOrders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+        const savedOrders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
         const target = savedOrders.find((item) => item.id === orderId);
         if (!target) return;
 
@@ -1909,7 +1959,7 @@ if (cancellationConfirm) {
           target.cancelledAt = new Date().toISOString();
           const restoredProductIds = window.restoreStockForOrder?.(target) || [];
           window.notifyAvailableWaitlist?.(restoredProductIds);
-          localStorage.setItem("rentalOrders", JSON.stringify(savedOrders));
+          appStorage.setItem("rentalOrders", JSON.stringify(savedOrders));
         }
         showComplete();
       });
@@ -1952,7 +2002,7 @@ if (noticeTabs.length) {
   const emptyElement = document.querySelector("[data-notice-empty]");
   const noticeList = document.querySelector("[data-notice-list]");
 
-  JSON.parse(localStorage.getItem("appNotifications") || "[]").forEach((notice) => {
+  JSON.parse(appStorage.getItem("appNotifications") || "[]").forEach((notice) => {
     const item = document.createElement("li");
     const details = document.createElement("details");
     const summary = document.createElement("summary");

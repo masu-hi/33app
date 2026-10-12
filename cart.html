@@ -10,11 +10,17 @@
       href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
+    <script src="assets/js/user_storage.js"></script>
+    <script src="assets/js/theme_init.js"></script>
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/product_data.js" defer></script>
-    <script src="assets/js/app.js" defer></script>
+    <script type="module" src="assets/js/firebase_app_bootstrap.js"></script>
   </head>
-  <body class="mobile_app">
+  <body class="mobile_app is_product_data_loading" aria-busy="true">
+    <div class="product_data_loading" data-product-data-loading role="status">
+      <span class="product_data_loading__spinner" aria-hidden="true"></span>
+      商品情報を読み込んでいます
+    </div>
     <main class="app_shell cart_page" data-cart-page>
       <header class="mypage_header">
         <button type="button" aria-label="前の画面へ戻る" data-history-back>
@@ -71,6 +77,7 @@
           <strong data-cart-total>¥0</strong>
         </div>
 
+        <p data-cart-availability role="status" hidden></p>
         <a class="cart_page__checkout" href="checkout.html" data-cart-checkout>
           決済方法を選択する
         </a>

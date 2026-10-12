@@ -1,3 +1,5 @@
+const adminWaitlistStorage = window.sharedAccountStorage;
+
 (() => {
   const storageKey = "waitlistProducts";
   const list = document.querySelector("[data-admin-waitlist]");
@@ -9,7 +11,7 @@
 
   const getEntries = () => {
     try {
-      const entries = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      const entries = JSON.parse(adminWaitlistStorage.getItem(storageKey) || "[]");
       return Array.isArray(entries) ? entries : [];
     } catch {
       return [];
@@ -17,7 +19,7 @@
   };
 
   const saveEntries = (entries) => {
-    localStorage.setItem(storageKey, JSON.stringify(entries));
+    adminWaitlistStorage.setItem(storageKey, JSON.stringify(entries));
   };
 
   const render = () => {

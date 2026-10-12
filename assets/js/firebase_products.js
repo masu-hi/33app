@@ -1,3 +1,6 @@
+import "./user_storage.js";
+const firebaseProductStorage = window.sharedAccountStorage;
+
 import {
   collection,
   getDocs,
@@ -10,7 +13,7 @@ let loadingPromise;
 
 const getActiveOrders = () => {
   try {
-    const orders = JSON.parse(localStorage.getItem("rentalOrders") || "[]");
+    const orders = JSON.parse(firebaseProductStorage.getItem("rentalOrders") || "[]");
     return Array.isArray(orders) ? orders.filter((order) => order.status !== "キャンセル") : [];
   } catch {
     return [];

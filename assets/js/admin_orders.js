@@ -1,3 +1,5 @@
+const adminOrderStorage = window.sharedAccountStorage;
+
 (() => {
   const storageKey = "rentalOrders";
   const list = document.querySelector("[data-admin-orders]");
@@ -9,7 +11,7 @@
 
   const getOrders = () => {
     try {
-      const orders = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      const orders = JSON.parse(adminOrderStorage.getItem(storageKey) || "[]");
       return Array.isArray(orders) ? orders : [];
     } catch {
       return [];
@@ -17,7 +19,7 @@
   };
 
   const saveOrders = (orders) => {
-    localStorage.setItem(storageKey, JSON.stringify(orders));
+    adminOrderStorage.setItem(storageKey, JSON.stringify(orders));
   };
 
   const createField = (label, value) => {
