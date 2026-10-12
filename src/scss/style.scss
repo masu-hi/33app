@@ -2032,6 +2032,22 @@ html.is-dark-favorite .app_shell .button {
   color: #86a1d3;
 }
 
+html.is-dark-favorite .app_shell .rental_history__empty a,
+html.is-dark-favorite .app_shell .favorites_page__empty a,
+html.is-dark-favorite .app_shell .waitlist_page__empty a,
+html.is-dark-favorite .app_shell .cart_page__checkout,
+html.is-dark-favorite .app_shell .cart_page__empty a,
+html.is-dark-favorite .app_shell .cancellation_confirm__actions a,
+html.is-dark-favorite .app_shell .cancellation_confirm__complete a,
+html.is-dark-favorite .app_shell .rental_history_item__cancel,
+html.is-dark-favorite .app_shell .order_page__primary,
+html.is-dark-favorite .app_shell .notice_item__link,
+html.is-dark-favorite .app_shell .help__urgent > a,
+html.is-dark-favorite .app_shell .help__contact a,
+html.is-dark-favorite .app_shell .about_mid_nav a {
+  color: #86a1d3;
+}
+
 .color_change_page {
   min-height: 550px;
   padding: 25px 30px 44px;
@@ -3920,6 +3936,60 @@ html.is-dark-favorite .app_shell .button {
   }
 }
 
+.checkout_shipping_section {
+  padding: 0 34px 24px;
+
+  h2 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    line-height: 25px;
+  }
+}
+
+.checkout_shipping_note {
+  margin: 0 0 16px;
+  font-family: $body;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.checkout_shipping_fields {
+  display: grid;
+  gap: 16px;
+
+  > label {
+    display: grid;
+    min-width: 0;
+    gap: 6px;
+  }
+
+  > label input,
+  > label select {
+    width: 100%;
+    min-width: 0;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid $line;
+    border-radius: 5px;
+    background: $white;
+    font-size: 14px;
+  }
+
+  > label select {
+    font-size: 14px;
+  }
+
+  .checkout_postal_fields {
+    min-width: 0;
+
+    input {
+      height: 36px;
+      border-radius: 5px;
+      background: $white;
+    }
+  }
+}
+
 .payment_method {
   border-bottom: 1px solid $theme_line;
 
@@ -4578,6 +4648,50 @@ html.is-dark-favorite .app_shell .button {
   input:checked + span {
     color: #5968a8;
     font-weight: 500;
+  }
+}
+
+.packing_checklist__edit {
+  min-width: 40px;
+  min-height: 36px;
+  flex: none;
+  padding: 0 4px;
+  border: 0;
+  color: #5968a8;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.packing_checklist__editor {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 6px;
+
+  input {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    padding: 7px 9px;
+    border: 1px solid #d4d8e6;
+    border-radius: 6px;
+    font: inherit;
+    font-size: 13px;
+  }
+
+  button {
+    min-height: 36px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 6px;
+    color: #5968a8;
+    background: var(--color-soft, #fdf6ff);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
   }
 }
 

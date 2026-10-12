@@ -310,7 +310,7 @@ const memberInfo = document.querySelector("[data-member-info]");
 
 if (memberInfo) {
   let profile = getActiveAccount()?.profile || {};
-  const memberDisplay = memberInfo.querySelector("[data-member-display]");
+  const memberView = memberInfo.querySelector("[data-member-view]");
   const editButton = memberInfo.querySelector("[data-member-edit]");
   const editForm = memberInfo.querySelector("[data-member-edit-form]");
   const memberIntro = memberInfo.querySelector("[data-member-intro]");
@@ -343,9 +343,9 @@ if (memberInfo) {
     if (editForm.elements.current_password) editForm.elements.current_password.value = "";
     if (editForm.elements.new_password) editForm.elements.new_password.value = "";
     if (editForm.elements.new_password_confirm) editForm.elements.new_password_confirm.value = "";
-    if (memberDisplay) memberDisplay.hidden = true;
+    if (memberView) memberView.hidden = true;
     editForm.hidden = false;
-    memberIntro.textContent = "登録情報・パスワードの変更を行えます。";
+    memberIntro.textContent = "登録されている会員情報を変更できます。";
   };
 
   renderMemberInfo();
@@ -353,8 +353,8 @@ if (memberInfo) {
   editButton?.addEventListener("click", showEditForm);
   memberInfo.querySelector("[data-member-edit-cancel]")?.addEventListener("click", () => {
     editForm.hidden = true;
-    if (memberDisplay) memberDisplay.hidden = false;
-    memberIntro.textContent = "登録されている会員情報の確認・編集、パスワード変更を行えます。";
+    if (memberView) memberView.hidden = false;
+    memberIntro.textContent = "登録されている会員情報を確認できます。";
   });
 
   const memberAddressSearchBtn = memberInfo.querySelector("[data-member-address-search]");
@@ -459,8 +459,8 @@ if (memberInfo) {
 
     renderMemberInfo();
     editForm.hidden = true;
-    if (memberDisplay) memberDisplay.hidden = false;
-    memberIntro.textContent = "登録されている会員情報の確認・編集、パスワード変更を行えます。";
+    if (memberView) memberView.hidden = false;
+    memberIntro.textContent = "登録されている会員情報を確認できます。";
     showToast("会員情報を更新しました。");
   });
 }

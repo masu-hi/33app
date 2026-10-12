@@ -54,43 +54,45 @@
       <section class="member_info" aria-labelledby="member-info-title" data-member-info>
         <h1 id="member-info-title">会員情報</h1>
         <p class="member_info__intro" data-member-intro>登録されている会員情報を確認できます。</p>
-        <dl class="member_info__list">
-          <div>
-            <dt>お名前</dt>
-            <dd data-member-value="name">未登録</dd>
-          </div>
-          <div>
-            <dt>フリガナ</dt>
-            <dd data-member-value="kana">未登録</dd>
-          </div>
-          <div>
-            <dt>生年月日</dt>
-            <dd data-member-value="birthday">未登録</dd>
-          </div>
-          <div>
-            <dt>郵便番号</dt>
-            <dd data-member-value="postal">未登録</dd>
-          </div>
-          <div>
-            <dt>住所</dt>
-            <dd data-member-value="address">未登録</dd>
-          </div>
-          <div>
-            <dt>建物名・部屋番号</dt>
-            <dd data-member-value="building">未登録</dd>
-          </div>
-          <div>
-            <dt>メールアドレス</dt>
-            <dd data-member-value="email">未登録</dd>
-          </div>
-          <div>
-            <dt>推しカラー</dt>
-            <dd data-member-value="favorite_color">未登録</dd>
-          </div>
-        </dl>
-        <button class="member_info__edit_button" type="button" data-member-edit>
-          登録情報を変更する
-        </button>
+        <div class="member_info__view" data-member-view>
+          <dl class="member_info__list">
+            <div>
+              <dt>お名前</dt>
+              <dd data-member-value="name">未登録</dd>
+            </div>
+            <div>
+              <dt>フリガナ</dt>
+              <dd data-member-value="kana">未登録</dd>
+            </div>
+            <div>
+              <dt>生年月日</dt>
+              <dd data-member-value="birthday">未登録</dd>
+            </div>
+            <div>
+              <dt>郵便番号</dt>
+              <dd data-member-value="postal">未登録</dd>
+            </div>
+            <div>
+              <dt>住所</dt>
+              <dd data-member-value="address">未登録</dd>
+            </div>
+            <div>
+              <dt>建物名・部屋番号</dt>
+              <dd data-member-value="building">未登録</dd>
+            </div>
+            <div>
+              <dt>メールアドレス</dt>
+              <dd data-member-value="email">未登録</dd>
+            </div>
+            <div>
+              <dt>推しカラー</dt>
+              <dd data-member-value="favorite_color">未登録</dd>
+            </div>
+          </dl>
+          <button class="member_info__edit_button" type="button" data-member-edit>
+            登録情報を変更する
+          </button>
+        </div>
         <form class="member_info__form" data-member-edit-form hidden>
           <label>
             お名前
