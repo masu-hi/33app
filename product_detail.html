@@ -3,17 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LEDコンサートライト | おしりーす</title>
+    <title>商品詳細 | おしりーす</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
+    <script src="assets/js/theme_init.js"></script>
     <link rel="stylesheet" href="src/scss/style.css" />
   </head>
 
-  <body class="mobile_app">
+  <body class="mobile_app is_product_data_loading" aria-busy="true">
+    <div class="product_data_loading" data-product-data-loading role="status">
+      <span class="product_data_loading__spinner" aria-hidden="true"></span>
+      商品情報を読み込んでいます
+    </div>
     <main class="app_shell product_detail_page">
       <header class="app_header">
         <a

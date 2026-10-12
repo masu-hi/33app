@@ -150,28 +150,40 @@ const softColors = {
   黒: "#f7f7f9",
 };
 const gradientEndColors = {
-  赤: "#eef0fa",
-  青: "#f7eef9",
-  ピンク: "#edeefa",
-  紫: "#edf3fb",
-  緑: "#eef1fa",
-  黄色: "#f3effa",
-  オレンジ: "#eef0fa",
-  水色: "#f7effa",
-  白: "#edeef8",
-  黒: "#e5e7f1",
+  赤: "#eaf2ff",
+  青: "#fff0f2",
+  ピンク: "#eaf8fb",
+  紫: "#fff2e8",
+  緑: "#fff8df",
+  黄色: "#edf8ef",
+  オレンジ: "#f4efff",
+  水色: "#fff0f7",
+  白: "#4b4c55",
+  黒: "#ffffff",
 };
 const gradientLineColors = {
-  赤: "#cdd3ea",
-  青: "#e0cde6",
-  ピンク: "#cfd3ea",
-  紫: "#cadced",
-  緑: "#ced5e9",
-  黄色: "#d9cfea",
-  オレンジ: "#cdd3ea",
-  水色: "#dfcee8",
-  白: "#ced1e5",
-  黒: "#c5c9dc",
+  赤: "#adc3e8",
+  青: "#e8b4bd",
+  ピンク: "#acd8e2",
+  紫: "#e8c09f",
+  緑: "#e3cf8b",
+  黄色: "#b4d8bd",
+  オレンジ: "#c9b6e8",
+  水色: "#e8b6cf",
+  白: "#292a31",
+  黒: "#d6d6dc",
+};
+const gradientTextColors = {
+  赤: "#353b60",
+  青: "#353b60",
+  ピンク: "#353b60",
+  紫: "#353b60",
+  緑: "#353b60",
+  黄色: "#353b60",
+  オレンジ: "#353b60",
+  水色: "#353b60",
+  白: "#ffffff",
+  黒: "#353b60",
 };
 const lineColors = {
   赤: "#f2cbd4",
@@ -193,6 +205,7 @@ const applyFavoriteColor = (color) => {
   document.documentElement.style.setProperty("--color-soft", softColors[color]);
   document.documentElement.style.setProperty("--color-gradient-end", gradientEndColors[color]);
   document.documentElement.style.setProperty("--color-gradient-line", gradientLineColors[color]);
+  document.documentElement.style.setProperty("--color-gradient-text", gradientTextColors[color]);
   document.documentElement.style.setProperty("--color-line", lineColors[color]);
   document.documentElement.classList.toggle("is-dark-favorite", color === "黒");
 };
@@ -216,6 +229,10 @@ if (favoriteColor && mainColors[favoriteColor]) {
   document.documentElement.style.setProperty(
     "--color-gradient-line",
     gradientLineColors[favoriteColor],
+  );
+  document.documentElement.style.setProperty(
+    "--color-gradient-text",
+    gradientTextColors[favoriteColor],
   );
   document.documentElement.style.setProperty("--color-line", lineColors[favoriteColor]);
 }
