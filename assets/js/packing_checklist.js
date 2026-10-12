@@ -125,6 +125,63 @@ const renderChecklistItems = () => {
     itemLabel.textContent = item.label;
     label.append(checkbox, itemLabel);
 
+    const editButton = document.createElement("button");
+    editButton.className = "packing_checklist__edit";
+    editButton.type = "button";
+    editButton.setAttribute("aria-label", `${item.label}を編集`);
+    editButton.textContent = "編集";
+    editButton.addEventListener("click", () => {
+      const originalLabel = item.label;
+      const editor = document.createElement("form");
+      editor.className = "packing_checklist__editor";
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = item.label;
+      input.maxLength = 40;
+      input.setAttribute("aria-label", "持ち物の名前");
+      input.required = true;
+      input.addEventListener("input", () => {
+        if (!input.value.trim()) return;
+        item.label = input.value;
+        saveChecklistState();
+      });
+
+      const saveButton = document.createElement("button");
+      saveButton.type = "submit";
+      saveButton.textContent = "保存";
+
+      const cancelButton = document.createElement("button");
+      cancelButton.type = "button";
+      cancelButton.textContent = "取消";
+      cancelButton.addEventListener("click", () => {
+        item.label = originalLabel;
+        saveChecklistState();
+        renderChecklistItems();
+      });
+
+      editor.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const nextLabel = input.value.trim();
+        if (!nextLabel) {
+          input.reportValidity();
+          return;
+        }
+
+        item.label = nextLabel;
+        checklistStatus.textContent = `${nextLabel}に変更しました`;
+        saveChecklistState();
+        renderChecklistItems();
+      });
+
+      editor.append(input, saveButton, cancelButton);
+      row.replaceChildren(editor);
+      input.focus();
+      input.select();
+    });
+
+    row.append(label, editButton);
+
     const deleteButton = document.createElement("button");
     deleteButton.className = "packing_checklist__delete";
     deleteButton.type = "button";
@@ -138,7 +195,7 @@ const renderChecklistItems = () => {
       renderChecklistItems();
     });
 
-    row.append(label, deleteButton);
+    row.append(deleteButton);
     checklistList.append(row);
   });
 
@@ -174,11 +231,6 @@ checklistAddForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const label = checklistNewItem.value.trim();
   if (!label) return;
-
-  if (checklistItems.some((item) => item.label === label)) {
-    checklistStatus.textContent = "同じ項目がすでにあります";
-    return;
-  }
 
   checklistItems.push({
     id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
