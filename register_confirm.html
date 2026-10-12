@@ -11,7 +11,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/scss/style.css" />
-    <script src="assets/js/auth.js" defer></script>
+    <script src="assets/js/user_storage.js"></script>
+    <script type="module" src="assets/js/auth.js"></script>
   </head>
   <body class="app_auth">
     <main class="auth_screen">
@@ -34,6 +35,10 @@
             <dd>同意する</dd>
           </div>
         </dl>
+        <p data-registration-error role="status"></p>
+        <a class="auth_secondary" href="login.html" data-registration-login hidden>
+          ログイン画面へ
+        </a>
         <a class="auth_primary" href="register_complete.html" data-registration-submit>
           アカウント登録
         </a>

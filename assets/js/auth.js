@@ -1,3 +1,11 @@
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { auth } from "./firebase_config.js";
+import { loadUserProfile, checkoutDestination } from "./firebase_user.js";
+
 const termsBox = document.querySelector("[data-terms-scroll]");
 const termsAgree = document.querySelector("[data-terms-agree]");
 const termsHint = document.querySelector("[data-terms-hint]");
@@ -11,19 +19,6 @@ const normalizeEmail = (email) =>
   String(email || "")
     .trim()
     .toLowerCase();
-const getAccounts = () => JSON.parse(localStorage.getItem("accounts") || "{}");
-const saveAccount = (values) => {
-  const email = normalizeEmail(values.email);
-  if (!email) return;
-
-  const accounts = getAccounts();
-  const { password, password_confirm, ...profile } = values;
-  accounts[email] = {
-    password: password || accounts[email]?.password || "",
-    profile: { ...accounts[email]?.profile, ...profile, email },
-  };
-  localStorage.setItem("accounts", JSON.stringify(accounts));
-};
 const prefectures = [
   "北海道",
   "青森県",
@@ -142,13 +137,6 @@ registerForm?.addEventListener("submit", (event) => {
   const values = Object.fromEntries(formData.entries());
   values.email = normalizeEmail(values.email);
   sessionStorage.setItem("registrationData", JSON.stringify(values));
-  localStorage.setItem(
-    "registeredAccount",
-    JSON.stringify({
-      email: values.email.toLowerCase(),
-      password: values.password,
-    }),
-  );
   window.location.href = "register_confirm.html";
 });
 
@@ -166,69 +154,87 @@ if (confirmContent) {
   });
 }
 
-document.querySelector("[data-registration-submit]")?.addEventListener("click", () => {
+let registrationUser = null;
+document.querySelector("[data-registration-submit]")?.addEventListener("click", async (event) => {
+  event.preventDefault();
+  const button = event.currentTarget;
+  if (button.getAttribute("aria-disabled") === "true") return;
+  const status = document.querySelector("[data-registration-error]");
   const values = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
-  saveAccount(values);
-});
-
-if (document.querySelector("[data-registration-complete]")) {
-  const values = JSON.parse(sessionStorage.getItem("registrationData") || "{}");
-
-  if (values.email) {
-    saveAccount(values);
-    localStorage.setItem(
-      "registeredAccount",
-      JSON.stringify({
-        email: values.email.toLowerCase(),
-        password: values.password,
-      }),
-    );
+  const loginLink = document.querySelector("[data-registration-login]");
+  if (loginLink) loginLink.hidden = true;
+  if (!values.email || !values.password) {
+    status.textContent = "入力情報を確認できませんでした。入力画面からもう一度お進みください。";
+    return;
   }
-}
+  button.setAttribute("aria-disabled", "true");
+  status.textContent = "登録しています。";
+  try {
+    // 詳細プロフィールは初回決済時に保存します。
+    if (!registrationUser) {
+      try {
+        registrationUser = (
+          await createUserWithEmailAndPassword(auth, values.email, values.password)
+        ).user;
+      } catch (error) {
+        if (error.code !== "auth/email-already-in-use") throw error;
+        // 登録後の再試行でも、本人確認ができた場合に限り完了へ進めます。
+        status.textContent = "登録済みのアカウントを確認しています。";
+        registrationUser = (await signInWithEmailAndPassword(auth, values.email, values.password))
+          .user;
+      }
+    }
+    await signOut(auth);
+    sessionStorage.removeItem("registrationData");
+    sessionStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("activeAccountEmail");
+    sessionStorage.removeItem("activeUserId");
+    sessionStorage.removeItem("checkoutShippingInfo");
+    window.location.replace("register_complete.html");
+  } catch (error) {
+    const messages = {
+      "auth/email-already-in-use": "このメールアドレスは登録済みです。ログインしてください。",
+      "auth/invalid-credential":
+        "このメールアドレスは登録済みですが、パスワードが一致しません。ログイン画面からお進みください。",
+      "auth/weak-password": "パスワードを8文字以上で設定してください。",
+      "auth/invalid-email": "メールアドレスを確認してください。",
+      "auth/network-request-failed": "通信できませんでした。もう一度お試しください。",
+    };
+    status.textContent =
+      messages[error.code] || "登録を完了できませんでした。もう一度お試しください。";
+    if (
+      loginLink &&
+      ["auth/invalid-credential", "auth/email-already-in-use"].includes(error.code)
+    ) {
+      loginLink.hidden = false;
+    }
+    button.setAttribute("aria-disabled", "false");
+  }
+});
 
 const loginForm = document.querySelector("[data-login-form]");
 
-loginForm?.addEventListener("submit", (event) => {
+loginForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const loginData = new FormData(loginForm);
   const email = normalizeEmail(loginData.get("email"));
   const password = String(loginData.get("password") || "");
   const loginError = loginForm.querySelector("[data-login-error]");
-  const registeredAccount = JSON.parse(localStorage.getItem("registeredAccount") || "{}");
-  const legacyEmail = normalizeEmail(registeredAccount.email);
-  const storedAccount = getAccounts()[email];
-  const storedAccountMatches = storedAccount?.password === password;
-  const legacyAccountMatches =
-    legacyEmail === email && String(registeredAccount.password || "") === password;
-
-  if (!storedAccountMatches && legacyAccountMatches) {
-    const legacyProfile = JSON.parse(localStorage.getItem("memberProfile") || "{}");
-    saveAccount({
-      ...legacyProfile,
-      name: registeredAccount.name || legacyProfile.name,
-      email,
-      password: registeredAccount.password,
-    });
+  const button = loginForm.querySelector('[type="submit"]');
+  button.disabled = true;
+  loginError.textContent = "ログインしています。";
+  try {
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    await loadUserProfile(credential.user);
+    sessionStorage.setItem("loginTransition", "true");
+    const returnToCheckout = sessionStorage.getItem("loginReturnToCheckout") === "true";
+    sessionStorage.removeItem("loginReturnToCheckout");
+    window.location.href = returnToCheckout ? checkoutDestination() : loginForm.action;
+  } catch (error) {
+    loginError.textContent =
+      error.code === "auth/invalid-credential"
+        ? "メールアドレスまたはパスワードが正しくありません。"
+        : "ログインを完了できませんでした。通信環境を確認してお試しください。";
+    button.disabled = false;
   }
-
-  const account = getAccounts()[email];
-
-  if (!account || account.password !== password) {
-    loginError.textContent = "メールアドレスまたはパスワードが正しくありません。";
-    return;
-  }
-
-  const loggedInName = account.profile.name || "会員様";
-
-  sessionStorage.setItem("isLoggedIn", "true");
-  sessionStorage.setItem("activeAccountEmail", email);
-  sessionStorage.setItem("loggedInName", loggedInName);
-  sessionStorage.setItem("loginTransition", "true");
-  document.body.classList.add("is_leaving");
-
-  const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 350;
-
-  window.setTimeout(() => {
-    window.location.href = loginForm.action;
-  }, delay);
 });

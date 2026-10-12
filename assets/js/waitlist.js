@@ -1,9 +1,11 @@
+const waitlistStorage = window.userStorage;
+
 (() => {
   const storageKey = "waitlistProducts";
 
   const getEntries = () => {
     try {
-      const entries = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      const entries = JSON.parse(waitlistStorage.getItem(storageKey) || "[]");
       return Array.isArray(entries) ? entries : [];
     } catch {
       return [];
@@ -11,7 +13,7 @@
   };
 
   const saveEntries = (entries) => {
-    localStorage.setItem(storageKey, JSON.stringify(entries));
+    waitlistStorage.setItem(storageKey, JSON.stringify(entries));
     window.dispatchEvent(new CustomEvent("waitlist:updated", { detail: entries }));
   };
 
@@ -53,7 +55,7 @@
   if (!list || !empty) return;
 
   const products = window.PRODUCTS || {};
-  const overrides = JSON.parse(localStorage.getItem("productOverrides") || "{}");
+  const overrides = JSON.parse(waitlistStorage.getItem("productOverrides") || "{}");
   const isDemoPreview = new URLSearchParams(window.location.search).get("demo") === "1";
 
   const getDemoEntries = () =>

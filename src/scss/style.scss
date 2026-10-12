@@ -57,6 +57,23 @@ body {
   font-weight: 500;
 }
 
+.checkout_profile {
+  padding: 24px;
+  color: $text;
+
+  h1 {
+    font-size: 20px;
+  }
+
+  > p {
+    font-size: 14px;
+  }
+
+  .member_info__form {
+    margin-top: 24px;
+  }
+}
+
 .product_data_loading__spinner {
   width: 22px;
   height: 22px;
@@ -1600,6 +1617,30 @@ h3,
   .auth_secondary {
     width: 200px;
     min-height: 70px;
+  }
+}
+
+.registration_complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 32px 24px;
+
+  h1 {
+    margin: 0;
+    color: $text;
+    font-size: 22px;
+    line-height: 32px;
+    text-align: center;
+  }
+
+  &__login {
+    width: min(100%, 280px);
+    min-height: 56px;
+    border: 1px solid $theme_line;
+    font-weight: 700;
   }
 }
 

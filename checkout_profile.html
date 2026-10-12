@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>会員情報の登録 | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/user_storage.js"></script>
+    <script src="assets/js/theme_init.js"></script>
+    <script type="module" src="assets/js/checkout_profile.js"></script>
+  </head>
+  <body class="mobile_app">
+    <main class="app_shell">
+      <header class="auth_header"><img src="assets/images/logo.png" alt="おしりーす" /></header>
+      <section class="checkout_profile">
+        <h1>会員情報の登録</h1>
+        <p>お届け先と会員情報を登録してください。</p>
+        <form class="member_info__form" data-checkout-profile>
+          <label>
+            お名前
+            <input name="name" required autocomplete="name" />
+          </label>
+          <label>
+            フリガナ
+            <input name="kana" required />
+          </label>
+          <label>
+            電話番号
+            <input name="phone" type="tel" required autocomplete="tel" pattern="[0-9\-]{10,13}" />
+          </label>
+          <label>
+            生年月日
+            <input name="birthday" type="date" required autocomplete="bday" />
+          </label>
+          <label>
+            郵便番号
+            <input
+              name="postal"
+              required
+              autocomplete="postal-code"
+              inputmode="numeric"
+              pattern="[0-9]{3}-?[0-9]{4}"
+              placeholder="123-4567"
+            />
+          </label>
+          <button type="button" data-profile-address-search>住所検索</button>
+          <p data-profile-postal-status role="status"></p>
+          <label>
+            都道府県
+            <select name="prefecture" required>
+              <option value="">選択してください</option>
+            </select>
+          </label>
+          <label>
+            市区町村・番地
+            <input name="address" required autocomplete="street-address" />
+          </label>
+          <label>
+            建物名・部屋番号（任意）
+            <input name="building" />
+          </label>
+          <label>
+            推しカラー
+            <select name="favorite_color" required>
+              <option value="">選択してください</option>
+              <option>赤</option>
+              <option>青</option>
+              <option>ピンク</option>
+              <option>水色</option>
+              <option>紫</option>
+              <option>オレンジ</option>
+              <option>黄色</option>
+              <option>緑</option>
+              <option>白</option>
+              <option>黒</option>
+            </select>
+          </label>
+          <p data-profile-status role="status"></p>
+          <div class="member_info__form_actions">
+            <button type="submit" disabled>登録して決済へ戻る</button>
+          </div>
+        </form>
+        <a href="cart.html">カートへ戻る</a>
+      </section>
+    </main>
+  </body>
+</html>
