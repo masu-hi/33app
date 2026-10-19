@@ -1,5 +1,4 @@
 import "./user_storage.js";
-const firebaseProductStorage = window.sharedAccountStorage;
 
 import {
   collection,
@@ -10,22 +9,6 @@ import {
 import { db } from "./firebase_config.js";
 
 let loadingPromise;
-
-const getActiveOrders = () => {
-  try {
-    const orders = JSON.parse(firebaseProductStorage.getItem("rentalOrders") || "[]");
-    return Array.isArray(orders) ? orders.filter((order) => order.status !== "キャンセル") : [];
-  } catch {
-    return [];
-  }
-};
-
-const getAllocatedQuantity = (productId, variantId) =>
-  getActiveOrders().reduce((total, order) => {
-    const selections = order.variantSelections || order.bundleVariants || {};
-    if (selections[productId] !== variantId) return total;
-    return total + (Number(order.quantity) || 1);
-  }, 0);
 
 const loadVariants = async (productId) => {
   const snapshots = await getDocs(collection(db, "products", productId, "variants"));
@@ -72,14 +55,18 @@ const syncProducts = async () => {
     if (!variants.length) return;
     window.PRODUCTS[productId].variants = variants;
     variants.forEach((variant) => {
-      const availableStock = Math.max(
-        0,
-        variant.stock - getAllocatedQuantity(productId, variant.id),
-      );
-      window.setVariantStock?.(productId, variant.id, availableStock);
+      window.setVariantStock?.(productId, variant.id, variant.stock);
     });
   });
 
+  try {
+    const days = await getDocs(collection(db, "inventoryDays"));
+    window.FIREBASE_INVENTORY_DAYS = Object.fromEntries(
+      days.docs.map((day) => [day.id, day.data().reservedCount]),
+    );
+  } catch (error) {
+    console.error("日付別在庫を読み込めませんでした。Firestoreルールを確認してください。", error);
+  }
   window.FIREBASE_PRODUCTS_LOADED = true;
   window.dispatchEvent(new CustomEvent("firebase-products-ready"));
   return true;

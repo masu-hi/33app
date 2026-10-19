@@ -12,9 +12,9 @@
     />
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/user_storage.js"></script>
-    <script src="assets/js/app.js" defer></script>
+    <script src="assets/js/theme_init.js"></script>
     <script src="assets/js/product_data.js" defer></script>
-    <script src="assets/js/waitlist.js" defer></script>
+    <script type="module" src="assets/js/waitlist_bootstrap.js"></script>
   </head>
   <body class="mobile_app">
     <main class="app_shell waitlist_page" data-waitlist-page>
@@ -35,6 +35,9 @@
       <section class="waitlist_page__content" aria-labelledby="waitlist-title">
         <h1 id="waitlist-title">空き待ちリスト</h1>
         <p class="waitlist_page__description">希望するレンタル期間の空きを待っている商品です。</p>
+        <p class="waitlist_page__status" data-waitlist-status role="status">
+          空き待ちを読み込んでいます。
+        </p>
         <div class="waitlist_list" data-waitlist-list></div>
         <div class="waitlist_page__empty" data-waitlist-empty hidden>
           <p>空き待ちに登録した商品はありません</p>

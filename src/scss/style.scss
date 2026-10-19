@@ -2514,7 +2514,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
     align-items: center;
   }
 
-  &__birth_fields input {
+  &__birth_fields input,
+  &__birth_fields select {
     min-width: 0;
     padding: 8px 4px;
     text-align: center;
@@ -2542,6 +2543,15 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 
   &__form_actions button:first-child {
     background: $white;
+  }
+
+  &__form_actions--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  &__form_actions--single button:first-child {
+    min-height: 48px;
+    background: $main;
   }
 }
 

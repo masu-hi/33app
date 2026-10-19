@@ -7,19 +7,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/user_storage.js"></script>
     <script type="module" src="assets/js/admin_auth_guard.js"></script>
     <script src="assets/js/product_data.js" defer></script>
-    <script src="assets/js/admin_orders.js" defer></script>
+    <script type="module" src="assets/js/admin_orders.js"></script>
   </head>
   <body class="admin_page is_auth_pending">
     <header class="admin_header">
       <div>
-        <p>おしりーす</p>
+        <img class="admin_header__logo" src="assets/images/logo.png" alt="おしりーす" />
         <h1>レンタル申込管理</h1>
       </div>
       <div class="admin_header__actions">
@@ -29,6 +29,7 @@
     </header>
 
     <nav class="admin_nav" aria-label="管理メニュー">
+      <a href="admin_dashboard.html">管理トップ</a>
       <a href="admin.html">商品管理</a>
       <a href="admin_orders.html" aria-current="page">レンタル申込管理</a>
       <a href="admin_waitlist.html">空き待ち管理</a>
@@ -63,6 +64,7 @@
             data-order-search
           />
         </div>
+        <p data-admin-orders-status role="status"></p>
         <div class="admin_orders__list" data-admin-orders></div>
         <p class="admin_empty" data-admin-orders-empty hidden>レンタル申込はまだありません。</p>
       </section>

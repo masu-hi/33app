@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   getDocs,
+  onSnapshot,
   serverTimestamp,
   writeBatch,
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
@@ -68,6 +69,11 @@ import { auth, db } from "./firebase_config.js";
         });
       }),
     );
+    const inventoryDays = await getDocs(collection(db, "inventoryDays"));
+    window.FIREBASE_INVENTORY_DAYS = Object.fromEntries(
+      inventoryDays.docs.map((day) => [day.id, day.data().reservedCount]),
+    );
+    window.FIREBASE_PRODUCTS_LOADED = true;
     firebaseLoaded = true;
   };
 
@@ -387,24 +393,17 @@ import { auth, db } from "./firebase_config.js";
       stockStatus: values.stockStatus,
     };
     const variantInputs = [...variantsContainer.querySelectorAll("[data-variant-stock]")];
-    const restockedProductIds = new Set();
-    variantInputs.forEach((input) => {
-      const previousStock = window.getVariantStock(
-        input.dataset.productId,
-        input.dataset.variantId,
-      );
-      const nextStock = Math.max(0, Number(input.value) || 0);
-      window.setVariantStock(input.dataset.productId, input.dataset.variantId, input.value);
-      if (nextStock > previousStock) restockedProductIds.add(input.dataset.productId);
-    });
-    if (restockedProductIds.size) {
-      window.notifyAvailableWaitlist?.([...restockedProductIds]);
-    }
-
     submitButton.disabled = true;
     status.textContent = "Firebaseへ保存しています…";
     try {
       await saveProductToFirestore(values, variantInputs);
+      variantInputs.forEach((input) => {
+        window.setVariantStock(input.dataset.productId, input.dataset.variantId, input.value);
+        const variant = products[input.dataset.productId]?.variants?.find(
+          (item) => item.id === input.dataset.variantId,
+        );
+        if (variant) variant.stock = Math.max(0, Number(input.value) || 0);
+      });
       products[values.id] = {
         ...products[values.id],
         ...overrides[values.id],
@@ -429,4 +428,16 @@ import { auth, db } from "./firebase_config.js";
     status.textContent = "Firebaseへ接続できないため、端末内のデータを表示しています。";
   }
   render();
+  if (firebaseLoaded) {
+    onSnapshot(
+      collection(db, "inventoryDays"),
+      (snapshot) => {
+        window.FIREBASE_INVENTORY_DAYS = Object.fromEntries(
+          snapshot.docs.map((day) => [day.id, day.data().reservedCount]),
+        );
+        renderDailyInventory();
+      },
+      (error) => console.error("日付別在庫を更新できませんでした。", error),
+    );
+  }
 })();

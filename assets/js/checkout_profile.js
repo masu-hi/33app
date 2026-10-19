@@ -14,7 +14,6 @@ const prefectures =
     " ",
   );
 prefectures.forEach((name) => form.elements.prefecture.add(new Option(name, name)));
-form.elements.birthday.max = new Date().toLocaleDateString("sv-SE");
 let user;
 try {
   user = await waitForUser();
@@ -29,9 +28,8 @@ try {
         const field = form.elements.namedItem(key);
         if (field) field.value = value;
       }
-      form.elements.postal.value = `${profile.postal_first || ""}${profile.postal_last || ""}`;
-      if (profile.birth_year)
-        form.elements.birthday.value = `${profile.birth_year}-${String(profile.birth_month).padStart(2, "0")}-${String(profile.birth_day).padStart(2, "0")}`;
+      window.setBirthdayFields(form, profile);
+      form.elements.email.value = user.email;
       submit.disabled = false;
     }
   }
@@ -39,8 +37,13 @@ try {
   status.textContent = "会員情報を読み込めませんでした。再読み込みしてください。";
 }
 
+await import("./app.js");
+
 document.querySelector("[data-profile-address-search]").addEventListener("click", async (event) => {
-  const zipcode = form.elements.postal.value.replace(/\D/g, "");
+  const zipcode = `${form.elements.postal_first.value}${form.elements.postal_last.value}`.replace(
+    /\D/g,
+    "",
+  );
   const message = document.querySelector("[data-profile-postal-status]");
   if (!/^\d{7}$/.test(zipcode)) {
     message.textContent = "郵便番号を7桁で入力してください。";
@@ -69,17 +72,20 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!user || submit.disabled) return;
   const values = Object.fromEntries(new FormData(form));
-  const [birth_year, birth_month, birth_day] = values.birthday.split("-");
-  const postal = values.postal.replace(/\D/g, "");
-  const { birthday, ...fields } = values;
-  const profile = {
-    ...fields,
-    birth_year,
-    birth_month,
-    birth_day,
-    postal_first: postal.slice(0, 3),
-    postal_last: postal.slice(3),
-  };
+  const year = Number(values.birth_year);
+  const month = Number(values.birth_month);
+  const day = Number(values.birth_day);
+  const birthday = new Date(year, month - 1, day);
+  if (
+    birthday.getFullYear() !== year ||
+    birthday.getMonth() !== month - 1 ||
+    birthday.getDate() !== day ||
+    birthday > new Date()
+  ) {
+    status.textContent = "生年月日を正しく入力してください。";
+    return;
+  }
+  const profile = { ...values, email: user.email };
   submit.disabled = true;
   status.textContent = "会員情報を保存しています。";
   try {

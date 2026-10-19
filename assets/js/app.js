@@ -1,7 +1,7 @@
 const appStorage = window.userStorage;
 
 const NOTICE_READ_STORAGE_KEY = "readNoticeIds";
-const DEFAULT_UNREAD_NOTICE_IDS = ["shipping-complete", "return-request"];
+const DEFAULT_UNREAD_NOTICE_IDS = ["welcome", "return-request"];
 
 const getReadNoticeIds = () => {
   try {
@@ -14,10 +14,13 @@ const getReadNoticeIds = () => {
 
 const getUnreadNoticeCount = () => {
   const readIds = getReadNoticeIds();
-  const dynamicIds = JSON.parse(appStorage.getItem("appNotifications") || "[]").map(
-    (notice) => notice.id,
-  );
-  return [...DEFAULT_UNREAD_NOTICE_IDS, ...dynamicIds].filter((id) => !readIds.includes(id)).length;
+  const dynamicIds = JSON.parse(appStorage.getItem("appNotifications") || "[]")
+    .filter((notice) => !notice.isRead)
+    .map((notice) => notice.id);
+  return new Set([
+    ...DEFAULT_UNREAD_NOTICE_IDS.filter((id) => !readIds.includes(id)),
+    ...dynamicIds,
+  ]).size;
 };
 
 const updateNoticeCount = () => {
@@ -28,7 +31,19 @@ const updateNoticeCount = () => {
   });
 };
 
-const markNoticeAsRead = (noticeId) => {
+const markNoticeAsRead = async (noticeId) => {
+  const notices = JSON.parse(appStorage.getItem("appNotifications") || "[]");
+  const dynamic = notices.find((notice) => notice.id === noticeId);
+  if (dynamic) {
+    const { markNotificationRead } = await import("./firebase_notifications.js");
+    await markNotificationRead(noticeId);
+    const latest = JSON.parse(appStorage.getItem("appNotifications") || "[]");
+    const updated = latest.find((notice) => notice.id === noticeId);
+    if (updated) updated.isRead = true;
+    appStorage.setItem("appNotifications", JSON.stringify(latest));
+    updateNoticeCount();
+    return;
+  }
   const readIds = getReadNoticeIds();
   if (!noticeId || readIds.includes(noticeId)) return;
 
@@ -342,6 +357,7 @@ if (memberInfo) {
       const field = editForm.elements.namedItem(name);
       if (field) field.value = value;
     });
+    window.setBirthdayFields?.(editForm, profile);
     if (editForm.elements.current_password) editForm.elements.current_password.value = "";
     if (editForm.elements.new_password) editForm.elements.new_password.value = "";
     if (editForm.elements.new_password_confirm) editForm.elements.new_password_confirm.value = "";
@@ -865,6 +881,24 @@ if (rentalCalendar) {
       const rentalDate = new Date(arrivalDate);
       rentalDate.setDate(rentalDate.getDate() + dayOffset);
       const dateKey = toDateKey(rentalDate);
+      const options = [...document.querySelectorAll("[data-product-options] select")].filter(
+        (select) => select.value,
+      );
+      if (
+        options.some((select) => {
+          const sourceId = select.dataset.sourceProductId;
+          const variantId = select.selectedOptions[0]?.dataset.variantId;
+          const component = quantityProduct?.bundleComponents?.find(
+            (item) => item.productId === sourceId,
+          );
+          return (
+            variantId &&
+            window.getVariantStockForDate?.(sourceId, variantId, dateKey) <
+              selectedProductQuantity * (component?.quantity || 1)
+          );
+        })
+      )
+        return true;
       if (
         window.getProductAvailableStockForDate?.(currentProductId, dateKey) <
         selectedProductQuantity
@@ -997,12 +1031,15 @@ if (rentalCalendar) {
     resetSelectedPeriod();
   });
 
+  document.querySelector("[data-product-options]")?.addEventListener("change", resetSelectedPeriod);
+
   renderQuantity();
   renderCalendar();
 }
 
-document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
+document.querySelector("[data-add-cart]")?.addEventListener("click", async () => {
   const button = document.querySelector("[data-add-cart]");
+  if (button.disabled) return;
 
   if (button.dataset.cartState === "waitlist-added") {
     window.location.href = "waitlist.html";
@@ -1024,27 +1061,45 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", () => {
   }
 
   if (button.dataset.cartState === "waitlist") {
-    const entries = JSON.parse(appStorage.getItem("waitlistProducts") || "[]");
     const selectedOptions = Object.fromEntries(
       optionSelects.map((select) => [
         select.previousElementSibling?.textContent.trim() || "オプション",
         select.options[select.selectedIndex]?.textContent || select.value,
       ]),
     );
-    entries.unshift({
+    const variantSelections = Object.fromEntries(
+      optionSelects
+        .map((select) => [
+          select.dataset.sourceProductId,
+          select.selectedOptions[0]?.dataset.variantId,
+        ])
+        .filter(([productId, variantId]) => productId && variantId),
+    );
+    const entry = {
       productId: document.body.dataset.productId || selectedWaitlistReservation.productId,
       startDate: selectedWaitlistReservation.arrivalDate,
       endDate: selectedWaitlistReservation.returnDate,
       selectedOptions,
+      variantSelections,
       quantity: selectedProductQuantity,
       notify: true,
       createdAt: new Date().toISOString(),
-    });
-    appStorage.setItem("waitlistProducts", JSON.stringify(entries));
-    button.dataset.cartState = "waitlist-added";
-    button.classList.add("is_added");
-    button.textContent = "空き待ちリストを見る";
-    showToast("空き待ちリストに登録しました。");
+    };
+    button.disabled = true;
+    try {
+      const { saveWaitlist } = await import("./firebase_waitlist.js");
+      await saveWaitlist(entry);
+      button.dataset.cartState = "waitlist-added";
+      button.classList.add("is_added");
+      button.textContent = "空き待ちリストを見る";
+      showToast("空き待ちリストに登録しました。");
+    } catch (error) {
+      showToast(
+        error.code ? "空き待ちを保存できませんでした。もう一度お試しください。" : error.message,
+      );
+    } finally {
+      button.disabled = false;
+    }
     return;
   }
 
@@ -1604,12 +1659,14 @@ const addDaysToStoredDate = (dateKey, days) => {
 
 const canExtendRentalOrder = (order) => {
   if (!order?.returnDate || order.status === "キャンセル") return false;
+  if (window.FIREBASE_PRODUCTS_LOADED && !order.inventoryReserved) return false;
   const nextDateKey = addDaysToStoredDate(order.returnDate, 1);
   const selections = Object.entries(order.variantSelections || order.bundleVariants || {});
   return selections.length
     ? selections.every(
         ([productId, variantId]) =>
-          window.getVariantStockForDate?.(productId, variantId, nextDateKey) > 0,
+          window.getVariantStockForDate?.(productId, variantId, nextDateKey) >=
+          (order.inventoryQuantities?.[productId] || order.quantity || 1),
       )
     : window.getProductAvailableStockForDate?.(order.productId, nextDateKey) > 0;
 };
@@ -1621,7 +1678,7 @@ const createOrderId = () => {
     String(now.getMonth() + 1).padStart(2, "0"),
     String(now.getDate()).padStart(2, "0"),
   ].join("");
-  const serial = String(now.getTime()).slice(-6);
+  const serial = crypto.randomUUID().slice(0, 8).toUpperCase();
   return `OSR-${date}-${serial}`;
 };
 
@@ -1731,10 +1788,10 @@ if (orderConfirmPage) {
   const draft = extensionOrder
     ? {
         ...extensionOrder,
-        subtotal: 440,
+        subtotal: 440 * extensionOrder.quantity,
         shipping: 0,
         paymentFee: 0,
-        total: 440,
+        total: 440 * extensionOrder.quantity,
         payment: appStorage.getItem("selectedPaymentMethod") || "credit",
         paymentName: paymentNames[appStorage.getItem("selectedPaymentMethod") || "credit"],
         period: `${formatStoredDate(extensionOrder.arrivalDate)}〜${formatStoredDate(
@@ -1788,26 +1845,39 @@ if (orderConfirmPage) {
   document.querySelector("[data-order-total]").textContent =
     `¥${draft.total.toLocaleString("ja-JP")}`;
 
-  document.querySelector("[data-place-order]").addEventListener("click", () => {
+  document.querySelector("[data-place-order]").addEventListener("click", async (event) => {
     if (cannotPlaceOrder) return;
+    const button = event.currentTarget;
+    if (button.disabled) return;
     if (extensionOrder) {
-      const orders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
-      const target = orders.find((order) => order.id === extensionOrder.id);
-      if (!target || !canExtendRentalOrder(target)) {
-        showToast("在庫状況が変わったため延長できませんでした。");
-        return;
+      button.disabled = true;
+      try {
+        const target = await window.changeRentalOrder(
+          extensionOrder.id,
+          "extend",
+          draft.payment,
+          extensionOrder.returnDate,
+        );
+        const orders = JSON.parse(appStorage.getItem("rentalOrders") || "[]").map((order) =>
+          order.id === target.id ? target : order,
+        );
+        appStorage.setItem("rentalOrders", JSON.stringify(orders));
+        appStorage.setItem(
+          "latestExtension",
+          JSON.stringify({
+            ...target,
+            total: 440 * target.quantity,
+            paymentName: draft.paymentName,
+          }),
+        );
+        window.location.href = `order_complete.html?extension=${encodeURIComponent(target.id)}`;
+      } catch (error) {
+        availabilityMessage.hidden = false;
+        availabilityMessage.textContent = error.code
+          ? "延長を保存できませんでした。もう一度お試しください。"
+          : error.message;
+        button.disabled = false;
       }
-      target.returnDate = addDaysToStoredDate(target.returnDate, 1);
-      target.period = `${formatStoredDate(target.arrivalDate)}〜${formatStoredDate(target.returnDate)}`;
-      target.extensionCount = (Number(target.extensionCount) || 0) + 1;
-      target.extensionTotal = (Number(target.extensionTotal) || 0) + 440;
-      target.lastExtensionPayment = draft.paymentName;
-      appStorage.setItem("rentalOrders", JSON.stringify(orders));
-      appStorage.setItem(
-        "latestExtension",
-        JSON.stringify({ ...target, total: 440, paymentName: draft.paymentName }),
-      );
-      window.location.href = `order_complete.html?extension=${encodeURIComponent(target.id)}`;
       return;
     }
 
@@ -1818,15 +1888,33 @@ if (orderConfirmPage) {
       placedDate: `${placedAt.getFullYear()}年${placedAt.getMonth() + 1}月${placedAt.getDate()}日`,
       status: "配送待ち",
     };
-    const orders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
-    orders.unshift(order);
-    appStorage.setItem("rentalOrders", JSON.stringify(orders));
-    window.reduceStockForOrder?.(order);
-    appStorage.setItem("latestOrder", JSON.stringify(order));
-    appStorage.setItem("cartCount", "0");
-    appStorage.removeItem("pendingReservation");
-    appStorage.removeItem("pendingOrderId");
-    window.location.href = "order_complete.html";
+    button.disabled = true;
+    const originalLabel = button.textContent;
+    button.textContent = "注文を保存しています…";
+    try {
+      if (!window.saveRentalOrder)
+        throw new Error("注文を保存できません。ページを再読み込みしてください。");
+      const savedOrder = await window.saveRentalOrder(order);
+      const orders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
+      if (!orders.some((item) => item.id === savedOrder.id)) {
+        orders.unshift(savedOrder);
+        appStorage.setItem("rentalOrders", JSON.stringify(orders));
+        if (!savedOrder.inventoryReserved) window.reduceStockForOrder?.(savedOrder);
+      }
+      appStorage.setItem("latestOrder", JSON.stringify(savedOrder));
+      appStorage.setItem("cartCount", "0");
+      appStorage.removeItem("pendingReservation");
+      appStorage.removeItem("pendingOrderId");
+      window.location.href = "order_complete.html";
+    } catch (error) {
+      console.error("注文を保存できませんでした。", error);
+      availabilityMessage.hidden = false;
+      availabilityMessage.textContent = error.code
+        ? "注文を保存できませんでした。通信環境を確認して、もう一度お試しください。"
+        : error.message;
+      button.disabled = false;
+      button.textContent = originalLabel;
+    }
   });
 }
 
@@ -1949,19 +2037,30 @@ if (cancellationConfirm) {
 
       if (order.status === "キャンセル") showComplete();
 
-      confirmButton.addEventListener("click", () => {
+      confirmButton.addEventListener("click", async () => {
+        if (confirmButton.disabled) return;
         const savedOrders = JSON.parse(appStorage.getItem("rentalOrders") || "[]");
         const target = savedOrders.find((item) => item.id === orderId);
         if (!target) return;
 
-        if (target.status !== "キャンセル") {
-          target.status = "キャンセル";
-          target.cancelledAt = new Date().toISOString();
-          const restoredProductIds = window.restoreStockForOrder?.(target) || [];
-          window.notifyAvailableWaitlist?.(restoredProductIds);
-          appStorage.setItem("rentalOrders", JSON.stringify(savedOrders));
+        confirmButton.disabled = true;
+        try {
+          const cancelled = await window.changeRentalOrder(target.id, "cancel");
+          appStorage.setItem(
+            "rentalOrders",
+            JSON.stringify(
+              savedOrders.map((item) => (item.id === cancelled.id ? cancelled : item)),
+            ),
+          );
+          showComplete();
+        } catch (error) {
+          showToast(
+            error.code
+              ? "キャンセルを保存できませんでした。もう一度お試しください。"
+              : error.message,
+          );
+          confirmButton.disabled = false;
         }
-        showComplete();
       });
     }
   }
@@ -2002,41 +2101,81 @@ if (noticeTabs.length) {
   const emptyElement = document.querySelector("[data-notice-empty]");
   const noticeList = document.querySelector("[data-notice-list]");
 
-  JSON.parse(appStorage.getItem("appNotifications") || "[]").forEach((notice) => {
-    const item = document.createElement("li");
-    const details = document.createElement("details");
-    const summary = document.createElement("summary");
-    const title = document.createElement("h2");
-    const body = document.createElement("p");
+  const renderNotices = () => {
+    const openIds = new Set(
+      [...noticeList.querySelectorAll("[data-dynamic-notice]")]
+        .filter((item) => item.querySelector("details")?.open)
+        .map((item) => item.dataset.noticeId),
+    );
+    noticeList.querySelectorAll("[data-dynamic-notice]").forEach((item) => item.remove());
+    JSON.parse(appStorage.getItem("appNotifications") || "[]")
+      .slice()
+      .reverse()
+      .forEach((notice) => {
+        const item = document.createElement("li");
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        const title = document.createElement("h2");
+        const body = document.createElement("p");
 
-    item.className = "notice_item is_unread";
-    item.dataset.category = "info";
-    item.dataset.noticeId = notice.id;
-    details.className = "notice_item__details";
-    summary.className = "notice_item__summary";
-    title.className = "notice_item__title";
-    body.className = "notice_item__body";
-    title.textContent = notice.title;
-    body.textContent = notice.message;
-    summary.append(title);
-    details.append(summary, body);
-    item.append(details);
-    noticeList.prepend(item);
-  });
+        item.className = notice.isRead ? "notice_item" : "notice_item is_unread";
+        item.dataset.dynamicNotice = "";
+        item.dataset.category = ["info", "order", "important"].includes(notice.category)
+          ? notice.category
+          : "info";
+        item.dataset.noticeId = notice.id;
+        details.className = "notice_item__details";
+        summary.className = "notice_item__summary";
+        title.className = "notice_item__title";
+        body.className = "notice_item__body";
+        title.textContent = notice.title;
+        body.textContent = notice.message;
+        summary.append(title);
+        details.append(summary, body);
+        if (notice.productId) {
+          const link = document.createElement("a");
+          link.className = "notice_item__link";
+          link.href = `product_detail.html?id=${encodeURIComponent(notice.productId)}`;
+          link.textContent = "商品を確認する";
+          details.append(link);
+        }
+        details.open = openIds.has(notice.id);
+        item.append(details);
+        noticeList.prepend(item);
+      });
 
-  document.querySelectorAll("[data-notice-id]").forEach((item) => {
-    const noticeId = item.dataset.noticeId;
-    if (getReadNoticeIds().includes(noticeId)) {
-      item.classList.remove("is_unread");
-    }
+    document.querySelectorAll("[data-notice-id]").forEach((item) => {
+      const noticeId = item.dataset.noticeId;
+      if (!item.hasAttribute("data-dynamic-notice") && getReadNoticeIds().includes(noticeId)) {
+        item.classList.remove("is_unread");
+      }
 
-    item.querySelector(".notice_item__details")?.addEventListener("toggle", (event) => {
-      if (!event.currentTarget.open || !item.classList.contains("is_unread")) return;
+      const details = item.querySelector(".notice_item__details");
+      if (!details || details.dataset.readHandler) return;
+      details.dataset.readHandler = "true";
+      details.addEventListener("toggle", async (event) => {
+        if (!event.currentTarget.open || !item.classList.contains("is_unread")) return;
 
-      item.classList.remove("is_unread");
-      markNoticeAsRead(noticeId);
+        item.classList.remove("is_unread");
+        try {
+          await markNoticeAsRead(noticeId);
+        } catch {
+          item.classList.add("is_unread");
+          showToast("既読にできませんでした。もう一度お試しください。");
+        }
+      });
     });
-  });
+    const category =
+      document.querySelector("[data-notice-tab].is_active")?.dataset.noticeTab || "all";
+    let count = 0;
+    noticeList.querySelectorAll(".notice_item").forEach((item) => {
+      item.hidden = category !== "all" && item.dataset.category !== category;
+      if (!item.hidden) count += 1;
+    });
+    if (emptyElement) emptyElement.hidden = count > 0;
+  };
+  renderNotices();
+  window.addEventListener("notifications:updated", renderNotices);
 
   noticeTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -2061,3 +2200,8 @@ if (noticeTabs.length) {
     });
   });
 }
+
+window.addEventListener("notifications:updated", updateNoticeCount);
+import("./firebase_notifications.js")
+  .then(({ subscribeNotifications }) => subscribeNotifications())
+  .catch((error) => console.error("通知を読み込めませんでした。", error));
