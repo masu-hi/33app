@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
+  <!-- Ring pins -->
+  <rect x="5" y="1" width="2" height="4" rx="1" fill="#7990be" />
+  <rect x="17" y="1" width="2" height="4" rx="1" fill="#7990be" />
+  <!-- Calendar Body -->
+  <path d="M3 5C3 3.9 3.9 3 5 3H19C20.1 3 21 3.9 21 5V8H3V5Z" stroke="#7990be" stroke-width="2" />
+  <path d="M3 8V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V8H3Z" stroke="#7990be" stroke-width="2" />
+  <!-- Calendar Dots/Grid -->
+  <circle cx="7.5" cy="12" r="1" fill="#7990be" />
+  <circle cx="12" cy="12" r="1" fill="#7990be" />
+  <circle cx="16.5" cy="12" r="1" fill="#7990be" />
+  <circle cx="7.5" cy="16" r="1" fill="#7990be" />
+  <circle cx="12" cy="16" r="1" fill="#7990be" />
+  <circle cx="16.5" cy="16" r="1" fill="#7990be" />
+</svg>
