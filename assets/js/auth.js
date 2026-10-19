@@ -190,7 +190,8 @@ document.querySelector("[data-registration-submit]")?.addEventListener("click", 
     sessionStorage.removeItem("activeAccountEmail");
     sessionStorage.removeItem("activeUserId");
     sessionStorage.removeItem("checkoutShippingInfo");
-    window.location.replace("register_complete.html");
+    sessionStorage.setItem("registrationCompleteToast", "true");
+    window.location.replace("login.html");
   } catch (error) {
     const messages = {
       "auth/email-already-in-use": "このメールアドレスは登録済みです。ログインしてください。",

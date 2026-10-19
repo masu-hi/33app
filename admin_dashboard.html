@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管理トップ | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/user_storage.js"></script>
+    <script src="assets/js/product_data.js" defer></script>
+    <script type="module" src="assets/js/admin_auth_guard.js"></script>
+    <script type="module" src="assets/js/admin_dashboard.js"></script>
+  </head>
+  <body class="admin_page is_auth_pending">
+    <header class="admin_header">
+      <div>
+        <img class="admin_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <h1>管理トップ</h1>
+      </div>
+      <div class="admin_header__actions">
+        <a href="home.html">利用者画面</a>
+        <button type="button" data-admin-logout>ログアウト</button>
+      </div>
+    </header>
+    <nav class="admin_nav" aria-label="管理メニュー">
+      <a href="admin_dashboard.html" aria-current="page">管理トップ</a>
+      <a href="admin.html">商品管理</a>
+      <a href="admin_orders.html">レンタル申込管理</a>
+      <a href="admin_waitlist.html">空き待ち管理</a>
+    </nav>
+    <main class="admin_main">
+      <p data-dashboard-status role="status">データを読み込んでいます。</p>
+      <div class="admin_dashboard_actions">
+        <button type="button" data-dashboard-migrate disabled>既存注文の在庫を反映</button>
+      </div>
+      <section class="admin_summary admin_dashboard_summary" aria-label="レンタル状況">
+        <div>
+          <span>申込総数</span>
+          <strong data-dashboard-count="all">0</strong>
+        </div>
+        <div>
+          <a href="admin_orders.html?status=配送待ち">配送待ち</a>
+          <strong data-dashboard-count="配送待ち">0</strong>
+        </div>
+        <div>
+          <a href="admin_orders.html?status=配送中">配送中</a>
+          <strong data-dashboard-count="配送中">0</strong>
+        </div>
+        <div>
+          <a href="admin_orders.html?status=返品待ち">返却待ち</a>
+          <strong data-dashboard-count="返品待ち">0</strong>
+        </div>
+        <div>
+          <a href="admin_orders.html?status=キャンセル">キャンセル</a>
+          <strong data-dashboard-count="キャンセル">0</strong>
+        </div>
+        <div>
+          <span>公開商品</span>
+          <strong data-dashboard-products>0</strong>
+        </div>
+      </section>
+      <section class="admin_products" aria-labelledby="dashboard-stock-title">
+        <div class="admin_products__heading">
+          <h2 id="dashboard-stock-title">残り在庫の少ない種類</h2>
+          <label>
+            確認日
+            <input type="date" data-dashboard-date />
+          </label>
+        </div>
+        <div class="admin_dashboard_list" data-dashboard-stock></div>
+        <p class="admin_empty" data-dashboard-stock-empty hidden>残り1点以下の商品はありません。</p>
+      </section>
+      <section class="admin_products" aria-labelledby="dashboard-order-title">
+        <div class="admin_products__heading">
+          <h2 id="dashboard-order-title">最近の申込み</h2>
+          <a href="admin_orders.html">すべての申込みを見る</a>
+        </div>
+        <div class="admin_dashboard_list" data-dashboard-orders></div>
+        <p class="admin_empty" data-dashboard-orders-empty hidden>申込みはまだありません。</p>
+      </section>
+    </main>
+  </body>
+</html>

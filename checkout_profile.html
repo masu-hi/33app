@@ -13,14 +13,49 @@
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/user_storage.js"></script>
     <script src="assets/js/theme_init.js"></script>
+    <script src="assets/js/birthday_fields.js" defer></script>
     <script type="module" src="assets/js/checkout_profile.js"></script>
   </head>
   <body class="mobile_app">
-    <main class="app_shell">
-      <header class="auth_header"><img src="assets/images/logo.png" alt="おしりーす" /></header>
-      <section class="checkout_profile">
-        <h1>会員情報の登録</h1>
-        <p>お届け先と会員情報を登録してください。</p>
+    <main class="app_shell member_info_page">
+      <header class="app_header">
+        <a
+          class="app_header__icon"
+          href="color_change.html"
+          aria-label="設定"
+          data-nav-icon
+          data-pages="color_change.html,password_setting.html,credit_card.html"
+        >
+          <img
+            src="assets/images/setting-icon--outline.png"
+            data-outline="assets/images/setting-icon--outline.png"
+            data-filled="assets/images/setting-icon--filled.png"
+            alt=""
+          />
+        </a>
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="notice.html" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+      <section class="member_info member_info--checkout" aria-labelledby="checkout-profile-title">
+        <h1 id="checkout-profile-title">会員情報</h1>
+        <p class="member_info__intro">お届け先と会員情報を登録してください。</p>
         <form class="member_info__form" data-checkout-profile>
           <label>
             お名前
@@ -34,23 +69,49 @@
             電話番号
             <input name="phone" type="tel" required autocomplete="tel" pattern="[0-9\-]{10,13}" />
           </label>
-          <label>
-            生年月日
-            <input name="birthday" type="date" required autocomplete="bday" />
-          </label>
-          <label>
-            郵便番号
-            <input
-              name="postal"
-              required
-              autocomplete="postal-code"
-              inputmode="numeric"
-              pattern="[0-9]{3}-?[0-9]{4}"
-              placeholder="123-4567"
-            />
-          </label>
-          <button type="button" data-profile-address-search>住所検索</button>
-          <p data-profile-postal-status role="status"></p>
+          <fieldset class="member_info__birth_fields" data-birthday-fields>
+            <legend>生年月日</legend>
+            <div>
+              <select name="birth_year" required aria-label="生まれた年" autocomplete="bday-year">
+                <option value="">0000</option>
+              </select>
+              <span>年</span>
+              <select name="birth_month" required aria-label="生まれた月" autocomplete="bday-month">
+                <option value="">00</option>
+              </select>
+              <span>月</span>
+              <select name="birth_day" required aria-label="生まれた日" autocomplete="bday-day">
+                <option value="">00</option>
+              </select>
+              <span>日</span>
+            </div>
+          </fieldset>
+          <fieldset class="postal_fields member_info__postal_fieldset">
+            <legend>郵便番号</legend>
+            <div>
+              <input
+                name="postal_first"
+                required
+                inputmode="numeric"
+                maxlength="3"
+                pattern="[0-9]{3}"
+                placeholder="123"
+                aria-label="郵便番号の最初の3桁"
+              />
+              <span>-</span>
+              <input
+                name="postal_last"
+                required
+                inputmode="numeric"
+                maxlength="4"
+                pattern="[0-9]{4}"
+                placeholder="4567"
+                aria-label="郵便番号の最後の4桁"
+              />
+              <button type="button" data-profile-address-search>住所検索</button>
+            </div>
+            <p class="postal_status" data-profile-postal-status role="status"></p>
+          </fieldset>
           <label>
             都道府県
             <select name="prefecture" required>
@@ -64,6 +125,10 @@
           <label>
             建物名・部屋番号（任意）
             <input name="building" />
+          </label>
+          <label>
+            メールアドレス
+            <input name="email" type="email" autocomplete="email" readonly />
           </label>
           <label>
             推しカラー
@@ -82,12 +147,53 @@
             </select>
           </label>
           <p data-profile-status role="status"></p>
-          <div class="member_info__form_actions">
-            <button type="submit" disabled>登録して決済へ戻る</button>
+          <div class="member_info__form_actions member_info__form_actions--single">
+            <button type="submit" disabled>登録して決済へもどる</button>
           </div>
         </form>
-        <a href="cart.html">カートへ戻る</a>
       </section>
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="about.html">お店について</a>
+          <a href="usage_guide.html">使い方ガイド</a>
+          <a href="terms.html">利用規約</a>
+          <a href="privacy_policy.html">個人情報保護方針</a>
+        </nav>
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
+        </a>
+        <a
+          href="mypage.html"
+          data-nav-icon
+          data-pages="mypage.html,rental_history.html,member_info.html,color_change.html,password_setting.html,credit_card.html"
+        >
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
     </main>
   </body>
 </html>

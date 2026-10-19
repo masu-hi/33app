@@ -1,8 +1,8 @@
 .admin_page {
   min-height: 100vh;
   margin: 0;
-  color: #252a3d;
-  background: #f5f6f8;
+  color: #353b60;
+  background: #f8f6fa;
   font-family: "Noto Sans JP", sans-serif;
 }
 
@@ -17,7 +17,7 @@
   justify-content: space-between;
   padding: 14px clamp(20px, 5vw, 64px);
   border-bottom: 1px solid #dfe2e8;
-  background: #fff;
+  background: #f6ecf8;
 }
 
 .admin_header p,
@@ -32,6 +32,76 @@
 
 .admin_header h1 {
   font-size: 21px;
+  font-family: "M PLUS Rounded 1c", sans-serif;
+}
+
+.admin_header__logo {
+  display: block;
+  width: 120px;
+  height: 36px;
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+.admin_dashboard_summary a,
+.admin_dashboard_row a {
+  color: #405795;
+}
+
+.admin_dashboard_list {
+  padding: 0 20px;
+}
+
+.admin_dashboard_actions {
+  margin-bottom: 20px;
+
+  button {
+    padding: 10px 16px;
+    border: 1px solid #cfcae3;
+    border-radius: 5px;
+    color: #353b60;
+    background: #f6ecf8;
+    font: inherit;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+  }
+}
+
+.admin_dashboard_row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(80px, 0.5fr);
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e8e0eb;
+  font-size: 14px;
+
+  > * {
+    overflow-wrap: anywhere;
+  }
+
+  > :last-child {
+    text-align: right;
+  }
+}
+
+@media (max-width: 767px) {
+  .admin_dashboard_row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+
+    > :last-child {
+      text-align: left;
+    }
+  }
+
+  .admin_header__actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
 }
 
 .admin_header a,
@@ -167,6 +237,11 @@
   border-bottom: 1px solid #dfe2e8;
   background: #fff;
   overflow-x: auto;
+}
+
+.admin_products__heading,
+.admin_daily__heading {
+  background: #eff7ff;
 }
 
 .admin_nav a {

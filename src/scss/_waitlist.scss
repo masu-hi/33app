@@ -37,6 +37,31 @@
   border-bottom: 1px solid var(--color-line, #ead5ee);
 }
 
+.waitlist_item__preference {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 72px 16px 30px;
+  font-size: 13px;
+  line-height: 20px;
+
+  input {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    accent-color: #788dbf;
+  }
+}
+
+.waitlist_page__status {
+  padding: 8px 30px;
+  font-size: 13px;
+
+  &:empty {
+    display: none;
+  }
+}
+
 .waitlist_item__product {
   display: grid;
   min-height: 132px;

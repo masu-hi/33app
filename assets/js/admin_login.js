@@ -16,7 +16,7 @@ const isAdmin = async (user) => {
 };
 
 onAuthStateChanged(auth, async (user) => {
-  if (await isAdmin(user)) window.location.replace("admin.html");
+  if (await isAdmin(user)) window.location.replace("admin_dashboard.html");
 });
 
 form?.addEventListener("submit", async (event) => {
@@ -40,7 +40,7 @@ form?.addEventListener("submit", async (event) => {
       throw new Error("このアカウントには管理者権限がありません。");
     }
 
-    window.location.replace("admin.html");
+    window.location.replace("admin_dashboard.html");
   } catch (error) {
     status.textContent =
       error?.code === "auth/invalid-credential"

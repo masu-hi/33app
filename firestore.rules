@@ -57,7 +57,51 @@ service cloud.firestore {
         && request.resource.data.userId == request.auth.uid;
       allow read: if isAdmin()
         || (signedIn() && resource.data.userId == request.auth.uid);
-      allow update, delete: if isAdmin();
+      allow get: if signedIn() && !exists(/databases/$(database)/documents/orders/$(orderId));
+      allow update: if isAdmin() || (
+        isOwner(resource.data.userId) && (
+          (request.resource.data.diff(resource.data).affectedKeys().hasOnly(["status", "cancelledAt", "updatedAt"])
+            && request.resource.data.status == "キャンセル")
+          || (resource.data.status != "キャンセル" && resource.data.status != "返品完了"
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["returnDate", "period", "extensionCount", "extensionTotal", "lastExtensionPayment", "updatedAt"])
+            && request.resource.data.returnDate > resource.data.returnDate
+            && request.resource.data.extensionCount == resource.data.get("extensionCount", 0) + 1
+            && request.resource.data.extensionTotal == resource.data.get("extensionTotal", 0) + 440 * resource.data.quantity
+            && request.resource.data.lastExtensionPayment in ["クレジットカード", "PayPay"])
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    match /inventoryDays/{dayId} {
+      function validDayChange(previousCount, previousAllocations) {
+        let data = request.resource.data;
+        let order = getAfter(/databases/$(database)/documents/orders/$(data.lastOrderId)).data;
+        let nextQuantity = data.allocations.get(data.lastOrderId, 0);
+        let previousQuantity = previousAllocations.get(data.lastOrderId, 0);
+        let capacity = get(/databases/$(database)/documents/products/$(data.productId)/variants/$(data.variantId)).data.totalStock;
+        return signedIn()
+          && (order.userId == request.auth.uid || isAdmin())
+          && data.keys().hasOnly(["productId", "variantId", "dateKey", "reservedCount", "allocations", "lastOrderId"])
+          && dayId == data.productId + "__" + data.variantId + "__" + data.dateKey
+          && data.reservedCount is int && data.reservedCount >= 0
+          && nextQuantity is int && nextQuantity >= 0
+          && previousAllocations.diff(data.allocations).affectedKeys().hasOnly([data.lastOrderId])
+          && data.reservedCount == previousCount + nextQuantity - previousQuantity
+          && ((order.status == "キャンセル" && nextQuantity == 0)
+            || (order.status != "キャンセル"
+              && nextQuantity == order.inventoryQuantities.get(data.productId, 0)
+              && nextQuantity > 0 && data.reservedCount <= capacity
+              && order.variantSelections.get(data.productId, "") == data.variantId
+              && order.arrivalDate <= data.dateKey && data.dateKey <= order.returnDate));
+      }
+      allow read: if true;
+      allow create: if validDayChange(0, {});
+      allow update: if request.resource.data.productId == resource.data.productId
+        && request.resource.data.variantId == resource.data.variantId
+        && request.resource.data.dateKey == resource.data.dateKey
+        && validDayChange(resource.data.reservedCount, resource.data.allocations);
+      allow delete: if false;
     }
 
     match /waitlists/{waitlistId} {
@@ -65,9 +109,14 @@ service cloud.firestore {
         && request.resource.data.userId == request.auth.uid;
       allow read: if isAdmin()
         || (signedIn() && resource.data.userId == request.auth.uid);
+      allow get: if signedIn() && !exists(/databases/$(database)/documents/waitlists/$(waitlistId));
       allow delete: if isAdmin()
         || (signedIn() && resource.data.userId == request.auth.uid);
-      allow update: if isAdmin();
+      allow update: if isAdmin() || (
+        isOwner(resource.data.userId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["notify", "updatedAt"])
+        && request.resource.data.notify is bool
+      );
     }
 
     match /notifications/{notificationId} {

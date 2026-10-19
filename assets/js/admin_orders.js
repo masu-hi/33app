@@ -1,26 +1,25 @@
-const adminOrderStorage = window.sharedAccountStorage;
+import {
+  collection,
+  doc,
+  onSnapshot,
+  updateDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { db } from "./firebase_config.js";
+import { waitForUser } from "./firebase_user.js";
+import { changeRentalOrder } from "./firebase_orders.js";
 
-(() => {
-  const storageKey = "rentalOrders";
+(async () => {
+  let cloudOrders = [];
   const list = document.querySelector("[data-admin-orders]");
   const empty = document.querySelector("[data-admin-orders-empty]");
   const search = document.querySelector("[data-order-search]");
+  const message = document.querySelector("[data-admin-orders-status]");
   const statuses = ["配送待ち", "配送中", "配送完了", "返品待ち", "返品完了", "キャンセル"];
 
   if (!list || !empty || !search) return;
 
-  const getOrders = () => {
-    try {
-      const orders = JSON.parse(adminOrderStorage.getItem(storageKey) || "[]");
-      return Array.isArray(orders) ? orders : [];
-    } catch {
-      return [];
-    }
-  };
-
-  const saveOrders = (orders) => {
-    adminOrderStorage.setItem(storageKey, JSON.stringify(orders));
-  };
+  const getOrders = () => cloudOrders;
 
   const createField = (label, value) => {
     const row = document.createElement("div");
@@ -46,6 +45,8 @@ const adminOrderStorage = window.sharedAccountStorage;
     const orders = getOrders();
     const keyword = search.value.trim().toLowerCase();
     const filteredOrders = orders.filter((order) => {
+      const requestedStatus = new URLSearchParams(window.location.search).get("status");
+      if (requestedStatus && order.status !== requestedStatus) return false;
       const customerName = order.customer?.name || "";
       return `${order.id} ${customerName}`.toLowerCase().includes(keyword);
     });
@@ -74,20 +75,25 @@ const adminOrderStorage = window.sharedAccountStorage;
       statuses.forEach((status) => statusSelect.add(new Option(status, status)));
       statusSelect.value = order.status || "配送待ち";
       statusSelect.disabled = order.status === "キャンセル";
-      statusSelect.addEventListener("change", () => {
-        const updatedOrders = getOrders();
-        const target = updatedOrders.find((savedOrder) => savedOrder.id === order.id);
-        if (!target) return;
-        const previousStatus = target.status || "配送待ち";
-        target.status = statusSelect.value;
-        if (statusSelect.value === "キャンセル" && previousStatus !== "キャンセル") {
-          const restoredProductIds = window.restoreStockForOrder?.(target) || [];
-          window.notifyAvailableWaitlist?.(restoredProductIds);
-        } else if (previousStatus === "キャンセル" && statusSelect.value !== "キャンセル") {
-          window.reduceStockForOrder?.(target);
+      statusSelect.addEventListener("change", async () => {
+        statusSelect.disabled = true;
+        message.textContent = "配送状況を保存しています。";
+        try {
+          if (statusSelect.value === "キャンセル") {
+            await changeRentalOrder(order.id, "cancel");
+          } else {
+            await updateDoc(doc(db, "orders", order.id), {
+              status: statusSelect.value,
+              updatedAt: serverTimestamp(),
+            });
+          }
+          message.textContent = "配送状況を保存しました。";
+        } catch (error) {
+          console.error("配送状況を保存できませんでした。", error);
+          statusSelect.value = order.status;
+          statusSelect.disabled = false;
+          message.textContent = "保存できませんでした。もう一度お試しください。";
         }
-        saveOrders(updatedOrders);
-        render();
       });
 
       statusLabel.append(statusSelect);
@@ -120,5 +126,23 @@ const adminOrderStorage = window.sharedAccountStorage;
   };
 
   search.addEventListener("input", render);
-  render();
+  message.textContent = "申込みを読み込んでいます。";
+  const user = await waitForUser();
+  if (!user) return;
+  const unsubscribe = onSnapshot(
+    collection(db, "orders"),
+    (snapshot) => {
+      cloudOrders = snapshot.docs
+        .map((item) => ({ ...item.data(), id: item.id }))
+        .sort((a, b) => String(b.placedAt || "").localeCompare(String(a.placedAt || "")));
+      message.textContent = "";
+      render();
+    },
+    (error) => {
+      console.error("申込みを読み込めませんでした。", error);
+      message.textContent =
+        "申込みを読み込めませんでした。管理者アカウントでログインし直してください。";
+    },
+  );
+  window.addEventListener("pagehide", unsubscribe, { once: true });
 })();

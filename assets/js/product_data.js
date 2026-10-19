@@ -346,6 +346,11 @@ const orderOverlapsDate = (order, dateKey) =>
   dateKey <= order.returnDate;
 
 window.getVariantPhysicalStock = (productId, variantId) => {
+  if (window.FIREBASE_PRODUCTS_LOADED) {
+    return Number(
+      window.PRODUCTS[productId]?.variants?.find((variant) => variant.id === variantId)?.stock || 0,
+    );
+  }
   const currentStock = window.getVariantStock(productId, variantId);
   const activeOrders = JSON.parse(
     window.sharedAccountStorage.getItem("rentalOrders") || "[]",
@@ -363,6 +368,12 @@ window.getVariantPhysicalStock = (productId, variantId) => {
 
 window.getVariantStockForDate = (productId, variantId, dateKey) => {
   const physicalStock = window.getVariantPhysicalStock(productId, variantId);
+  if (window.FIREBASE_INVENTORY_DAYS) {
+    const reserved = Number(
+      window.FIREBASE_INVENTORY_DAYS[`${productId}__${variantId}__${dateKey}`] || 0,
+    );
+    return Math.max(0, physicalStock - reserved);
+  }
   const activeOrders = JSON.parse(
     window.sharedAccountStorage.getItem("rentalOrders") || "[]",
   ).filter((order) => order.status !== "キャンセル" && orderOverlapsDate(order, dateKey));
