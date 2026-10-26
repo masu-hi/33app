@@ -230,6 +230,61 @@
   text-align: center;
 }
 
+.admin_contact {
+  padding: 24px 0;
+  border-top: 1px solid #e6d4eb;
+  overflow-wrap: anywhere;
+
+  h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  &__message {
+    white-space: pre-wrap;
+  }
+
+  form,
+  label {
+    display: grid;
+    gap: 16px;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 144px;
+    padding: 12px;
+    border: 1px solid #d7b9df;
+    border-radius: 5px;
+    color: #353b60;
+    background: white;
+    font: inherit;
+    resize: vertical;
+  }
+
+  button {
+    justify-self: end;
+    min-height: 44px;
+    padding: 10px 20px;
+    border: 1px solid #d7b9df;
+    border-radius: 5px;
+    color: #353b60;
+    background: #f6ecf8;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
 .admin_nav {
   display: flex;
   gap: 4px;

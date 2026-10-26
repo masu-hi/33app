@@ -12,10 +12,15 @@
     />
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/user_storage.js"></script>
+    <script src="assets/js/theme_init.js"></script>
     <script src="assets/js/birthday_fields.js" defer></script>
-    <script src="assets/js/app.js" defer></script>
+    <script type="module" src="assets/js/profile_bootstrap.js"></script>
   </head>
-  <body class="mobile_app">
+  <body class="mobile_app is_product_data_loading" aria-busy="true">
+    <div class="product_data_loading" data-product-data-loading role="status">
+      <span class="product_data_loading__spinner" aria-hidden="true"></span>
+      会員情報を読み込んでいます
+    </div>
     <main class="app_shell member_info_page">
       <header class="app_header">
         <a
@@ -67,6 +72,10 @@
               <dd data-member-value="kana">未登録</dd>
             </div>
             <div>
+              <dt>電話番号</dt>
+              <dd data-member-value="phone">未登録</dd>
+            </div>
+            <div>
               <dt>生年月日</dt>
               <dd data-member-value="birthday">未登録</dd>
             </div>
@@ -98,11 +107,15 @@
         <form class="member_info__form" data-member-edit-form hidden>
           <label>
             お名前
-            <input name="name" autocomplete="name" />
+            <input name="name" required autocomplete="name" />
           </label>
           <label>
             フリガナ
-            <input name="kana" />
+            <input name="kana" required />
+          </label>
+          <label>
+            電話番号
+            <input name="phone" type="tel" required autocomplete="tel" pattern="[0-9\-]{10,13}" />
           </label>
           <fieldset class="member_info__birth_fields" data-birthday-fields>
             <legend>生年月日</legend>
@@ -124,20 +137,34 @@
           <fieldset class="postal_fields member_info__postal_fieldset">
             <legend>郵便番号</legend>
             <div>
-              <input name="postal_first" inputmode="numeric" maxlength="3" placeholder="123" />
+              <input
+                name="postal_first"
+                required
+                inputmode="numeric"
+                pattern="[0-9]{3}"
+                maxlength="3"
+                placeholder="123"
+              />
               <span>-</span>
-              <input name="postal_last" inputmode="numeric" maxlength="4" placeholder="4567" />
+              <input
+                name="postal_last"
+                required
+                inputmode="numeric"
+                pattern="[0-9]{4}"
+                maxlength="4"
+                placeholder="4567"
+              />
               <button type="button" data-member-address-search>住所検索</button>
             </div>
             <p class="postal_status" data-member-postal-status role="status"></p>
           </fieldset>
           <label>
             都道府県
-            <input name="prefecture" />
+            <input name="prefecture" required />
           </label>
           <label>
             市区町村番地
-            <input name="address" autocomplete="street-address" />
+            <input name="address" required autocomplete="street-address" />
           </label>
           <label>
             建物名・部屋番号
@@ -145,11 +172,11 @@
           </label>
           <label>
             メールアドレス
-            <input name="email" type="email" autocomplete="email" />
+            <input name="email" type="email" autocomplete="email" readonly />
           </label>
           <label>
             推しカラー
-            <select name="favorite_color">
+            <select name="favorite_color" required>
               <option value="">選択してください</option>
               <option>赤</option>
               <option>青</option>
@@ -163,23 +190,7 @@
               <option>黒</option>
             </select>
           </label>
-          <label>
-            現在のパスワード（変更する場合）
-            <input name="current_password" type="password" autocomplete="current-password" />
-          </label>
-          <label>
-            新しいパスワード
-            <input name="new_password" type="password" minlength="8" autocomplete="new-password" />
-          </label>
-          <label>
-            新しいパスワード（確認）
-            <input
-              name="new_password_confirm"
-              type="password"
-              minlength="8"
-              autocomplete="new-password"
-            />
-          </label>
+          <a href="password_reset.html">パスワードを再設定する</a>
           <p class="account_form__error" data-member-form-error role="alert"></p>
           <div class="member_info__form_actions">
             <button type="button" data-member-edit-cancel>キャンセル</button>

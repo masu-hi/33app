@@ -45,7 +45,7 @@ window.PRODUCTS = {
     artistIds: [...ALL_ARTIST_IDS],
     name: "推し活バッグ",
     price: 2400,
-    rentalDays: 3,
+    rentalDays: 4,
     extensionFee: 440,
     shippingFee: 440,
     images: ["assets/images/bag_hero.png"],
@@ -85,7 +85,7 @@ window.PRODUCTS = {
     artistIds: [...ALL_ARTIST_IDS],
     name: "双眼鏡",
     price: 2400,
-    rentalDays: 3,
+    rentalDays: 4,
     extensionFee: 440,
     shippingFee: 440,
     images: ["assets/images/binoculars_hero.png"],
@@ -126,7 +126,7 @@ window.PRODUCTS = {
     artistIds: [...ALL_ARTIST_IDS],
     name: "ファンサうちわセット",
     price: 2400,
-    rentalDays: 3,
+    rentalDays: 4,
     extensionFee: 440,
     shippingFee: 440,
     images: ["assets/images/fan_hero.png"],
@@ -182,7 +182,7 @@ window.PRODUCTS = {
     name: "うちわケース",
     standalone: false,
     price: 2600,
-    rentalDays: 3,
+    rentalDays: 4,
     extensionFee: 440,
     shippingFee: 440,
     images: ["assets/images/fan_hero.png"],
@@ -212,10 +212,10 @@ window.PRODUCTS = {
     artistIds: [...ALL_ARTIST_IDS],
     name: "推し活セット",
     price: 3200,
-    rentalDays: 3,
+    rentalDays: 4,
     extensionFee: 440,
     shippingFee: 440,
-    images: ["assets/images/setto.png"],
+    images: ["assets/images/set_hero.webp"],
     inventoryMode: "shared",
     bundleComponents: [
       {
@@ -273,11 +273,19 @@ window.getProductData = (productId) => {
   } catch {
     overrides = {};
   }
-  return {
+  const current = {
     ...product,
     ...(window.FIREBASE_PRODUCTS_LOADED ? {} : overrides[productId] || {}),
     id: product.id,
+    rentalDays: 4,
   };
+  // Firebaseに残っている旧セット画像も新しい素材で表示します。
+  if (productId === "set" && Array.isArray(current.images)) {
+    current.images = current.images.map((path) =>
+      path === "assets/images/setto.png" ? "assets/images/set_hero.webp" : path,
+    );
+  }
+  return current;
 };
 
 const INVENTORY_STORAGE_KEY = "productVariantInventory";

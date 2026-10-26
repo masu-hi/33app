@@ -224,6 +224,54 @@
   text-align: center;
 }
 
+.admin_contact {
+  padding: 24px 0;
+  border-top: 1px solid #e6d4eb;
+  overflow-wrap: anywhere;
+}
+.admin_contact h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+.admin_contact p {
+  font-size: 14px;
+  line-height: 1.8;
+}
+.admin_contact__message {
+  white-space: pre-wrap;
+}
+.admin_contact form,
+.admin_contact label {
+  display: grid;
+  gap: 16px;
+}
+.admin_contact textarea {
+  width: 100%;
+  min-height: 144px;
+  padding: 12px;
+  border: 1px solid #d7b9df;
+  border-radius: 5px;
+  color: #353b60;
+  background: white;
+  font: inherit;
+  resize: vertical;
+}
+.admin_contact button {
+  justify-self: end;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1px solid #d7b9df;
+  border-radius: 5px;
+  color: #353b60;
+  background: #f6ecf8;
+  font: inherit;
+  cursor: pointer;
+}
+.admin_contact button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .admin_nav {
   display: flex;
   gap: 4px;
@@ -1437,6 +1485,8 @@
    src/scss/_product_detail.scss
 ========================================================= */
 .product_detail__options {
+  min-width: 0;
+  max-width: 100%;
   margin-top: 16px;
   display: flex;
   flex-direction: column;
@@ -1447,6 +1497,92 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
+}
+
+.product_detail__option_choices {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  gap: 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line, #ead5ee) transparent;
+  padding: 4px 3px 10px;
+}
+
+.product_detail__option_choice {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  color: #353b60;
+  font: inherit;
+  cursor: pointer;
+}
+.product_detail__option_choice:focus-visible {
+  outline: 2px solid #7896c9;
+  outline-offset: 1px;
+}
+.product_detail__option_choice:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+.product_detail__option_choice--color {
+  display: grid;
+  width: 60px;
+  height: 72px;
+  grid-template-rows: 42px 18px;
+  justify-items: center;
+  align-content: center;
+  padding: 4px 2px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+.product_detail__option_choice--color svg {
+  width: 40px;
+  height: 40px;
+  fill: var(--option-color);
+  stroke: var(--option-stroke);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.product_detail__option_choice--color.is_selected {
+  border-color: #7896c9;
+  background: var(--color-soft, #fdf6ff);
+  font-weight: 700;
+}
+.product_detail__option_choice--message {
+  min-height: 36px;
+  padding: 4px 18px;
+  border: 1px solid var(--color-line, #ead5ee);
+  border-radius: 18px;
+  background: #ffffff;
+  font-size: 14px;
+  line-height: 24px;
+  white-space: nowrap;
+}
+.product_detail__option_choice--message.is_selected {
+  border-color: #7896c9;
+  background: var(--color-main, #f6ecf8);
+  font-weight: 700;
+}
+
+.product_detail__option_status {
+  margin: 0;
+  color: #a23b58;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+html.is-dark-favorite .product_detail__option_choice--message.is_selected {
+  color: #ffffff;
 }
 
 .product_detail__option_label {
@@ -4158,6 +4294,58 @@ h3,
   color: #86a1d3;
 }
 
+.password_reset {
+  padding: 56px 32px 64px;
+}
+.password_reset h1 {
+  margin-bottom: 24px;
+}
+.password_reset__description {
+  margin: 0 0 32px;
+  line-height: 1.7;
+}
+.password_reset form {
+  padding-bottom: 32px;
+}
+.password_reset input[type=email] {
+  min-height: 44px;
+  border: 1px solid var(--color-line, #ead5ee);
+  cursor: text;
+}
+.password_reset input[type=email]:focus {
+  outline: 2px solid #86a1d3;
+  outline-offset: 2px;
+}
+.password_reset .account_form__error:empty {
+  display: none;
+}
+.password_reset .auth_primary {
+  margin-top: 24px;
+}
+.password_reset__result {
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 24px;
+  background: #eff7ff;
+  overflow-wrap: anywhere;
+}
+.password_reset__result h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.password_reset__result p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.password_reset__result p:last-child {
+  margin-bottom: 0;
+}
+.password_reset > .auth_secondary {
+  margin-top: 32px;
+}
+
 .account_form {
   display: grid;
   gap: 49px;
@@ -4491,6 +4679,23 @@ h3,
   width: 132px;
   transform: translateX(-50%);
 }
+.app_header__back {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  margin: 0 -7px;
+  background: transparent;
+  cursor: pointer;
+}
+.app_header__back.app_header__icon img {
+  width: 20px;
+  height: 20px;
+}
+.app_header__back:focus-visible {
+  outline: 2px solid #7896c9;
+  outline-offset: 2px;
+}
 .app_header__actions {
   display: flex;
   align-items: center;
@@ -4812,6 +5017,16 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   color: #86a1d3;
 }
 
+.color_change_page__status {
+  min-height: 24px;
+  margin: 16px 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.color_change_page .color_button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
 .color_change_page {
   min-height: 550px;
   padding: 25px 30px 44px;
@@ -6158,6 +6373,29 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 
 .contact_page .app_footer {
   margin-top: auto;
+}
+
+#cancellation-refund {
+  scroll-margin-top: 111px;
+}
+
+.contact__history {
+  margin-top: 40px;
+}
+.contact__history h2 {
+  font-size: 16px;
+}
+.contact__history details {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-line, #ead5ee);
+  font-size: 14px;
+}
+.contact__history summary {
+  cursor: pointer;
+}
+.contact__history p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .rental_history {
@@ -8118,6 +8356,10 @@ details[open] .notice_item__arrow::after {
 }
 .notice_item__body p:last-child {
   margin-bottom: 0;
+}
+.notice_item__message {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .notice_item__box {
   padding: 12px 14px;

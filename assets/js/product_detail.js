@@ -94,6 +94,116 @@
     if (optionsContainer && displayOptions) {
       optionsContainer.innerHTML = "";
 
+      const optionColors = {
+        赤: "#e87678",
+        青: "#769ee8",
+        ピンク: "#e876de",
+        水色: "#76d8e8",
+        オレンジ: "#e8a476",
+        紫: "#b88ae0",
+        黄色: "#efd86a",
+        緑: "#73bf8b",
+        白: "#ffffff",
+        黒: "#393a43",
+      };
+
+      const createOptionChoices = (group, label, select, kind) => {
+        const choices = document.createElement("div");
+        choices.className = `product_detail__option_choices product_detail__option_choices--${kind}`;
+        choices.setAttribute("role", "radiogroup");
+        choices.setAttribute("aria-labelledby", label.id);
+        choices.setAttribute("aria-required", "true");
+        const status = document.createElement("p");
+        status.className = "product_detail__option_status";
+        status.setAttribute("role", "status");
+        status.hidden = true;
+        select.hidden = true;
+        select.tabIndex = -1;
+        select.setAttribute("aria-hidden", "true");
+        label.removeAttribute("for");
+        const buttons = [];
+        [...select.options]
+          .filter((option) => option.value)
+          .forEach((option) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = `product_detail__option_choice product_detail__option_choice--${kind}`;
+            button.dataset.optionValue = option.value;
+            button.setAttribute("role", "radio");
+            button.setAttribute("aria-checked", "false");
+            button.setAttribute("aria-label", option.textContent);
+            button.title = option.textContent;
+            button.disabled = option.disabled;
+            button.tabIndex = -1;
+            const text = document.createElement("span");
+            text.textContent = option.dataset.label;
+            if (kind === "color") {
+              button.style.setProperty("--option-color", optionColors[option.dataset.label]);
+              button.style.setProperty(
+                "--option-stroke",
+                option.dataset.label === "白" ? "#9da1b9" : optionColors[option.dataset.label],
+              );
+              const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+              icon.setAttribute("viewBox", "0 0 24 24");
+              icon.setAttribute("aria-hidden", "true");
+              const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+              use.setAttribute("href", "assets/images/option_heart.svg#heart-shape");
+              icon.append(use);
+              button.append(icon);
+            }
+            button.append(text);
+            button.addEventListener("click", () => {
+              select.value = option.value;
+              select.dispatchEvent(new Event("change", { bubbles: true }));
+            });
+            buttons.push(button);
+            choices.append(button);
+          });
+        const syncChoices = () => {
+          const selected = buttons.find((button) => button.dataset.optionValue === select.value);
+          const tabStop = selected || buttons.find((button) => !button.disabled);
+          buttons.forEach((button) => {
+            const checked = button === selected;
+            button.setAttribute("aria-checked", String(checked));
+            button.classList.toggle("is_selected", checked);
+            button.tabIndex = button === tabStop ? 0 : -1;
+          });
+          status.hidden = true;
+          choices.removeAttribute("aria-invalid");
+        };
+        select.addEventListener("change", syncChoices);
+        select.addEventListener("invalid", (event) => {
+          event.preventDefault();
+          status.textContent = `${label.textContent}を選択してください。`;
+          status.hidden = false;
+          choices.setAttribute("aria-invalid", "true");
+          buttons.find((button) => !button.disabled)?.focus();
+        });
+        choices.addEventListener("keydown", (event) => {
+          if (
+            !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)
+          )
+            return;
+          const available = buttons.filter((button) => !button.disabled);
+          const currentIndex = available.indexOf(event.target);
+          if (currentIndex < 0) return;
+          event.preventDefault();
+          const direction = ["ArrowLeft", "ArrowUp"].includes(event.key) ? -1 : 1;
+          const index =
+            event.key === "Home"
+              ? 0
+              : event.key === "End"
+                ? available.length - 1
+                : (currentIndex + direction + available.length) % available.length;
+          const next = available[index];
+          next.click();
+          next.focus({ preventScroll: true });
+          next.scrollIntoView({ block: "nearest", inline: "nearest" });
+        });
+        syncChoices();
+        group.append(choices, status);
+      };
+
       const createOptionSelect = (groupTitle, optionsList, index, optionConfig = {}) => {
         const group = document.createElement("div");
         group.className = "product_detail__option_group";
@@ -101,6 +211,7 @@
         const label = document.createElement("label");
         label.className = "product_detail__option_label";
         const selectId = `product-option-${index}`;
+        label.id = `${selectId}-label`;
         label.htmlFor = selectId;
         label.textContent = groupTitle;
 
@@ -128,6 +239,7 @@
               optionEl.value = String(item);
               optionEl.textContent = String(item);
             }
+            optionEl.dataset.label = optionEl.textContent;
 
             const matchingVariant = (optionConfig.sourceVariants || product.variants)?.find(
               (variant) => variant.label === optionEl.textContent || variant.id === optionEl.value,
@@ -150,6 +262,15 @@
 
         group.appendChild(label);
         group.appendChild(select);
+        const sourceId = select.dataset.sourceProductId;
+        const isColor =
+          ["bag", "fan_case"].includes(sourceId) &&
+          [...select.options]
+            .filter((option) => option.value)
+            .every((option) => optionColors[option.dataset.label]);
+        if (isColor || ["fan", "binoculars"].includes(sourceId)) {
+          createOptionChoices(group, label, select, isColor ? "color" : "message");
+        }
         return group;
       };
 

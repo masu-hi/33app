@@ -1,4 +1,5 @@
 import { waitForUser, loadUserProfile, isProfileComplete } from "./firebase_user.js";
+import { initializeUserState } from "./firebase_user_state.js";
 
 try {
   const user = await waitForUser();
@@ -11,6 +12,7 @@ try {
     if (!isProfileComplete(profile)) {
       window.location.replace("checkout_profile.html");
     } else {
+      await initializeUserState();
       await import("./app.js");
       document.body.classList.remove("is_product_data_loading");
       document.body.setAttribute("aria-busy", "false");

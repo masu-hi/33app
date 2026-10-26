@@ -142,7 +142,7 @@ test("未読バッジはFirebaseの既読状態と初期案内に一致する", 
     ],
   ]);
   const getCount = vm.runInNewContext(
-    `${app.slice(0, app.indexOf("const updateNoticeCount"))}\ngetUnreadNoticeCount`,
+    `const appStorage = window.userStorage;\n${app.slice(app.indexOf("const NOTICE_READ_STORAGE_KEY"), app.indexOf("const updateNoticeCount"))}\ngetUnreadNoticeCount`,
     {
       window: { userStorage: { getItem: (key) => storage.get(key) || null } },
     },

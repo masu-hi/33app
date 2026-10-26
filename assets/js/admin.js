@@ -59,6 +59,7 @@ import { auth, db } from "./firebase_config.js";
         products[productId] = {
           ...(products[productId] || {}),
           ...firebaseProduct,
+          rentalDays: 4,
           id: productId,
           isPublic: firebaseProduct.isPublished !== false,
           variants: variants.length ? variants : products[productId]?.variants || [],
@@ -86,6 +87,7 @@ import { auth, db } from "./firebase_config.js";
       {
         name: values.name.trim(),
         price: Number(values.price),
+        rentalDays: 4,
         isPublished: values.isPublic === "true",
         stockStatus: values.stockStatus,
         updatedAt: serverTimestamp(),

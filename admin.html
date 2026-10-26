@@ -33,38 +33,10 @@
       <a href="admin.html" aria-current="page">商品管理</a>
       <a href="admin_orders.html">レンタル申込管理</a>
       <a href="admin_waitlist.html">空き待ち管理</a>
+      <a href="admin_contacts.html">お問い合わせ管理</a>
     </nav>
 
     <main class="admin_main">
-      <section class="admin_summary" aria-label="商品状況">
-        <div>
-          <span>登録商品</span>
-          <strong data-admin-total>0</strong>
-        </div>
-        <div>
-          <span>公開中</span>
-          <strong data-admin-public>0</strong>
-        </div>
-        <div>
-          <span>貸出可能</span>
-          <strong data-admin-available>0</strong>
-        </div>
-      </section>
-
-      <section class="admin_daily" aria-labelledby="admin-daily-title">
-        <div class="admin_daily__heading">
-          <div>
-            <h2 id="admin-daily-title">日付別の在庫</h2>
-            <p>確認したい日を選ぶと、その日に貸し出せる在庫が表示されます。</p>
-          </div>
-          <label>
-            確認日
-            <input type="date" data-admin-inventory-date />
-          </label>
-        </div>
-        <div class="admin_daily__list" data-admin-daily-inventory></div>
-      </section>
-
       <section class="admin_products" aria-labelledby="admin-products-title">
         <div class="admin_products__heading">
           <div>
@@ -82,6 +54,35 @@
         <p class="admin_empty" data-admin-empty hidden>
           商品データがありません。product_data.jsを読み込むと表示されます。
         </p>
+      </section>
+
+      <section class="admin_daily" aria-labelledby="admin-daily-title">
+        <div class="admin_daily__heading">
+          <div>
+            <h2 id="admin-daily-title">日付別の在庫</h2>
+            <p>確認したい日を選ぶと、その日に貸し出せる在庫が表示されます。</p>
+          </div>
+          <label>
+            確認日
+            <input type="date" data-admin-inventory-date />
+          </label>
+        </div>
+        <div class="admin_daily__list" data-admin-daily-inventory></div>
+      </section>
+
+      <section class="admin_summary" aria-label="商品状況">
+        <div>
+          <span>登録商品</span>
+          <strong data-admin-total>0</strong>
+        </div>
+        <div>
+          <span>公開中</span>
+          <strong data-admin-public>0</strong>
+        </div>
+        <div>
+          <span>貸出可能</span>
+          <strong data-admin-available>0</strong>
+        </div>
       </section>
 
       <section class="admin_editor" data-admin-editor hidden aria-labelledby="admin-editor-title">

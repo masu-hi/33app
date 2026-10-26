@@ -1,4 +1,21 @@
 const appStorage = window.userStorage;
+let userStateError = null;
+const userStateReady = import("./firebase_user_state.js")
+  .then(async (api) => ((await api.initializeUserState()) ? api : null))
+  .catch((error) => {
+    userStateError = error;
+    console.error("お気に入り・カートを読み込めませんでした。", error);
+    showToast("保存内容を読み込めませんでした。ページを再読み込みしてください。");
+    return null;
+  });
+const getUserState = async () => {
+  const api = await userStateReady;
+  if (userStateError) throw userStateError;
+  return api;
+};
+window.addEventListener("user-state:error", () => {
+  showToast("保存内容との通信が切れました。ページを再読み込みしてください。");
+});
 
 const NOTICE_READ_STORAGE_KEY = "readNoticeIds";
 const DEFAULT_UNREAD_NOTICE_IDS = ["welcome", "return-request"];
@@ -87,7 +104,7 @@ const normalizeEmail = (email) =>
     .toLowerCase();
 const getAccounts = () => JSON.parse(appStorage.getItem("accounts") || "{}");
 const legacyAccount = JSON.parse(appStorage.getItem("registeredAccount") || "{}");
-const activeAccountEmail = normalizeEmail(
+let activeAccountEmail = normalizeEmail(
   sessionStorage.getItem("activeAccountEmail") ||
     (sessionStorage.getItem("isLoggedIn") === "true" ? legacyAccount.email : ""),
 );
@@ -269,20 +286,30 @@ const updateFavoriteColorButtons = (color) => {
 updateFavoriteColorButtons(favoriteColor);
 
 favoriteColorButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    favoriteColor = button.dataset.favoriteColor;
-    const activeAccount = getActiveAccount();
-
-    if (activeAccount) {
-      saveActiveAccount({
-        ...activeAccount,
-        profile: { ...activeAccount.profile, favorite_color: favoriteColor },
+  button.addEventListener("click", async () => {
+    if (button.disabled) return;
+    favoriteColorButtons.forEach((item) => {
+      item.disabled = true;
+    });
+    const status = document.querySelector("[data-color-status]");
+    if (status) status.textContent = "推しカラーを保存しています。";
+    try {
+      const api = await getUserState();
+      if (!api) throw new Error("推しカラーを保存するにはログインしてください。");
+      await api.saveProfile({ favorite_color: button.dataset.favoriteColor });
+      if (status) status.textContent = "推しカラーを変更しました。";
+      showToast("推しカラーを変更しました。");
+    } catch (error) {
+      const message = error.code
+        ? "推しカラーを保存できませんでした。もう一度お試しください。"
+        : error.message;
+      if (status) status.textContent = message;
+      else showToast(message);
+    } finally {
+      favoriteColorButtons.forEach((item) => {
+        item.disabled = false;
       });
     }
-
-    appStorage.setItem("favoriteColor", favoriteColor);
-    applyFavoriteColor(favoriteColor);
-    updateFavoriteColorButtons(favoriteColor);
   });
 });
 
@@ -304,9 +331,20 @@ document.querySelectorAll("[data-nav-icon]").forEach((link) => {
 const accountNameElement = document.querySelector("[data-account-name]");
 
 if (accountNameElement) {
-  const accountName = getActiveAccount()?.profile?.name || "ゲスト";
+  const accountName =
+    getActiveAccount()?.profile?.name ||
+    (sessionStorage.getItem("isLoggedIn") === "true" ? "会員様" : "ゲスト");
   accountNameElement.textContent = accountName;
 }
+
+window.addEventListener("profile:updated", () => {
+  activeAccountEmail = normalizeEmail(sessionStorage.getItem("activeAccountEmail"));
+  const profile = getActiveAccount()?.profile || {};
+  favoriteColor = profile.favorite_color || "ピンク";
+  applyFavoriteColor(favoriteColor);
+  updateFavoriteColorButtons(favoriteColor);
+  if (accountNameElement) accountNameElement.textContent = profile.name || "会員様";
+});
 
 const rentalStatusCounts = document.querySelectorAll("[data-rental-status-count]");
 
@@ -327,6 +365,8 @@ const memberInfo = document.querySelector("[data-member-info]");
 
 if (memberInfo) {
   let profile = getActiveAccount()?.profile || {};
+  let editBaseline = {};
+  let savingProfile = false;
   const memberView = memberInfo.querySelector("[data-member-view]");
   const editButton = memberInfo.querySelector("[data-member-edit]");
   const editForm = memberInfo.querySelector("[data-member-edit-form]");
@@ -334,7 +374,7 @@ if (memberInfo) {
   const formError = memberInfo.querySelector("[data-member-form-error]");
 
   const renderMemberInfo = () => {
-    profile = getActiveAccount()?.profile || profile;
+    profile = getActiveAccount()?.profile || {};
     const memberValues = {
       ...profile,
       birthday: profile.birth_year
@@ -352,24 +392,26 @@ if (memberInfo) {
   };
 
   const showEditForm = () => {
+    renderMemberInfo();
+    editBaseline = { ...profile };
+    editForm.reset();
     if (formError) formError.textContent = "";
     Object.entries(profile).forEach(([name, value]) => {
       const field = editForm.elements.namedItem(name);
       if (field) field.value = value;
     });
     window.setBirthdayFields?.(editForm, profile);
-    if (editForm.elements.current_password) editForm.elements.current_password.value = "";
-    if (editForm.elements.new_password) editForm.elements.new_password.value = "";
-    if (editForm.elements.new_password_confirm) editForm.elements.new_password_confirm.value = "";
     if (memberView) memberView.hidden = true;
     editForm.hidden = false;
     memberIntro.textContent = "登録されている会員情報を変更できます。";
   };
 
   renderMemberInfo();
+  window.addEventListener("profile:updated", renderMemberInfo);
 
   editButton?.addEventListener("click", showEditForm);
   memberInfo.querySelector("[data-member-edit-cancel]")?.addEventListener("click", () => {
+    if (savingProfile) return;
     editForm.hidden = true;
     if (memberView) memberView.hidden = false;
     memberIntro.textContent = "登録されている会員情報を確認できます。";
@@ -419,67 +461,51 @@ if (memberInfo) {
     });
   }
 
-  editForm.addEventListener("submit", (event) => {
+  editForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (savingProfile || !editForm.reportValidity()) return;
     if (formError) formError.textContent = "";
 
     const formData = new FormData(editForm);
     const values = Object.fromEntries(formData.entries());
-    const activeAccount = getActiveAccount();
-
-    const currentPassword = String(values.current_password || "").trim();
-    const newPassword = String(values.new_password || "").trim();
-    const newPasswordConfirm = String(values.new_password_confirm || "").trim();
-
-    let passwordToSave = activeAccount?.password || "";
-
-    if (currentPassword || newPassword || newPasswordConfirm) {
-      if (!currentPassword) {
-        if (formError) formError.textContent = "現在のパスワードを入力してください。";
-        return;
-      }
-
-      if (activeAccount && activeAccount.password !== currentPassword) {
-        if (formError) formError.textContent = "現在のパスワードが正しくありません。";
-        return;
-      }
-
-      if (!newPassword) {
-        if (formError) formError.textContent = "新しいパスワードを入力してください。";
-        return;
-      }
-
-      if (newPassword.length < 8) {
-        if (formError) formError.textContent = "新しいパスワードは8文字以上で入力してください。";
-        return;
-      }
-
-      if (newPassword !== newPasswordConfirm) {
-        if (formError)
-          formError.textContent = "新しいパスワードと確認用パスワードが一致していません。";
-        return;
-      }
-
-      passwordToSave = newPassword;
+    const changes = Object.fromEntries(
+      Object.entries(values).filter(
+        ([key, value]) =>
+          key !== "email" && String(value).trim() !== String(editBaseline[key] ?? "").trim(),
+      ),
+    );
+    const submitButton = editForm.querySelector('[type="submit"]');
+    savingProfile = true;
+    editForm.setAttribute("aria-busy", "true");
+    const controls = [...editForm.querySelectorAll("input, select, button")];
+    controls.forEach((control) => {
+      control.disabled = true;
+    });
+    const originalLabel = submitButton.textContent;
+    submitButton.textContent = "保存しています…";
+    try {
+      const api = await getUserState();
+      if (!api) throw new Error("会員情報を変更するにはログインしてください。");
+      await api.saveProfile(changes, editBaseline);
+      renderMemberInfo();
+      editForm.hidden = true;
+      if (memberView) memberView.hidden = false;
+      memberIntro.textContent = "登録されている会員情報を確認できます。";
+      showToast("会員情報を更新しました。");
+    } catch (error) {
+      if (formError)
+        formError.textContent =
+          error.code && error.code !== "profile/conflict"
+            ? "保存できませんでした。通信環境を確認して、もう一度お試しください。"
+            : error.message;
+    } finally {
+      savingProfile = false;
+      controls.forEach((control) => {
+        control.disabled = false;
+      });
+      editForm.removeAttribute("aria-busy");
+      submitButton.textContent = originalLabel;
     }
-
-    const { current_password, new_password, new_password_confirm, ...profileChanges } = values;
-
-    profile = { ...profile, ...profileChanges, email: profile.email || activeAccountEmail };
-    saveActiveAccount({ ...activeAccount, password: passwordToSave, profile });
-
-    appStorage.setItem("memberProfile", JSON.stringify(profile));
-    if (profile.name) appStorage.setItem("accountName", profile.name);
-    if (profile.favorite_color) {
-      appStorage.setItem("favoriteColor", profile.favorite_color);
-      applyFavoriteColor(profile.favorite_color);
-    }
-
-    renderMemberInfo();
-    editForm.hidden = true;
-    if (memberView) memberView.hidden = false;
-    memberIntro.textContent = "登録されている会員情報を確認できます。";
-    showToast("会員情報を更新しました。");
   });
 }
 
@@ -504,15 +530,6 @@ passwordSettingForm?.addEventListener("submit", (event) => {
   saveActiveAccount({ ...activeAccount, password: values.new_password });
   passwordSettingForm.reset();
   status.textContent = "パスワードを変更しました。";
-});
-
-const contactForm = document.querySelector("[data-contact-form]");
-
-contactForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const status = contactForm.querySelector("[data-contact-status]");
-  contactForm.reset();
-  status.textContent = "お問い合わせを受け付けました。返信までしばらくお待ちください。";
 });
 
 document.querySelector("[data-history-back]")?.addEventListener("click", () => {
@@ -752,6 +769,9 @@ const updateCartCount = (count) => {
 };
 
 updateCartCount(savedCartCount);
+window.addEventListener("cart:updated", () => {
+  updateCartCount(Number(appStorage.getItem("cartCount") || 0));
+});
 
 const productGallery = document.querySelector("[data-product-gallery]");
 
@@ -1130,14 +1150,33 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", async () =>
         selectedReservation.variantSelections[component.productId] = component.defaultVariant;
       }
     });
-    appStorage.setItem("pendingReservation", JSON.stringify(selectedReservation));
   }
 
-  updateCartCount(selectedProductQuantity);
-  button.dataset.cartState = "added";
-  button.classList.add("is_added");
-  button.textContent = "カートを見る";
-  showToast("カートに入れました。");
+  button.disabled = true;
+  try {
+    const api = await getUserState();
+    if (api) {
+      await api.saveCart(
+        selectedReservation,
+        selectedProductQuantity,
+        appStorage.getItem("cartRevision") || "",
+      );
+    } else {
+      appStorage.setItem("pendingReservation", JSON.stringify(selectedReservation));
+      appStorage.removeItem("pendingOrderId");
+      updateCartCount(selectedProductQuantity);
+    }
+    button.dataset.cartState = "added";
+    button.classList.add("is_added");
+    button.textContent = "カートを見る";
+    showToast("カートに入れました。");
+  } catch (error) {
+    showToast(
+      error.code ? "カートを保存できませんでした。もう一度お試しください。" : error.message,
+    );
+  } finally {
+    button.disabled = false;
+  }
 });
 
 document.querySelector("[data-show-reviews]")?.addEventListener("click", () => {
@@ -1149,32 +1188,32 @@ const savedFavorites = new Set(JSON.parse(appStorage.getItem("favoriteProducts")
 const legacyFavoriteProducts = {
   "penlight-simple": {
     name: "ペンライト（シンプルタイプ）",
-    price: "¥800 / 3泊4日〜",
+    price: "¥800 / 4日間〜",
     image: "assets/images/penlight.png",
   },
   "penlight-standard": {
     name: "ペンライト（スタンダード）",
-    price: "¥1,800 / 3日〜",
+    price: "¥1,800 / 4日間〜",
     image: "assets/images/penlight.png",
   },
   "penlight-pair": {
     name: "ペンライト（2点セット）",
-    price: "¥3,200 / 3日〜",
+    price: "¥3,200 / 4日間〜",
     image: "assets/images/penlight.png",
   },
   "penlight-color-change": {
     name: "ペンライト（カラーバリエーション）",
-    price: "¥2,600 / 3日〜",
+    price: "¥2,600 / 4日間〜",
     image: "assets/images/penlight.png",
   },
   "penlight-light": {
     name: "ペンライト（ライトタイプ）",
-    price: "¥1,500 / 3日〜",
+    price: "¥1,500 / 4日間〜",
     image: "assets/images/penlight.png",
   },
   "penlight-long": {
     name: "ペンライト（ロングタイプ）",
-    price: "¥3,600 / 3日〜",
+    price: "¥3,600 / 4日間〜",
     image: "assets/images/penlight.png",
   },
 };
@@ -1307,36 +1346,51 @@ favoriteButtons.forEach((button) => {
   updateFavoriteButton(button, savedFavorites.has(button.dataset.favoriteId));
 });
 
-document.addEventListener("click", (event) => {
+document.addEventListener("click", async (event) => {
   const button = event.target.closest("[data-favorite-id]");
-  if (!button) return;
+  if (!button || button.disabled) return;
 
   const productId = button.dataset.favoriteId;
-  const isFavorite = !savedFavorites.has(productId);
-
-  if (isFavorite) {
-    savedFavorites.add(productId);
-  } else {
-    savedFavorites.delete(productId);
+  button.disabled = true;
+  try {
+    const api = await getUserState();
+    const isFavorite = !savedFavorites.has(productId);
+    if (api) {
+      await api.saveFavorite(productId, isFavorite);
+    } else {
+      if (isFavorite) savedFavorites.add(productId);
+      else savedFavorites.delete(productId);
+      appStorage.setItem("favoriteProducts", JSON.stringify([...savedFavorites]));
+      window.dispatchEvent(new CustomEvent("favorites:updated"));
+    }
+    showToast(isFavorite ? "お気に入りに保存しました。" : "お気に入りから削除しました。");
+  } catch (error) {
+    showToast(
+      error.code ? "お気に入りを保存できませんでした。もう一度お試しください。" : error.message,
+    );
+  } finally {
+    button.disabled = false;
   }
+});
 
-  appStorage.setItem("favoriteProducts", JSON.stringify([...savedFavorites]));
-  document.querySelectorAll(`[data-favorite-id="${productId}"]`).forEach((matchingButton) => {
-    updateFavoriteButton(matchingButton, isFavorite);
-  });
+window.addEventListener("favorites:updated", () => {
+  savedFavorites.clear();
+  JSON.parse(appStorage.getItem("favoriteProducts") || "[]").forEach((id) =>
+    savedFavorites.add(id),
+  );
   renderFavoritesPage();
+  document.querySelectorAll("[data-favorite-id]").forEach((button) => {
+    updateFavoriteButton(button, savedFavorites.has(button.dataset.favoriteId));
+  });
   updateFavoriteCount();
-  showToast(isFavorite ? "お気に入りに保存しました。" : "お気に入りから削除しました。");
 });
 
 const cartPage = document.querySelector("[data-cart-page]");
 
 if (cartPage) {
-  const pendingReservation = JSON.parse(appStorage.getItem("pendingReservation") || "{}");
-  const cartProductData =
-    window.getProductData?.(pendingReservation.productId || "penlight") ||
-    window.PRODUCTS?.[pendingReservation.productId || "penlight"];
-  const unitPrice = Number(cartProductData?.price ?? pendingReservation.price ?? 800);
+  let pendingReservation;
+  let cartProductData;
+  let unitPrice;
   const roundTripShipping = 440;
   const product = document.querySelector("[data-cart-product]");
   const quantityElement = document.querySelector("[data-cart-quantity]");
@@ -1346,22 +1400,36 @@ if (cartPage) {
   const checkout = document.querySelector("[data-cart-checkout]");
   const emptyMessage = document.querySelector("[data-cart-empty]");
   const availabilityMessage = document.querySelector("[data-cart-availability]");
-  const isUnavailable =
-    !cartProductData ||
-    cartProductData.isPublic === false ||
-    cartProductData.stockStatus === "unavailable";
+  let isUnavailable;
+  let savingCart = false;
+  const controls = [
+    ...cartPage.querySelectorAll("[data-cart-decrease], [data-cart-increase], [data-remove-cart]"),
+  ];
   let quantity = Number(appStorage.getItem("cartCount") || 0);
 
-  product.querySelector("img").src =
-    cartProductData?.images?.[0] || pendingReservation.image || "assets/images/penlight.png";
-  product.querySelector("h2").textContent =
-    cartProductData?.name || pendingReservation.product || "ペンライト";
-  product.querySelector("img").alt =
-    `${cartProductData?.name || pendingReservation.product || "商品"}の商品画像`;
-  product.querySelector(".cart_product__details p").textContent =
-    `¥${unitPrice.toLocaleString("ja-JP")} / ${cartProductData?.rentalDays || 4}日間〜`;
-
   const renderCart = () => {
+    pendingReservation = JSON.parse(appStorage.getItem("pendingReservation") || "{}");
+    cartProductData =
+      window.getProductData?.(pendingReservation.productId || "penlight") ||
+      window.PRODUCTS?.[pendingReservation.productId || "penlight"];
+    unitPrice = Number(cartProductData?.price ?? pendingReservation.price ?? 800);
+    isUnavailable =
+      !cartProductData ||
+      cartProductData.isPublic === false ||
+      cartProductData.stockStatus === "unavailable";
+    quantity = Number(appStorage.getItem("cartCount") || 0);
+    controls.forEach((button) => {
+      button.disabled = savingCart;
+    });
+    product.querySelector("img").src =
+      cartProductData?.images?.[0] || pendingReservation.image || "assets/images/penlight.png";
+    product.querySelector("h2").textContent =
+      cartProductData?.name || pendingReservation.product || "ペンライト";
+    product.querySelector("img").alt =
+      `${cartProductData?.name || pendingReservation.product || "商品"}の商品画像`;
+    product.querySelector(".cart_product__details p").textContent =
+      `¥${unitPrice.toLocaleString("ja-JP")} / ${cartProductData?.rentalDays || 4}日間〜`;
+
     const isEmpty = quantity < 1;
     quantityElement.textContent = quantity;
     itemCountElement.textContent = quantity;
@@ -1372,7 +1440,7 @@ if (cartPage) {
     product.hidden = isEmpty;
     summary.hidden = isEmpty;
     emptyMessage.hidden = !isEmpty;
-    const cannotCheckout = isEmpty || isUnavailable;
+    const cannotCheckout = isEmpty || isUnavailable || savingCart;
     checkout.classList.toggle("is_disabled", cannotCheckout);
     checkout.setAttribute("aria-disabled", String(cannotCheckout));
     checkout.tabIndex = cannotCheckout ? -1 : 0;
@@ -1381,24 +1449,43 @@ if (cartPage) {
     updateCartCount(quantity);
   };
 
-  document.querySelector("[data-cart-decrease]").addEventListener("click", () => {
-    quantity = Math.max(0, quantity - 1);
+  const changeCartQuantity = async (nextQuantity) => {
+    if (savingCart) return;
+    savingCart = true;
+    const reservation = pendingReservation;
+    const revision = appStorage.getItem("cartRevision") || "";
     renderCart();
-  });
+    try {
+      const api = await getUserState();
+      if (api) await api.saveCart(reservation, nextQuantity, revision);
+      else {
+        updateCartCount(nextQuantity);
+        appStorage.removeItem("pendingOrderId");
+        if (!nextQuantity) appStorage.removeItem("pendingReservation");
+      }
+      if (!nextQuantity) showToast("カートから削除しました。");
+    } catch (error) {
+      showToast(
+        error.code ? "カートを保存できませんでした。もう一度お試しください。" : error.message,
+      );
+    } finally {
+      savingCart = false;
+      renderCart();
+    }
+  };
 
-  document.querySelector("[data-cart-increase]").addEventListener("click", () => {
-    quantity += 1;
-    renderCart();
-  });
-
-  document.querySelector("[data-remove-cart]").addEventListener("click", () => {
-    quantity = 0;
-    renderCart();
-    showToast("カートから削除しました。");
-  });
+  document
+    .querySelector("[data-cart-decrease]")
+    .addEventListener("click", () => changeCartQuantity(Math.max(0, quantity - 1)));
+  document
+    .querySelector("[data-cart-increase]")
+    .addEventListener("click", () => changeCartQuantity(quantity + 1));
+  document
+    .querySelector("[data-remove-cart]")
+    .addEventListener("click", () => changeCartQuantity(0));
 
   checkout.addEventListener("click", (event) => {
-    if (quantity < 1 || isUnavailable) {
+    if (quantity < 1 || isUnavailable || savingCart) {
       event.preventDefault();
       return;
     }
@@ -1414,6 +1501,7 @@ if (cartPage) {
   });
 
   renderCart();
+  window.addEventListener("cart:updated", renderCart);
 }
 
 const paymentPage = document.querySelector("[data-payment-page]");
@@ -1508,6 +1596,24 @@ if (paymentPage) {
         .join(" ");
       shippingSummary.append(heading, details);
       shippingSection.after(shippingSummary);
+      window.addEventListener("profile:updated", () => {
+        const latest = getActiveAccount()?.profile || {};
+        details.textContent = [
+          latest.name,
+          `〒${latest.postal_first || ""}-${latest.postal_last || ""}`,
+          latest.prefecture,
+          latest.address,
+          latest.building,
+          latest.phone,
+        ]
+          .filter(Boolean)
+          .join(" ");
+        ["name", "postal_first", "postal_last", "prefecture", "address", "building"].forEach(
+          (key) => {
+            checkoutForm.elements[`shipping_${key}`].value = latest[key] || "";
+          },
+        );
+      });
     }
 
     const checkoutAddressSearchBtn = document.querySelector("[data-checkout-address-search]");
@@ -1725,6 +1831,7 @@ const getOrderDraft = () => {
 
   return {
     id: orderId,
+    cartRevision: appStorage.getItem("cartRevision") || "",
     productId: reservation.productId || "penlight",
     product: currentProduct?.name || reservation.product || "ペンライト（シンプルタイプ）",
     image: currentProduct?.images?.[0] || reservation.image || "assets/images/penlight.png",
@@ -1811,6 +1918,15 @@ if (orderConfirmPage) {
   availabilityMessage.textContent =
     "この商品は現在お申し込みいただけません。カートをご確認ください。";
   document.querySelector("[data-place-order]").disabled = cannotPlaceOrder;
+  if (!extensionOrder) {
+    window.addEventListener("cart:updated", () => {
+      if ((appStorage.getItem("cartRevision") || "") === draft.cartRevision) return;
+      document.querySelector("[data-place-order]").disabled = true;
+      availabilityMessage.hidden = false;
+      availabilityMessage.textContent =
+        "カートの内容が変更されました。カートからもう一度お手続きください。";
+    });
+  }
 
   if (extensionOrder) {
     document.title = "延長内容の確認 | おしりーす";
@@ -1829,7 +1945,7 @@ if (orderConfirmPage) {
     document.querySelector(".order_product img").src = draft.image;
     document.querySelector(".order_product img").alt = `${draft.product}の商品画像`;
     document.querySelector(".order_product p").textContent =
-      `¥${Number(draft.subtotal / draft.quantity).toLocaleString("ja-JP")} / 3泊4日〜`;
+      `¥${Number(draft.subtotal / draft.quantity).toLocaleString("ja-JP")} / 4日間〜`;
   }
 
   document.querySelector("[data-order-id]").textContent = draft.id;
@@ -1902,9 +2018,11 @@ if (orderConfirmPage) {
         if (!savedOrder.inventoryReserved) window.reduceStockForOrder?.(savedOrder);
       }
       appStorage.setItem("latestOrder", JSON.stringify(savedOrder));
-      appStorage.setItem("cartCount", "0");
-      appStorage.removeItem("pendingReservation");
-      appStorage.removeItem("pendingOrderId");
+      if (appStorage.getItem("cartRevision") === draft.cartRevision) {
+        appStorage.setItem("cartCount", "0");
+        appStorage.removeItem("pendingReservation");
+        appStorage.removeItem("pendingOrderId");
+      }
       window.location.href = "order_complete.html";
     } catch (error) {
       console.error("注文を保存できませんでした。", error);
@@ -2116,7 +2234,13 @@ if (noticeTabs.length) {
         const details = document.createElement("details");
         const summary = document.createElement("summary");
         const title = document.createElement("h2");
-        const body = document.createElement("p");
+        const header = document.createElement("div");
+        const meta = document.createElement("div");
+        const badge = document.createElement("span");
+        const arrow = document.createElement("span");
+        const unreadDot = document.createElement("span");
+        const body = document.createElement("div");
+        const message = document.createElement("p");
 
         item.className = notice.isRead ? "notice_item" : "notice_item is_unread";
         item.dataset.dynamicNotice = "";
@@ -2126,18 +2250,52 @@ if (noticeTabs.length) {
         item.dataset.noticeId = notice.id;
         details.className = "notice_item__details";
         summary.className = "notice_item__summary";
+        header.className = "notice_item__header";
+        meta.className = "notice_item__meta";
+        badge.className = `notice_badge notice_badge--${item.dataset.category}`;
+        badge.textContent = { info: "お知らせ", order: "注文・配送", important: "重要" }[
+          item.dataset.category
+        ];
+        arrow.className = "notice_item__arrow";
+        arrow.setAttribute("aria-hidden", "true");
+        unreadDot.className = "notice_item__unread_dot";
+        unreadDot.setAttribute("aria-label", "未読");
+        meta.append(badge);
+        const date = new Date(notice.createdAt);
+        if (!Number.isNaN(date.getTime())) {
+          const time = document.createElement("time");
+          time.className = "notice_item__date";
+          time.dateTime = date.toISOString();
+          time.textContent = new Intl.DateTimeFormat("ja-JP", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          })
+            .format(date)
+            .replaceAll("/", ".");
+          meta.append(time);
+        }
+        meta.append(unreadDot);
+        header.append(meta, arrow);
         title.className = "notice_item__title";
         body.className = "notice_item__body";
         title.textContent = notice.title;
-        body.textContent = notice.message;
-        summary.append(title);
+        message.textContent = notice.message;
+        message.className = "notice_item__message";
+        body.append(message);
+        summary.append(header, title);
         details.append(summary, body);
-        if (notice.productId) {
+        if (notice.productId || notice.contactId) {
+          const action = document.createElement("div");
+          action.className = "notice_item__action";
           const link = document.createElement("a");
           link.className = "notice_item__link";
-          link.href = `product_detail.html?id=${encodeURIComponent(notice.productId)}`;
-          link.textContent = "商品を確認する";
-          details.append(link);
+          link.href = notice.contactId
+            ? "contact.html"
+            : `product_detail.html?id=${encodeURIComponent(notice.productId)}`;
+          link.textContent = notice.contactId ? "お問い合わせを確認する ›" : "商品を確認する ›";
+          action.append(link);
+          body.append(action);
         }
         details.open = openIds.has(notice.id);
         item.append(details);

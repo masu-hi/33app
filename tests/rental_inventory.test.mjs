@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
+import { webcrypto } from "node:crypto";
 
 const logic = await import(
   `data:text/javascript,${encodeURIComponent(readFileSync(new URL("../assets/js/rental_inventory.js", import.meta.url), "utf8"))}`
@@ -22,6 +23,7 @@ const fixture = () => {
     return { id: path.split("/").at(-1), exists: () => data !== undefined, data: () => data };
   };
   const context = {
+    crypto: webcrypto,
     ...logic,
     window: {
       PRODUCTS: { penlight: { id: "penlight", variants: [{ id: "default" }] } },
@@ -78,6 +80,39 @@ const order = (id, start = "2026-11-01") => ({
   customer: {},
   variantSelections: { penlight: "default" },
   status: "配送待ち",
+});
+
+test("注文と同じトランザクションで本人のカートを空にする", async () => {
+  const { api, store } = fixture();
+  const cartPath = "users/test-user/cart/current";
+  store.set(cartPath, { revision: "cart-1", quantity: 1, reservation: { productId: "penlight" } });
+  const draft = { ...order("cart-order"), cartRevision: "cart-1" };
+  await api.saveRentalOrder(draft);
+  assert.equal(store.get(cartPath).quantity, 0);
+  assert.equal(store.get(cartPath).reservation, null);
+  assert.notEqual(store.get(cartPath).revision, "cart-1");
+  // A retry must not delete a new item added after the order was placed.
+  store.set(cartPath, { revision: "cart-2", quantity: 2 });
+  await api.saveRentalOrder(draft);
+  assert.equal(store.get(cartPath).quantity, 2);
+});
+
+test("別端末でカートが変わったら注文も在庫確保も行わない", async () => {
+  const { api, store } = fixture();
+  store.set("users/test-user/cart/current", {
+    revision: "new",
+    quantity: 1,
+    reservation: { productId: "penlight" },
+  });
+  await assert.rejects(
+    api.saveRentalOrder({ ...order("stale"), cartRevision: "old" }),
+    /カートの内容が変更/,
+  );
+  assert.equal(store.has("orders/stale"), false);
+  assert.equal(
+    [...store.keys()].some((key) => key.startsWith("inventoryDays/")),
+    false,
+  );
 });
 
 test("同時注文でも1点の在庫に1件だけ確保する", async () => {
