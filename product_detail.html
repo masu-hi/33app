@@ -185,7 +185,9 @@
             <div class="rental_calendar__controls">
               <button type="button" aria-label="前の月を表示" data-calendar-previous>‹</button>
               <p class="rental_calendar__month" data-calendar-month aria-live="polite"></p>
-              <button type="button" aria-label="次の月を表示" data-calendar-next>›</button>
+              <button type="button" aria-label="次の月を表示" data-calendar-next>
+                <span aria-hidden="true">›</span>
+              </button>
             </div>
             <div class="rental_calendar__weekdays" aria-hidden="true">
               <span>日</span>
@@ -204,13 +206,17 @@
               レンタル可能
             </span>
             <span class="is_unavailable">
-              <i class="rental_calendar__legend_mark rental_calendar__legend_mark--unavailable">
-                ×
-              </i>
+              <i
+                class="rental_calendar__legend_mark rental_calendar__legend_mark--unavailable"
+                aria-hidden="true"
+              ></i>
               レンタル不可
             </span>
             <span class="is_waitlist">
-              <i class="rental_calendar__legend_mark rental_calendar__legend_mark--waitlist">△</i>
+              <i
+                class="rental_calendar__legend_mark rental_calendar__legend_mark--waitlist"
+                aria-hidden="true"
+              ></i>
               空き待ち可能
             </span>
             <span>
@@ -238,7 +244,7 @@
         <nav aria-label="フッターナビゲーション">
           <a href="about.html">お店について</a>
           <a href="usage_guide.html">使い方ガイド</a>
-          <a href="#">利用規約</a>
+          <a href="terms.html">利用規約</a>
           <a href="privacy_policy.html">個人情報保護方針</a>
         </nav>
         <small>Tokimekilab&copy;2026</small>
@@ -247,7 +253,7 @@
         <a
           href="home.html"
           data-nav-icon
-          data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html"
+          data-pages="home.html,artist_search.html,goods_search.html"
         >
           <img
             src="assets/images/home-icon--outline.png"

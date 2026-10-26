@@ -21,52 +21,26 @@
     <main class="app_shell">
       <header class="app_header">
         <div class="app_header__start">
-          <a
-            class="app_header__icon"
-            href="color_change.html"
-            aria-label="設定"
-            data-nav-icon
-            data-pages="color_change.html,password_setting.html,credit_card.html"
-          >
-            <img
-              src="assets/images/setting-icon--outline.png"
-              data-outline="assets/images/setting-icon--outline.png"
-              data-filled="assets/images/setting-icon--filled.png"
-              alt=""
-            />
+          <a class="app_header__icon" href="color_change.html" aria-label="設定" data-nav-icon
+            data-pages="color_change.html,password_setting.html,credit_card.html">
+            <img src="assets/images/setting-icon--outline.png" data-outline="assets/images/setting-icon--outline.png"
+              data-filled="assets/images/setting-icon--filled.png" alt="" />
           </a>
-          <a
-            class="app_header__icon"
-            href="countdown.html"
-            aria-label="カウントダウン"
-            data-nav-icon
-            data-pages="countdown.html"
-          >
-            <img
-              src="assets/images/timer-icon--outline.png"
-              data-outline="assets/images/timer-icon--outline.png"
-              data-filled="assets/images/timer-icon--filled.png"
-              alt=""
-            />
+          <a class="app_header__icon" href="countdown.html" aria-label="カウントダウン" data-nav-icon
+            data-pages="countdown.html">
+            <img src="assets/images/timer.png" data-outline="assets/images/timer.png"
+              data-filled="assets/images/timer.png" alt="" />
           </a>
         </div>
         <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
         <div class="app_header__actions">
           <a href="notice.html" aria-label="通知" data-nav-icon data-pages="notice.html">
-            <img
-              src="assets/images/notice-icon--outline.png"
-              data-outline="assets/images/notice-icon--outline.png"
-              data-filled="assets/images/notice-icon--filled.png"
-              alt=""
-            />
+            <img src="assets/images/notice-icon--outline.png" data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png" alt="" />
           </a>
           <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
-            <img
-              src="assets/images/cart-icon--outline.png"
-              data-outline="assets/images/cart-icon--outline.png"
-              data-filled="assets/images/cart-icon--filled.png"
-              alt=""
-            />
+            <img src="assets/images/cart-icon--outline.png" data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png" alt="" />
           </a>
         </div>
       </header>
@@ -169,7 +143,7 @@
         </div>
       </dialog>
 
-      <nav class="bottom_nav bottom_nav--two_items" aria-label="下部ナビゲーション">
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
         <a
           href="home.html"
           data-nav-icon
@@ -182,6 +156,11 @@
             alt=""
           />
           ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
         </a>
         <a href="mypage.html" data-nav-icon data-pages="mypage.html">
           <img

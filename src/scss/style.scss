@@ -12,7 +12,7 @@
 
 $main: var(--color-main, #f6ecf8);
 $soft: var(--color-soft, #fdf6ff);
-$gradient_end: var(--color-gradient-end, #edeefa);
+$gradient_end: var(--color-gradient-end, #eff7ff);
 $gradient_line: var(--color-gradient-line, #cfd3ea);
 $gradient_text: var(--color-gradient-text, #353b60);
 $theme_line: var(--color-line, #ead5ee);
@@ -848,7 +848,7 @@ h3,
   }
 
   .is_waitlist {
-    background: #fff8e8;
+    background: #f1f7ff;
   }
 
   span:last-child {
@@ -868,8 +868,7 @@ h3,
 
   &--unavailable {
     border: 0;
-    font-size: 20px;
-    line-height: 14px;
+    background: #d9dce8;
   }
 
   &--selected {
@@ -878,8 +877,9 @@ h3,
   }
 
   &--waitlist {
-    color: #8a6a22;
-    border-color: #c7a95d;
+    border-color: #7382b8;
+    border-style: dashed;
+    background: #f1f7ff;
   }
 }
 
@@ -1905,9 +1905,9 @@ h3,
   text-decoration: none;
 
   &--goods {
-    border-color: $gradient_line;
+    border-color: #c7e3fc;
     color: $gradient_text;
-    background: $gradient_end;
+    background: #eff7ff;
   }
 
   &__visual {
@@ -2446,8 +2446,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   padding: 28px 30px 65px;
   color: $text;
   font-family: $body;
-  font-size: 9px;
-  line-height: 1.35;
+  font-size: 12px;
+  line-height: 18px;
 
   h1,
   h2 {
@@ -2465,7 +2465,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   &__date {
     margin: 26px 0 27px;
     text-align: right;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   > p {
@@ -2606,6 +2606,17 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
     font-size: 14px;
   }
 
+  &__form select[name="favorite_color"],
+  &__form select[name="prefecture"] {
+    width: 100%;
+    padding-right: 52px;
+    appearance: none;
+    background-image: url("../../assets/images/chevron_down.svg");
+    background-position: right 28px center;
+    background-repeat: no-repeat;
+    -webkit-appearance: none;
+  }
+
   &__birth_fields div {
     display: grid;
     grid-template-columns: 1fr 14px 1fr 14px 1fr 14px;
@@ -2618,6 +2629,12 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
     min-width: 0;
     padding: 8px 4px;
     text-align: center;
+    text-indent: -8px;
+    appearance: none;
+    background-image: url("../../assets/images/chevron_down.svg");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    -webkit-appearance: none;
   }
 
   &__birth_fields span,
@@ -2974,7 +2991,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 
   &--goods {
     color: $gradient_text;
-    background: $gradient_end;
+    background: #eff7ff;
   }
 
   .search_choice__visual {
@@ -3074,7 +3091,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 
 .goods_content {
-  background: var(--color-gradient-end, #eff7ff);
+  background: #eff7ff;
 }
 
 .goods_grid {
@@ -3087,7 +3104,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
     min-height: 150px;
     align-content: center;
     justify-items: center;
-    border: 1px solid $gradient_line;
+    border: 1px solid #c7e3fc;
     border-radius: 16px;
     color: $text;
     background: $white;
@@ -4154,6 +4171,15 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 
   > label select {
     font-size: 14px;
+  }
+
+  > label select[name="shipping_prefecture"] {
+    padding-right: 52px;
+    appearance: none;
+    background-image: url("../../assets/images/chevron_down.svg");
+    background-position: right 28px center;
+    background-repeat: no-repeat;
+    -webkit-appearance: none;
   }
 
   .checkout_postal_fields {
@@ -5341,6 +5367,11 @@ html.is-dark-favorite
 
   button:last-child {
     justify-self: end;
+
+    span {
+      display: block;
+      transform: translate(1px, -2px);
+    }
   }
 
   button:disabled {

@@ -2652,6 +2652,12 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
   min-height: 1024px;
   background: #eff7ff;
 }
+.countdown_add_page .app_header .countdown_add__back {
+  position: relative;
+  top: auto;
+  left: auto;
+  z-index: 1;
+}
 .countdown_add_page .bottom_nav {
   bottom: 180px;
 }
@@ -3813,7 +3819,7 @@ h3,
   background: #f1f7ff;
 }
 .rental_calendar__legend .is_waitlist {
-  background: #fff8e8;
+  background: #f1f7ff;
 }
 .rental_calendar__legend span:last-child {
   background: #e8fae4;
@@ -3831,16 +3837,16 @@ h3,
 }
 .rental_calendar__legend_mark--unavailable {
   border: 0;
-  font-size: 20px;
-  line-height: 14px;
+  background: #d9dce8;
 }
 .rental_calendar__legend_mark--selected {
   border: 0;
   background: #5667aa;
 }
 .rental_calendar__legend_mark--waitlist {
-  color: #8a6a22;
-  border-color: #c7a95d;
+  border-color: #7382b8;
+  border-style: dashed;
+  background: #f1f7ff;
 }
 
 .rental_calendar__period {
@@ -4779,9 +4785,9 @@ h3,
   text-decoration: none;
 }
 .search_choice--goods {
-  border-color: var(--color-gradient-line, #cfd3ea);
+  border-color: #c7e3fc;
   color: var(--color-gradient-text, #353b60);
-  background: var(--color-gradient-end, #edeefa);
+  background: #eff7ff;
 }
 .search_choice__visual {
   display: grid;
@@ -5249,8 +5255,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   padding: 28px 30px 65px;
   color: #353b60;
   font-family: "Noto Sans JP", sans-serif;
-  font-size: 9px;
-  line-height: 1.35;
+  font-size: 12px;
+  line-height: 18px;
 }
 .privacy_policy h1,
 .privacy_policy h2 {
@@ -5266,7 +5272,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .privacy_policy__date {
   margin: 26px 0 27px;
   text-align: right;
-  font-size: 11px;
+  font-size: 12px;
 }
 .privacy_policy > p {
   margin: 0;
@@ -5383,6 +5389,15 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   font-family: "Noto Sans JP", sans-serif;
   font-size: 14px;
 }
+.member_info__form select[name=favorite_color], .member_info__form select[name=prefecture] {
+  width: 100%;
+  padding-right: 52px;
+  appearance: none;
+  background-image: url("../../assets/images/chevron_down.svg");
+  background-position: right 28px center;
+  background-repeat: no-repeat;
+  -webkit-appearance: none;
+}
 .member_info__birth_fields div {
   display: grid;
   grid-template-columns: 1fr 14px 1fr 14px 1fr 14px;
@@ -5393,6 +5408,12 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   min-width: 0;
   padding: 8px 4px;
   text-align: center;
+  text-indent: -8px;
+  appearance: none;
+  background-image: url("../../assets/images/chevron_down.svg");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  -webkit-appearance: none;
 }
 .member_info__birth_fields span, .member_info__postal_fields b {
   font-weight: 400;
@@ -5701,7 +5722,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 .search_intro--goods {
   color: var(--color-gradient-text, #353b60);
-  background: var(--color-gradient-end, #edeefa);
+  background: #eff7ff;
 }
 .search_intro .search_choice__visual {
   margin: 0;
@@ -5815,7 +5836,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 
 .goods_content {
-  background: var(--color-gradient-end, #eff7ff);
+  background: #eff7ff;
 }
 
 .goods_grid {
@@ -5828,7 +5849,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   min-height: 150px;
   align-content: center;
   justify-items: center;
-  border: 1px solid var(--color-gradient-line, #cfd3ea);
+  border: 1px solid #c7e3fc;
   border-radius: 16px;
   color: #353b60;
   background: #fff;
@@ -5991,7 +6012,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 .results_header .app_search {
   border-color: var(--color-gradient-line, #cfd3ea);
-  background: var(--color-gradient-end, #edeefa);
+  background: var(--color-gradient-end, #eff7ff);
 }
 
 .sort_tabs {
@@ -6205,7 +6226,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 
 .rental_summary {
   padding: 40px 30px;
-  background: linear-gradient(135deg, var(--color-main, #f6ecf8) 0%, var(--color-gradient-end, #edeefa) 100%);
+  background: linear-gradient(135deg, var(--color-main, #f6ecf8) 0%, var(--color-gradient-end, #eff7ff) 100%);
 }
 .rental_summary__card {
   display: block;
@@ -6771,6 +6792,14 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 .checkout_shipping_fields > label select {
   font-size: 14px;
+}
+.checkout_shipping_fields > label select[name=shipping_prefecture] {
+  padding-right: 52px;
+  appearance: none;
+  background-image: url("../../assets/images/chevron_down.svg");
+  background-position: right 28px center;
+  background-repeat: no-repeat;
+  -webkit-appearance: none;
 }
 .checkout_shipping_fields .checkout_postal_fields {
   min-width: 0;
@@ -7576,7 +7605,7 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
   text-decoration: none;
 }
 .rental_history_item__extension {
-  background: var(--color-gradient-end, #edeefa);
+  background: var(--color-gradient-end, #eff7ff);
 }
 .rental_history_item__extension[aria-disabled=true] {
   color: #8f94a8;
@@ -7832,6 +7861,10 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
 }
 .rental_calendar__controls button:last-child {
   justify-self: end;
+}
+.rental_calendar__controls button:last-child span {
+  display: block;
+  transform: translate(1px, -2px);
 }
 .rental_calendar__controls button:disabled {
   cursor: not-allowed;
