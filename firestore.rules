@@ -119,6 +119,35 @@ service cloud.firestore {
       );
     }
 
+    match /contacts/{contactId} {
+      allow create: if signedIn()
+        && request.auth.token.firebase.sign_in_provider != "anonymous"
+        && request.resource.data.keys().hasOnly(["userId", "senderName", "senderEmail", "type", "message", "status", "createdAt"])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.senderEmail == request.auth.token.email
+        && request.resource.data.senderName is string
+        && request.resource.data.senderName.size() <= 200
+        && request.resource.data.type in ["商品について", "レンタルについて", "配送・返却について", "アカウントについて", "その他"]
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 5000
+        && request.resource.data.status == "pending"
+        && request.resource.data.createdAt is string;
+      allow read: if isAdmin() || isOwner(resource.data.userId);
+      allow get: if signedIn() && !exists(/databases/$(database)/documents/contacts/$(contactId));
+      allow update: if isAdmin()
+        && resource.data.status == "pending"
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["status", "reply", "repliedAt", "repliedBy"])
+        && request.resource.data.status == "replied"
+        && request.resource.data.reply is string
+        && request.resource.data.reply.size() > 0
+        && request.resource.data.reply.size() <= 5000
+        && request.resource.data.repliedBy == request.auth.uid
+        && request.resource.data.repliedAt is string
+        && getAfter(/databases/$(database)/documents/notifications/$("contact-" + contactId)).data.userId == resource.data.userId;
+      allow delete: if false;
+    }
+
     match /notifications/{notificationId} {
       allow create, delete: if isAdmin();
       allow read: if isAdmin()

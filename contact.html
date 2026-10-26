@@ -12,7 +12,8 @@
     />
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/user_storage.js"></script>
-    <script src="assets/js/app.js" defer></script>
+    <script src="assets/js/theme_init.js"></script>
+    <script type="module" src="assets/js/contact.js"></script>
   </head>
   <body class="mobile_app">
     <main class="app_shell contact_page">
@@ -54,7 +55,10 @@
 
       <section class="contact" aria-labelledby="contact-title">
         <h1 id="contact-title">お問い合わせ</h1>
-        <p class="contact__intro">ご質問やご相談は、以下のフォームからお問い合わせください。</p>
+        <p class="contact__intro">
+          ご質問やご相談は、以下のフォームからお問い合わせください。返信はログイン中のアカウントのお知らせに届きます。
+        </p>
+        <p data-contact-login hidden><a href="login.html">ログインしてお問い合わせする</a></p>
         <form class="contact__form" data-contact-form>
           <label>
             お問い合わせの種類
@@ -69,11 +73,16 @@
           </label>
           <label>
             お問い合わせ内容
-            <textarea name="message" required></textarea>
+            <textarea name="message" maxlength="5000" required></textarea>
           </label>
           <button type="submit">送信する</button>
           <p class="contact__status" data-contact-status role="status" aria-live="polite"></p>
         </form>
+        <section class="contact__history" aria-labelledby="contact-history-title">
+          <h2 id="contact-history-title">送信したお問い合わせ</h2>
+          <div data-contact-history></div>
+          <p data-contact-history-status role="status"></p>
+        </section>
       </section>
 
       <footer class="app_footer">

@@ -1366,6 +1366,70 @@ h3,
   }
 }
 
+.password_reset {
+  padding: 56px 32px 64px;
+
+  h1 {
+    margin-bottom: 24px;
+  }
+
+  &__description {
+    margin: 0 0 32px;
+    line-height: 1.7;
+  }
+
+  form {
+    padding-bottom: 32px;
+  }
+
+  input[type="email"] {
+    min-height: 44px;
+    border: 1px solid $theme_line;
+    cursor: text;
+
+    &:focus {
+      outline: 2px solid #86a1d3;
+      outline-offset: 2px;
+    }
+  }
+
+  .account_form__error:empty {
+    display: none;
+  }
+
+  .auth_primary {
+    margin-top: 24px;
+  }
+
+  &__result {
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 24px;
+    background: $sub;
+    overflow-wrap: anywhere;
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    p {
+      margin: 0 0 12px;
+      font-size: 14px;
+      line-height: 1.7;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  > .auth_secondary {
+    margin-top: 32px;
+  }
+}
+
 .account_form {
   display: grid;
   gap: 49px;
@@ -1730,6 +1794,26 @@ h3,
     transform: translateX(-50%);
   }
 
+  &__back {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    margin: 0 -7px;
+    background: transparent;
+    cursor: pointer;
+
+    &.app_header__icon img {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #7896c9;
+      outline-offset: 2px;
+    }
+  }
+
   &__actions {
     display: flex;
     align-items: center;
@@ -2090,6 +2174,17 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 
 .color_change_page {
+  &__status {
+    min-height: 24px;
+    margin: 16px 0 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .color_button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
   min-height: 550px;
   padding: 25px 30px 44px;
   background: $white;
@@ -3606,6 +3701,33 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 
 .contact_page .app_footer {
   margin-top: auto;
+}
+
+#cancellation-refund {
+  scroll-margin-top: 111px;
+}
+
+.contact__history {
+  margin-top: 40px;
+
+  h2 {
+    font-size: 16px;
+  }
+
+  details {
+    padding: 16px 0;
+    border-bottom: 1px solid $theme_line;
+    font-size: 14px;
+  }
+
+  summary {
+    cursor: pointer;
+  }
+
+  p {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
 }
 
 .rental_history {
@@ -5817,6 +5939,11 @@ html.is-dark-favorite
         margin-bottom: 0;
       }
     }
+  }
+
+  &__message {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
 
   &__box {

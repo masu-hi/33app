@@ -73,6 +73,18 @@ export const saveRentalOrder = async (order) => {
         throw new Error("注文内容が変更されています。カートをご確認ください。");
       return { ...snapshot.data(), id: snapshot.id };
     }
+    const cartReference = order.cartRevision ? doc(db, "users", user.uid, "cart", "current") : null;
+    if (cartReference) {
+      const cart = (await transaction.get(cartReference)).data();
+      if (
+        !cart ||
+        cart.revision !== order.cartRevision ||
+        cart.quantity !== order.quantity ||
+        cart.reservation?.productId !== order.productId
+      ) {
+        throw new Error("カートの内容が変更されています。カートからもう一度お手続きください。");
+      }
+    }
     const productSnapshot = await transaction.get(doc(db, "products", order.productId));
     if (
       !productSnapshot.exists() ||
@@ -96,6 +108,14 @@ export const saveRentalOrder = async (order) => {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
+    if (cartReference) {
+      transaction.set(cartReference, {
+        reservation: null,
+        quantity: 0,
+        revision: crypto.randomUUID(),
+        updatedAt: serverTimestamp(),
+      });
+    }
     return saved;
   });
 };

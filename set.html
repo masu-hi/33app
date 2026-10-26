@@ -19,20 +19,14 @@
   <body class="mobile_app">
     <main class="app_shell product_detail_page">
       <header class="app_header">
-        <a
-          class="app_header__icon"
-          href="color_change.html"
-          aria-label="設定"
-          data-nav-icon
-          data-pages="color_change.html,password_setting.html,credit_card.html"
+        <button
+          class="app_header__icon app_header__back"
+          type="button"
+          aria-label="前の画面へ戻る"
+          data-history-back
         >
-          <img
-            src="assets/images/setting-icon--outline.png"
-            data-outline="assets/images/setting-icon--outline.png"
-            data-filled="assets/images/setting-icon--filled.png"
-            alt=""
-          />
-        </a>
+          <img src="assets/images/back.png" alt="" />
+        </button>
         <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
         <div class="app_header__actions">
           <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
@@ -56,9 +50,6 @@
 
       <section class="results_header product_detail_header">
         <div class="results_header__title">
-          <button type="button" aria-label="前の画面へ戻る" data-history-back>
-            <img src="assets/images/back.png" alt="" />
-          </button>
           <h1>商品詳細</h1>
         </div>
       </section>
@@ -143,7 +134,7 @@
             </button>
           </div>
           <h2 data-product-detail-name>ペンライト（シンプルタイプ）</h2>
-          <p class="product_detail__price" data-product-detail-price>¥800 / 3泊4日〜</p>
+          <p class="product_detail__price" data-product-detail-price>¥800 / 4日間〜</p>
           <p class="product_detail__fee_note">
             ※別途、一律送料440円（税込）がかかります。
             <br />

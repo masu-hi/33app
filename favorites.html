@@ -12,10 +12,15 @@
     />
     <link rel="stylesheet" href="src/scss/style.css" />
     <script src="assets/js/user_storage.js"></script>
+    <script src="assets/js/theme_init.js"></script>
     <script src="assets/js/product_data.js" defer></script>
-    <script src="assets/js/app.js" defer></script>
+    <script type="module" src="assets/js/firebase_app_bootstrap.js"></script>
   </head>
-  <body class="mobile_app">
+  <body class="mobile_app is_product_data_loading" aria-busy="true">
+    <div class="product_data_loading" data-product-data-loading role="status">
+      <span class="product_data_loading__spinner" aria-hidden="true"></span>
+      お気に入りを読み込んでいます
+    </div>
     <main class="app_shell favorites_page" data-favorites-page>
       <header class="mypage_header">
         <div class="mypage_header__actions">

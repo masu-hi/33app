@@ -2,6 +2,7 @@
   if (window.userStorage) return;
   const personalKeys = new Set([
     "cartCount",
+    "cartRevision",
     "pendingReservation",
     "pendingOrderId",
     "rentalOrders",

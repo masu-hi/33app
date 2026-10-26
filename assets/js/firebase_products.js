@@ -35,6 +35,7 @@ const syncProducts = async () => {
     window.PRODUCTS[snapshot.id] = {
       ...(window.PRODUCTS[snapshot.id] || {}),
       ...firebaseProduct,
+      rentalDays: 4,
       id: snapshot.id,
       isPublic: true,
     };

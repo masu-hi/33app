@@ -1,8 +1,9 @@
 import { loadFirebaseProducts } from "./firebase_products.js";
+import { initializeUserState } from "./firebase_user_state.js";
 
-await loadFirebaseProducts();
 let initialized = false;
 try {
+  await Promise.all([loadFirebaseProducts(), initializeUserState()]);
   if (
     document.querySelector(
       "[data-order-confirm], [data-rental-history], [data-cancellation-confirm], [data-extension-page], [data-rental-status-count]",
