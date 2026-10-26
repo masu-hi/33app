@@ -3809,7 +3809,7 @@ h3,
   background: #f1f7ff;
 }
 .rental_calendar__legend .is_waitlist {
-  background: #fff8e8;
+  background: #f1f7ff;
 }
 .rental_calendar__legend span:last-child {
   background: #e8fae4;
@@ -3827,16 +3827,16 @@ h3,
 }
 .rental_calendar__legend_mark--unavailable {
   border: 0;
-  font-size: 20px;
-  line-height: 14px;
+  background: #d9dce8;
 }
 .rental_calendar__legend_mark--selected {
   border: 0;
   background: #5667aa;
 }
 .rental_calendar__legend_mark--waitlist {
-  color: #8a6a22;
-  border-color: #c7a95d;
+  border-color: #7382b8;
+  border-style: dashed;
+  background: #f1f7ff;
 }
 
 .rental_calendar__period {
@@ -5245,8 +5245,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   padding: 28px 30px 65px;
   color: #353b60;
   font-family: "Noto Sans JP", sans-serif;
-  font-size: 9px;
-  line-height: 1.35;
+  font-size: 12px;
+  line-height: 18px;
 }
 .privacy_policy h1,
 .privacy_policy h2 {
@@ -5262,7 +5262,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .privacy_policy__date {
   margin: 26px 0 27px;
   text-align: right;
-  font-size: 11px;
+  font-size: 12px;
 }
 .privacy_policy > p {
   margin: 0;
@@ -5379,6 +5379,15 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   font-family: "Noto Sans JP", sans-serif;
   font-size: 14px;
 }
+.member_info__form select[name=favorite_color], .member_info__form select[name=prefecture] {
+  width: 100%;
+  padding-right: 52px;
+  appearance: none;
+  background-image: url("../../assets/images/chevron_down.svg");
+  background-position: right 28px center;
+  background-repeat: no-repeat;
+  -webkit-appearance: none;
+}
 .member_info__birth_fields div {
   display: grid;
   grid-template-columns: 1fr 14px 1fr 14px 1fr 14px;
@@ -5389,6 +5398,12 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   min-width: 0;
   padding: 8px 4px;
   text-align: center;
+  text-indent: -8px;
+  appearance: none;
+  background-image: url("../../assets/images/chevron_down.svg");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  -webkit-appearance: none;
 }
 .member_info__birth_fields span, .member_info__postal_fields b {
   font-weight: 400;
@@ -6768,6 +6783,14 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .checkout_shipping_fields > label select {
   font-size: 14px;
 }
+.checkout_shipping_fields > label select[name=shipping_prefecture] {
+  padding-right: 52px;
+  appearance: none;
+  background-image: url("../../assets/images/chevron_down.svg");
+  background-position: right 28px center;
+  background-repeat: no-repeat;
+  -webkit-appearance: none;
+}
 .checkout_shipping_fields .checkout_postal_fields {
   min-width: 0;
 }
@@ -7828,6 +7851,10 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
 }
 .rental_calendar__controls button:last-child {
   justify-self: end;
+}
+.rental_calendar__controls button:last-child span {
+  display: block;
+  transform: translate(1px, -2px);
 }
 .rental_calendar__controls button:disabled {
   cursor: not-allowed;
