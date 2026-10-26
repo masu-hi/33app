@@ -1,130 +1,116 @@
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>カート | おしりーす</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <script src="assets/js/user_storage.js"></script>
-    <script src="assets/js/theme_init.js"></script>
-    <link rel="stylesheet" href="src/scss/style.css" />
-    <script src="assets/js/product_data.js" defer></script>
-    <script type="module" src="assets/js/firebase_app_bootstrap.js"></script>
-  </head>
-  <body class="mobile_app is_product_data_loading" aria-busy="true">
-    <div class="product_data_loading" data-product-data-loading role="status">
-      <span class="product_data_loading__spinner" aria-hidden="true"></span>
-      商品情報を読み込んでいます
-    </div>
-    <main class="app_shell cart_page" data-cart-page>
-      <header class="mypage_header">
-        <button type="button" aria-label="前の画面へ戻る" data-history-back>
-          <img src="assets/images/back.png" alt="" />
-        </button>
-        <p class="cart_page__header_title">カート</p>
-        <div class="mypage_header__actions">
-          <a href="#" aria-label="通知">
-            <img src="assets/images/notice-icon--outline.png" alt="" />
-          </a>
-          <a href="cart.html" aria-label="カート" aria-current="page">
-            <img src="assets/images/cart-icon--filled.png" alt="" />
-          </a>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>カート | おしりーす</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <script src="assets/js/user_storage.js"></script>
+  <script src="assets/js/theme_init.js"></script>
+  <link rel="stylesheet" href="src/scss/style.css" />
+  <script src="assets/js/product_data.js" defer></script>
+  <script type="module" src="assets/js/firebase_app_bootstrap.js"></script>
+</head>
+
+<body class="mobile_app is_product_data_loading" aria-busy="true">
+  <div class="product_data_loading" data-product-data-loading role="status">
+    <span class="product_data_loading__spinner" aria-hidden="true"></span>
+    商品情報を読み込んでいます
+  </div>
+  <main class="app_shell cart_page" data-cart-page>
+    <header class="mypage_header">
+      <button type="button" aria-label="前の画面へ戻る" data-history-back>
+        <img src="assets/images/back.png" alt="" />
+      </button>
+      <p class="cart_page__header_title">カート</p>
+      <div class="mypage_header__actions">
+        <a href="#" aria-label="通知">
+          <img src="assets/images/notice-icon--outline.png" alt="" />
+        </a>
+        <a href="cart.html" aria-label="カート" aria-current="page">
+          <img src="assets/images/cart-icon--filled.png" alt="" />
+        </a>
+      </div>
+    </header>
+
+    <section class="cart_page__content">
+      <h1>
+        カートに入っている商品：
+        <span data-cart-item-count>0</span>
+        点
+      </h1>
+
+      <div class="cart_page__empty" data-cart-empty hidden>
+        <p>カートに商品はありません</p>
+        <a href="home.html">商品を探す</a>
+      </div>
+
+      <article class="cart_product" data-cart-product>
+        <img src="assets/images/penlight.png" alt="LEDコンサートライト" />
+        <div class="cart_product__details">
+          <h2>
+            ペンライト
+            <br />
+            （シンプルタイプ）
+          </h2>
+          <p>¥800 / 4日間〜</p>
         </div>
-      </header>
-
-      <section class="cart_page__content">
-        <h1>
-          カートに入っている商品：
-          <span data-cart-item-count>0</span>
-          点
-        </h1>
-
-        <div class="cart_page__empty" data-cart-empty hidden>
-          <p>カートに商品はありません</p>
-          <a href="home.html">商品を探す</a>
+        <div class="cart_product__controls">
+          <button type="button" class="cart_product__remove" data-remove-cart>削除</button>
+          <div class="cart_product__quantity" aria-label="数量">
+            <button type="button" aria-label="数量を1減らす" data-cart-decrease>−</button>
+            <span data-cart-quantity>1</span>
+            <button type="button" aria-label="数量を1増やす" data-cart-increase>＋</button>
+          </div>
         </div>
+      </article>
 
-        <article class="cart_product" data-cart-product>
-          <img src="assets/images/penlight.png" alt="LEDコンサートライト" />
-          <div class="cart_product__details">
-            <h2>
-              ペンライト
-              <br />
-              （シンプルタイプ）
-            </h2>
-            <p>¥800 / 4日間〜</p>
-          </div>
-          <div class="cart_product__controls">
-            <button type="button" class="cart_product__remove" data-remove-cart>削除</button>
-            <div class="cart_product__quantity" aria-label="数量">
-              <button type="button" aria-label="数量を1減らす" data-cart-decrease>−</button>
-              <span data-cart-quantity>1</span>
-              <button type="button" aria-label="数量を1増やす" data-cart-increase>＋</button>
-            </div>
-          </div>
-        </article>
-
-        <div class="cart_page__total" data-cart-summary>
-          <div>
-            <span>合計</span>
-            <small>※往復送料440円（税込）を含みます。</small>
-          </div>
-          <strong data-cart-total>¥0</strong>
+      <div class="cart_page__total" data-cart-summary>
+        <div>
+          <span>合計</span>
+          <small>※往復送料440円（税込）を含みます。</small>
         </div>
+        <strong data-cart-total>¥0</strong>
+      </div>
 
-        <p data-cart-availability role="status" hidden></p>
-        <a class="cart_page__checkout" href="checkout.html" data-cart-checkout>
-          決済方法を選択する
-        </a>
-      </section>
+      <p data-cart-availability role="status" hidden></p>
+      <a class="cart_page__checkout" href="checkout.html" data-cart-checkout>
+        決済方法を選択する
+      </a>
+    </section>
 
-      <footer class="app_footer">
-        <nav aria-label="フッターナビゲーション">
-          <a href="about.html">お店について</a>
-          <a href="usage_guide.html">使い方ガイド</a>
-          <a href="#">利用規約</a>
-          <a href="privacy_policy.html">個人情報保護方針</a>
-        </nav>
-        <small>Tokimekilab&copy;2026</small>
-      </footer>
-      <nav class="bottom_nav" aria-label="下部ナビゲーション">
-        <a
-          href="home.html"
-          data-nav-icon
-          data-pages="home.html,artist_search.html,goods_search.html,search.html,product_detail.html"
-        >
-          <img
-            src="assets/images/home-icon--outline.png"
-            data-outline="assets/images/home-icon--outline.png"
-            data-filled="assets/images/home-icon--filled.png"
-            alt=""
-          />
-          ホーム
-        </a>
-        <a href="favorites.html" data-favorite-nav>
-          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
-          <span class="bottom_nav__badge" data-favorite-count>0</span>
-          お気に入り
-        </a>
-        <a
-          href="mypage.html"
-          data-nav-icon
-          data-pages="mypage.html,rental_history.html,member_info.html,cancellation_refund.html,color_change.html,password_setting.html,credit_card.html"
-        >
-          <img
-            src="assets/images/mypage-icon--outline.png"
-            data-outline="assets/images/mypage-icon--outline.png"
-            data-filled="assets/images/mypage-icon--filled.png"
-            alt=""
-          />
-          マイページ
-        </a>
+    <footer class="app_footer">
+      <nav aria-label="フッターナビゲーション">
+        <a href="about.html">お店について</a>
+        <a href="usage_guide.html">使い方ガイド</a>
+        <a href="terms.html">利用規約</a>
+        <a href="privacy_policy.html">個人情報保護方針</a>
       </nav>
-    </main>
-  </body>
+      <small>Tokimekilab&copy;2026</small>
+    </footer>
+    <nav class="bottom_nav" aria-label="下部ナビゲーション">
+      <a href="home.html" data-nav-icon data-pages="home.html,artist_search.html,goods_search.html">
+        <img src="assets/images/home-icon--outline.png" data-outline="assets/images/home-icon--outline.png"
+          data-filled="assets/images/home-icon--filled.png" alt="" />
+        ホーム
+      </a>
+      <a href="favorites.html" data-favorite-nav>
+        <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+        <span class="bottom_nav__badge" data-favorite-count>0</span>
+        お気に入り
+      </a>
+      <a href="mypage.html" data-nav-icon data-pages="mypage.html">
+        <img src="assets/images/mypage-icon--outline.png" data-outline="assets/images/mypage-icon--outline.png"
+          data-filled="assets/images/mypage-icon--filled.png" alt="" />
+        マイページ
+      </a>
+    </nav>
+  </main>
+</body>
+
 </html>

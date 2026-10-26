@@ -1,41 +1,36 @@
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>イベントを追加 | おしりーす</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="src/scss/style.css" />
-    <script src="assets/js/countdown_store.js"></script>
-    <script src="assets/js/user_storage.js"></script>
-    <script src="assets/js/app.js" defer></script>
-    <script src="assets/js/countdown_add.js" defer></script>
-  </head>
-  <body class="mobile_app countdown_add_page">
-    <main class="app_shell">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>イベントを追加 | おしりーす</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="src/scss/style.css" />
+  <script src="assets/js/countdown_store.js"></script>
+  <script src="assets/js/user_storage.js"></script>
+  <script src="assets/js/app.js" defer></script>
+  <script src="assets/js/countdown_add.js" defer></script>
+</head>
+
+<body class="mobile_app countdown_add_page">
+  <main class="app_shell">
       <header class="app_header">
-        <a
-          class="app_header__icon"
-          href="color_change.html"
-          aria-label="設定"
-          data-nav-icon
-          data-pages="color_change.html,password_setting.html,credit_card.html"
+        <button
+          class="app_header__icon app_header__back"
+          type="button"
+          aria-label="前の画面へ戻る"
+          data-history-back
         >
-          <img
-            src="assets/images/setting-icon--outline.png"
-            data-outline="assets/images/setting-icon--outline.png"
-            data-filled="assets/images/setting-icon--filled.png"
-            alt=""
-          />
-        </a>
+          <img src="assets/images/back.png" alt="" />
+        </button>
         <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
         <div class="app_header__actions">
-          <a href="notice.html" aria-label="通知" data-nav-icon data-pages="notice.html">
+          <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
             <img
               src="assets/images/notice-icon--outline.png"
               data-outline="assets/images/notice-icon--outline.png"
@@ -54,92 +49,76 @@
         </div>
       </header>
 
-      <section class="countdown_add" aria-labelledby="countdownAddTitle">
-        <div class="countdown_add__heading">
-          <a class="countdown_add__back" href="countdown.html" aria-label="カウントダウンに戻る">
-            <span aria-hidden="true">‹</span>
-            戻る
-          </a>
-          <h1 class="countdown_add__title" id="countdownAddTitle">イベントを追加</h1>
-        </div>
-        <form class="countdown_add__form" id="countdownAddForm">
-          <label class="countdown_add__field">
-            <span>イベント名</span>
-            <input type="text" name="title" id="eventTitle" required />
-          </label>
+    <section class="countdown_add" aria-labelledby="countdownAddTitle">
+      <div class="countdown_add__heading">
+        <h1 class="countdown_add__title" id="countdownAddTitle">イベントを追加</h1>
+      </div>
+      <form class="countdown_add__form" id="countdownAddForm">
+        <label class="countdown_add__field">
+          <span>イベント名</span>
+          <input type="text" name="title" id="eventTitle" required />
+        </label>
 
-          <div class="countdown_add__calendar" aria-label="ライブ日を選択">
-            <div class="countdown_add__calendar_header">
-              <button type="button" id="previousMonth" aria-label="前の月">‹</button>
-              <h2 id="calendarMonth" aria-live="polite"></h2>
-              <button type="button" id="nextMonth" aria-label="次の月">›</button>
-            </div>
-            <div class="countdown_add__weekdays" aria-hidden="true">
-              <span>日</span>
-              <span>月</span>
-              <span>火</span>
-              <span>水</span>
-              <span>木</span>
-              <span>金</span>
-              <span>土</span>
-            </div>
-            <div class="countdown_add__days" id="calendarDays" aria-label="日付"></div>
+        <div class="countdown_add__calendar" aria-label="ライブ日を選択">
+          <div class="countdown_add__calendar_header">
+            <button type="button" id="previousMonth" aria-label="前の月">‹</button>
+            <h2 id="calendarMonth" aria-live="polite"></h2>
+            <button type="button" id="nextMonth" aria-label="次の月">›</button>
           </div>
-          <input
-            class="countdown_add__date_input"
-            type="date"
-            name="date"
-            id="eventDate"
-            required
-            aria-label="選択中のイベント日"
-          />
-          <p class="countdown_add__date_display">
-            <span>日付</span>
-            <time id="eventDateLabel" datetime="2026-12-24">2026.12.24</time>
-          </p>
+          <div class="countdown_add__weekdays" aria-hidden="true">
+            <span>日</span>
+            <span>月</span>
+            <span>火</span>
+            <span>水</span>
+            <span>木</span>
+            <span>金</span>
+            <span>土</span>
+          </div>
+          <div class="countdown_add__days" id="calendarDays" aria-label="日付"></div>
+        </div>
+        <input class="countdown_add__date_input" type="date" name="date" id="eventDate" required
+          aria-label="選択中のイベント日" />
+        <p class="countdown_add__date_display">
+          <span>日付</span>
+          <time id="eventDateLabel" datetime="2026-12-24">2026.12.24</time>
+        </p>
 
-          <label class="countdown_add__field">
-            <span>場所</span>
-            <input type="text" name="place" id="eventPlace" required />
-          </label>
+        <label class="countdown_add__field">
+          <span>場所</span>
+          <input type="text" name="place" id="eventPlace" required />
+        </label>
 
-          <label class="countdown_add__field countdown_add__field--memo">
-            <span>メモ</span>
-            <textarea name="memo" id="eventMemo" rows="4"></textarea>
-          </label>
+        <label class="countdown_add__field countdown_add__field--memo">
+          <span>メモ</span>
+          <textarea name="memo" id="eventMemo" rows="4"></textarea>
+        </label>
 
-          <p class="countdown_add__error" id="formError" role="alert" hidden>
-            イベント名・日付・場所を入力してください。
-          </p>
-        </form>
-      </section>
+        <p class="countdown_add__error" id="formError" role="alert" hidden>
+          イベント名・日付・場所を入力してください。
+        </p>
+      </form>
+    </section>
 
-      <nav class="bottom_nav bottom_nav--two_items" aria-label="下部ナビゲーション">
-        <a
-          href="home.html"
-          data-nav-icon
-          data-pages="home.html,artist_search.html,goods_search.html"
-        >
-          <img
-            src="assets/images/home-icon--outline.png"
-            data-outline="assets/images/home-icon--outline.png"
-            data-filled="assets/images/home-icon--filled.png"
-            alt=""
-          />
-          ホーム
-        </a>
-        <a href="mypage.html" data-nav-icon data-pages="mypage.html">
-          <img
-            src="assets/images/mypage-icon--outline.png"
-            data-outline="assets/images/mypage-icon--outline.png"
-            data-filled="assets/images/mypage-icon--filled.png"
-            alt=""
-          />
-          マイページ
-        </a>
-      </nav>
+    <nav class="bottom_nav" aria-label="下部ナビゲーション">
+      <a href="home.html" data-nav-icon data-pages="home.html,artist_search.html,goods_search.html">
+        <img src="assets/images/home-icon--outline.png" data-outline="assets/images/home-icon--outline.png"
+          data-filled="assets/images/home-icon--filled.png" alt="" />
+        ホーム
+      </a>
+      <a href="favorites.html" data-favorite-nav>
+        <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+        <span class="bottom_nav__badge" data-favorite-count>0</span>
+        お気に入り
+      </a>
+      <a href="mypage.html" data-nav-icon data-pages="mypage.html">
+        <img src="assets/images/mypage-icon--outline.png" data-outline="assets/images/mypage-icon--outline.png"
+          data-filled="assets/images/mypage-icon--filled.png" alt="" />
+        マイページ
+      </a>
+    </nav>
 
-      <button class="countdown_add__submit" type="submit" form="countdownAddForm">登録する</button>
-    </main>
-  </body>
+    <button class="countdown_add__submit" type="submit" form="countdownAddForm">登録する</button>
+  </main>
+</body>
+
 </html>

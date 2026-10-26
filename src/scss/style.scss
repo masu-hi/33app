@@ -12,7 +12,7 @@
 
 $main: var(--color-main, #f6ecf8);
 $soft: var(--color-soft, #fdf6ff);
-$gradient_end: var(--color-gradient-end, #edeefa);
+$gradient_end: var(--color-gradient-end, #eff7ff);
 $gradient_line: var(--color-gradient-line, #cfd3ea);
 $gradient_text: var(--color-gradient-text, #353b60);
 $theme_line: var(--color-line, #ead5ee);
@@ -1905,9 +1905,9 @@ h3,
   text-decoration: none;
 
   &--goods {
-    border-color: $gradient_line;
+    border-color: #c7e3fc;
     color: $gradient_text;
-    background: $gradient_end;
+    background: #eff7ff;
   }
 
   &__visual {
@@ -2991,7 +2991,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 
   &--goods {
     color: $gradient_text;
-    background: $gradient_end;
+    background: #eff7ff;
   }
 
   .search_choice__visual {
@@ -3091,7 +3091,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 
 .goods_content {
-  background: var(--color-gradient-end, #eff7ff);
+  background: #eff7ff;
 }
 
 .goods_grid {
@@ -3104,7 +3104,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
     min-height: 150px;
     align-content: center;
     justify-items: center;
-    border: 1px solid $gradient_line;
+    border: 1px solid #c7e3fc;
     border-radius: 16px;
     color: $text;
     background: $white;

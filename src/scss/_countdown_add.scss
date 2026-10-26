@@ -6,6 +6,15 @@
     background: #eff7ff;
   }
 
+  .app_header {
+    .countdown_add__back {
+      position: relative;
+      top: auto;
+      left: auto;
+      z-index: 1;
+    }
+  }
+
   .bottom_nav {
     bottom: 180px;
   }
