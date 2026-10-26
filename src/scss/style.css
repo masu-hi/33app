@@ -2648,6 +2648,12 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
   min-height: 1024px;
   background: #eff7ff;
 }
+.countdown_add_page .app_header .countdown_add__back {
+  position: relative;
+  top: auto;
+  left: auto;
+  z-index: 1;
+}
 .countdown_add_page .bottom_nav {
   bottom: 180px;
 }
@@ -4775,9 +4781,9 @@ h3,
   text-decoration: none;
 }
 .search_choice--goods {
-  border-color: var(--color-gradient-line, #cfd3ea);
+  border-color: #c7e3fc;
   color: var(--color-gradient-text, #353b60);
-  background: var(--color-gradient-end, #edeefa);
+  background: #eff7ff;
 }
 .search_choice__visual {
   display: grid;
@@ -5697,7 +5703,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 .search_intro--goods {
   color: var(--color-gradient-text, #353b60);
-  background: var(--color-gradient-end, #edeefa);
+  background: #eff7ff;
 }
 .search_intro .search_choice__visual {
   margin: 0;
@@ -5811,7 +5817,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 
 .goods_content {
-  background: var(--color-gradient-end, #eff7ff);
+  background: #eff7ff;
 }
 
 .goods_grid {
@@ -5824,7 +5830,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   min-height: 150px;
   align-content: center;
   justify-items: center;
-  border: 1px solid var(--color-gradient-line, #cfd3ea);
+  border: 1px solid #c7e3fc;
   border-radius: 16px;
   color: #353b60;
   background: #fff;
@@ -5987,7 +5993,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 .results_header .app_search {
   border-color: var(--color-gradient-line, #cfd3ea);
-  background: var(--color-gradient-end, #edeefa);
+  background: var(--color-gradient-end, #eff7ff);
 }
 
 .sort_tabs {
@@ -6201,7 +6207,7 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 
 .rental_summary {
   padding: 40px 30px;
-  background: linear-gradient(135deg, var(--color-main, #f6ecf8) 0%, var(--color-gradient-end, #edeefa) 100%);
+  background: linear-gradient(135deg, var(--color-main, #f6ecf8) 0%, var(--color-gradient-end, #eff7ff) 100%);
 }
 .rental_summary__card {
   display: block;
@@ -7572,7 +7578,7 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
   text-decoration: none;
 }
 .rental_history_item__extension {
-  background: var(--color-gradient-end, #edeefa);
+  background: var(--color-gradient-end, #eff7ff);
 }
 .rental_history_item__extension[aria-disabled=true] {
   color: #8f94a8;
