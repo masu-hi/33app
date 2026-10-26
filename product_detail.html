@@ -185,7 +185,9 @@
             <div class="rental_calendar__controls">
               <button type="button" aria-label="前の月を表示" data-calendar-previous>‹</button>
               <p class="rental_calendar__month" data-calendar-month aria-live="polite"></p>
-              <button type="button" aria-label="次の月を表示" data-calendar-next>›</button>
+              <button type="button" aria-label="次の月を表示" data-calendar-next>
+                <span aria-hidden="true">›</span>
+              </button>
             </div>
             <div class="rental_calendar__weekdays" aria-hidden="true">
               <span>日</span>
@@ -204,13 +206,17 @@
               レンタル可能
             </span>
             <span class="is_unavailable">
-              <i class="rental_calendar__legend_mark rental_calendar__legend_mark--unavailable">
-                ×
-              </i>
+              <i
+                class="rental_calendar__legend_mark rental_calendar__legend_mark--unavailable"
+                aria-hidden="true"
+              ></i>
               レンタル不可
             </span>
             <span class="is_waitlist">
-              <i class="rental_calendar__legend_mark rental_calendar__legend_mark--waitlist">△</i>
+              <i
+                class="rental_calendar__legend_mark rental_calendar__legend_mark--waitlist"
+                aria-hidden="true"
+              ></i>
               空き待ち可能
             </span>
             <span>
