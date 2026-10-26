@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ライブカウントダウン | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/countdown_store.js"></script>
+    <script src="assets/js/user_storage.js"></script>
+    <script src="assets/js/app.js" defer></script>
+    <script src="assets/js/countdown.js" defer></script>
+  </head>
+
+  <body class="mobile_app countdown_page">
+    <main class="app_shell">
+      <header class="app_header">
+        <div class="app_header__start">
+          <a
+            class="app_header__icon"
+            href="color_change.html"
+            aria-label="設定"
+            data-nav-icon
+            data-pages="color_change.html,password_setting.html,credit_card.html"
+          >
+            <img
+              src="assets/images/setting-icon--outline.png"
+              data-outline="assets/images/setting-icon--outline.png"
+              data-filled="assets/images/setting-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a
+            class="app_header__icon"
+            href="countdown.html"
+            aria-label="カウントダウン"
+            data-nav-icon
+            data-pages="countdown.html"
+          >
+            <img
+              src="assets/images/timer-icon--outline.png"
+              data-outline="assets/images/timer-icon--outline.png"
+              data-filled="assets/images/timer-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="notice.html" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+
+      <div class="countdown_container">
+        <div class="countdown_hearts" aria-hidden="true">
+          <span class="countdown_hearts__item countdown_hearts__item--1">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--2">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--3">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--4">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--5">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--6">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--7">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--8">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--9">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--10">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--11">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--12">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--13">♡</span>
+          <span class="countdown_hearts__item countdown_hearts__item--14">♡</span>
+        </div>
+
+        <div class="countdown_toolbar">
+          <a class="countdown_toolbar__list_link" href="countdown_list.html">イベント一覧</a>
+          <a
+            href="countdown_add.html"
+            class="countdown_toolbar__edit_button"
+            aria-label="ライブ予定を編集する"
+          >
+            <img src="assets/images/calendar_edit_icon.svg" alt="" width="24" height="24" />
+          </a>
+        </div>
+
+        <div class="countdown_circle" role="timer" aria-live="polite">
+          <div class="countdown_circle__inner">
+            <p class="countdown_circle__label" id="circleLabel">ライブまで</p>
+            <div class="countdown_circle__days_wrap">
+              <span class="countdown_circle__days_num" id="countdownDays">12</span>
+              <span class="countdown_circle__days_unit" id="countdownDaysUnit">日</span>
+            </div>
+            <p class="countdown_circle__date" id="circleDate">2026.12.24</p>
+          </div>
+        </div>
+
+        <div class="countdown_message">
+          <div class="countdown_message__body">
+            <p class="countdown_message__heading" id="countdownMessage">当日はなに着ていく？ ♡</p>
+            <div class="countdown_message__divider" aria-hidden="true">
+              <span class="countdown_message__line"></span>
+              <span class="countdown_message__heart">♡</span>
+              <span class="countdown_message__line"></span>
+            </div>
+          </div>
+        </div>
+
+        <a href="countdown_detail.html" class="countdown_card" aria-label="ライブ詳細を見る">
+          <div class="countdown_card__badge">
+            <span class="countdown_card__badge_date" id="cardBadgeDate">12/24</span>
+            <span class="countdown_card__badge_weekday" id="cardBadgeWeekday">(土)</span>
+          </div>
+          <div class="countdown_card__info">
+            <h2 class="countdown_card__title" id="cardEventTitle">Sugar ♡ Tune LIVE TOUR</h2>
+            <p class="countdown_card__place">
+              <img src="assets/images/map_pin_icon.svg" alt="" class="countdown_card__place_icon" />
+              <span id="cardEventPlace">名古屋◯◯ホール</span>
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <dialog class="countdown_modal" id="eventModal">
+        <div class="countdown_modal__card">
+          <h3 class="countdown_modal__title">ライブ予定を設定</h3>
+          <form id="eventForm" class="countdown_modal__form">
+            <label class="countdown_modal__field">
+              <span>イベント名</span>
+              <input
+                type="text"
+                id="inputTitle"
+                name="title"
+                required
+                value="Sugar ♡ Tune LIVE TOUR"
+              />
+            </label>
+            <label class="countdown_modal__field">
+              <span>公演日</span>
+              <input type="date" id="inputDate" name="date" required value="2026-12-24" />
+            </label>
+            <label class="countdown_modal__field">
+              <span>会場・場所</span>
+              <input type="text" id="inputPlace" name="place" required value="名古屋◯◯ホール" />
+            </label>
+            <div class="countdown_modal__actions">
+              <button type="button" class="button button--outline" id="closeModalBtn">
+                キャンセル
+              </button>
+              <button type="submit" class="button">保存する</button>
+            </div>
+          </form>
+        </div>
+      </dialog>
+
+      <nav class="bottom_nav bottom_nav--two_items" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html">
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
+</html>

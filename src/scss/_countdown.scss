@@ -1,0 +1,545 @@
+// ==========================================
+// カウントダウン画面スタイル (_countdown.scss)
+// ==========================================
+
+// ヘッダーの左側アイコン群（設定＋タイマー）
+.app_header__start {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+// カウントダウン画面専用の背景・レイアウト
+.countdown_page {
+  background-color: #f7faff;
+
+  .app_shell {
+    background-color: #eff7ff;
+    position: relative;
+    overflow-x: hidden;
+  }
+}
+
+.countdown_container {
+  position: relative;
+  min-height: calc(100vh - 95px - 70px);
+  padding: 16px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 1;
+}
+
+// 散りばめられたハート背景（ふわふわ浮遊アニメーション）
+@keyframes float_heart {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(5deg);
+  }
+}
+
+.countdown_hearts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+
+  &__item {
+    position: absolute;
+    color: #eabfe8;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1;
+    user-select: none;
+    opacity: 0.85;
+    animation: float_heart 4s ease-in-out infinite;
+
+    &--1 {
+      top: 24px;
+      left: 32px;
+      font-size: 16px;
+      animation-duration: 4.5s;
+    }
+
+    &--2 {
+      top: 24px;
+      left: 120px;
+      font-size: 15px;
+      animation-duration: 3.8s;
+      animation-delay: 0.5s;
+    }
+
+    &--3 {
+      top: 54px;
+      left: 80px;
+      font-size: 14px;
+      animation-duration: 5s;
+      animation-delay: 1s;
+    }
+
+    &--4 {
+      top: 80px;
+      left: 32px;
+      font-size: 15px;
+      animation-duration: 4.2s;
+      animation-delay: 1.5s;
+    }
+
+    &--5 {
+      top: 66px;
+      left: 165px;
+      font-size: 14px;
+      animation-duration: 4.8s;
+      animation-delay: 0.8s;
+    }
+
+    &--6 {
+      top: 114px;
+      left: 66px;
+      font-size: 13px;
+      animation-duration: 3.9s;
+      animation-delay: 2s;
+    }
+
+    &--7 {
+      top: 160px;
+      left: 32px;
+      font-size: 15px;
+      animation-duration: 4.4s;
+      animation-delay: 1.2s;
+    }
+
+    &--8 {
+      top: 320px;
+      right: 32px;
+      font-size: 15px;
+      animation-duration: 4.6s;
+      animation-delay: 0.3s;
+    }
+
+    &--9 {
+      top: 350px;
+      right: 80px;
+      font-size: 14px;
+      animation-duration: 5.2s;
+      animation-delay: 1.7s;
+    }
+
+    &--10 {
+      top: 380px;
+      right: 46px;
+      font-size: 15px;
+      animation-duration: 4s;
+      animation-delay: 0.9s;
+    }
+
+    &--11 {
+      top: 380px;
+      left: 140px;
+      font-size: 14px;
+      animation-duration: 4.7s;
+      animation-delay: 2.2s;
+    }
+
+    &--12 {
+      top: 420px;
+      left: 202px;
+      font-size: 15px;
+      animation-duration: 3.6s;
+      animation-delay: 1.4s;
+    }
+
+    &--13 {
+      top: 420px;
+      left: 276px;
+      font-size: 14px;
+      animation-duration: 4.9s;
+      animation-delay: 0.6s;
+    }
+
+    &--14 {
+      top: 420px;
+      right: 28px;
+      font-size: 15px;
+      animation-duration: 4.1s;
+      animation-delay: 1.8s;
+    }
+  }
+}
+
+// ツールバー（カレンダー編集ボタン）
+.countdown_toolbar {
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+  z-index: 2;
+
+  &__edit_button {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1.5px solid #edf2fc;
+    background: #ffffff;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 3px 10px rgba(160, 180, 220, 0.18);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      background-color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      background-color: #fbf8fe;
+      transform: scale(1.1) rotate(6deg);
+      box-shadow: 0 5px 14px rgba(220, 180, 240, 0.35);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+  }
+
+  &__list_link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    margin-right: auto;
+    padding: 0 12px;
+    border: 1px solid rgba(199, 211, 239, 0.9);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    color: #4d5f9b;
+    font-size: 13px;
+    text-decoration: none;
+  }
+}
+
+// 中央のカウントダウンリング（マシュマロ風パステルグラデーション）
+.countdown_circle {
+  position: relative;
+  width: 244px;
+  height: 244px;
+  margin: 25px auto 22px;
+  border-radius: 50%;
+  padding: 6px;
+  background: linear-gradient(140deg, #b8dcff 0%, #ded2fd 45%, #ffbfe0 100%);
+  box-shadow:
+    0 12px 36px rgba(210, 190, 245, 0.45),
+    0 4px 16px rgba(160, 195, 245, 0.25);
+  z-index: 2;
+  transition: transform 0.3s ease;
+
+  &__inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 30%, #ffffff 0%, #faf8ff 100%);
+    box-shadow: inset 0 2px 8px rgba(210, 200, 240, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px 16px;
+  }
+
+  &__label {
+    margin: 0;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: #4a5785;
+    letter-spacing: 0.08em;
+  }
+
+  &__days_wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin: 6px 0 10px;
+    color: #353b60;
+  }
+
+  &__days_num {
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-size: 70px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #353b60;
+    text-shadow: 0 2px 4px rgba(53, 59, 96, 0.08);
+  }
+
+  &__days_unit {
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1;
+    margin-left: 3px;
+    color: #353b60;
+  }
+
+  &__date {
+    margin: 0;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: #4a5785;
+    letter-spacing: 0.05em;
+  }
+}
+
+// イベント情報カード（ぽってり角丸＆リンク）
+.countdown_card {
+  width: 100%;
+  max-width: 310px;
+  margin: 15px auto 0;
+  background: #ffffff;
+  border-radius: 26px;
+  border: 1.5px solid #edf2fc;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow:
+    0 6px 20px rgba(180, 200, 235, 0.22),
+    0 2px 6px rgba(53, 59, 96, 0.04);
+  z-index: 2;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow:
+      0 10px 28px rgba(210, 190, 240, 0.35),
+      0 4px 10px rgba(53, 59, 96, 0.06);
+    border-color: #dce7fb;
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  &__badge {
+    flex: none;
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    border: 1.5px solid #c8d8f8;
+    background: linear-gradient(135deg, #f0f4ff 0%, #f6f1fd 100%);
+    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #353b60;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    line-height: 1.2;
+
+    &_date {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    &_weekday {
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0 0 6px;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #353b60;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  &__place {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #525d88;
+
+    &_icon {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+
+.countdown_message {
+  width: 100%;
+  max-width: 340px;
+  margin: 20px auto 20px;
+  text-align: center;
+  z-index: 2;
+
+  &__body {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  &__heading {
+    margin: 0;
+    display: inline-block;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: #353b60;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+  }
+
+  &__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  &__line {
+    flex: 1;
+    min-width: 16px;
+    height: 1.5px;
+    background-color: #a8b8db;
+    border-radius: 1px;
+  }
+
+  &__heart {
+    color: #eabfe8;
+    font-size: 14px;
+    line-height: 1;
+    flex: none;
+    transform: translateY(-1px);
+    animation: float_heart 3s ease-in-out infinite;
+  }
+}
+
+// カレンダー編集モーダル
+.countdown_modal {
+  border: 0;
+  border-radius: 26px;
+  padding: 0;
+  background: transparent;
+  max-width: 340px;
+  width: 90%;
+  box-shadow: 0 16px 48px rgba(53, 59, 96, 0.28);
+
+  &::backdrop {
+    background: rgba(53, 59, 96, 0.45);
+    backdrop-filter: blur(3px);
+  }
+
+  &__card {
+    background: #ffffff;
+    border-radius: 26px;
+    padding: 26px 24px 28px;
+  }
+
+  &__title {
+    margin: 0 0 18px;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #353b60;
+    text-align: center;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a5785;
+
+    input {
+      width: 100%;
+      min-height: 44px;
+      padding: 8px 14px;
+      border: 1.5px solid #c8d5ee;
+      border-radius: 12px;
+      font-size: 14px;
+      background: #fafbff;
+      outline: none;
+      transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+
+      &:focus {
+        border-color: #7990be;
+        background: #ffffff;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+
+    button {
+      flex: 1;
+      min-height: 44px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+  }
+}
+
+// フッターの2アイテム用レイアウト（ホームとマイページのみの場合）
+.bottom_nav--two_items {
+  justify-content: space-around;
+  padding: 0 40px;
+}

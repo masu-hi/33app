@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="24" height="24" fill="none">
+  <!-- Calendar Ring / Pins -->
+  <rect x="5" y="1" width="2" height="4" rx="1" fill="#7990be" />
+  <rect x="17" y="1" width="2" height="4" rx="1" fill="#7990be" />
+  <!-- Calendar Body Outline -->
+  <path d="M3 4C3 3 4 3 5 3H19C20 3 21 3 21 4V11H3V4Z" stroke="#7990be" stroke-width="2" stroke-linejoin="round" />
+  <path d="M3 11V21C3 22 4 23 5 23H11" stroke="#7990be" stroke-width="2" stroke-linecap="round" />
+  <!-- Pencil icon on bottom right -->
+  <path d="M22.5 12.5C23.2 13.2 23.2 14.3 22.5 15L15 22.5L11 23.5L12 19.5L19.5 12C20.2 11.3 21.3 11.3 22 12L22.5 12.5Z" stroke="#7990be" stroke-width="1.8" stroke-linejoin="round" />
+  <path d="M18.5 13L21.5 16" stroke="#7990be" stroke-width="1.8" />
+</svg>
