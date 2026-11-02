@@ -1,0 +1,242 @@
+.countdown_reminder {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  padding: 56px 24px 32px;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: #353b60;
+  background: color-mix(in srgb, var(--color-soft, #f6ecf8) 65%, transparent);
+  backdrop-filter: blur(12px);
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  text-align: center;
+
+  &::backdrop {
+    background: rgb(255 255 255 / 45%);
+    backdrop-filter: blur(12px);
+  }
+
+  &[open] {
+    display: grid;
+    align-items: center;
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 390px;
+    margin: auto;
+  }
+
+  &__heading {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  &__events {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    li + li {
+      margin-top: 48px;
+    }
+  }
+
+  &__circle {
+    width: min(100%, 300px);
+    aspect-ratio: 1;
+    padding: 6px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: linear-gradient(140deg, #b8dcff 0%, #ded2fd 45%, #ffbfe0 100%);
+    box-shadow:
+      0 12px 36px rgb(210 190 245 / 45%),
+      0 4px 16px rgb(160 195 245 / 25%);
+  }
+
+  &__face {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 30%, #fff 0%, #faf8ff 100%);
+    box-shadow: inset 0 2px 8px rgb(210 200 240 / 20%);
+
+    h2 {
+      display: -webkit-box;
+      max-width: 100%;
+      margin: 0;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      font-size: 19px;
+      line-height: 1.5;
+      color: #4a5785;
+    }
+
+    time {
+      font-size: 18px;
+      color: #4a5785;
+    }
+  }
+
+  &__days {
+    margin: 8px 0;
+    font-size: clamp(36px, 11vw, 56px);
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgb(53 59 96 / 8%);
+  }
+
+  &__message {
+    margin: 28px 0 24px;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.8;
+    text-wrap: pretty;
+  }
+
+  &__actions {
+    margin-top: 12px;
+  }
+
+  &__link,
+  &__actions button {
+    display: grid;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px;
+    place-items: center;
+    border: 1px solid var(--color-line, #ead5ee);
+    border-radius: 24px;
+    color: #353b60;
+    background: white;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  &__link {
+    background: var(--color-main, #f6ecf8);
+    font-weight: 700;
+  }
+
+  &__close {
+    position: fixed;
+    z-index: 3;
+    top: 16px;
+    right: 16px;
+    display: grid;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    color: #353b60;
+    background: rgb(255 255 255 / 80%);
+    font-size: 32px;
+    cursor: pointer;
+  }
+
+  &__celebration {
+    position: fixed;
+    z-index: 2;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  &__popper {
+    position: absolute;
+    bottom: 18%;
+    width: 40px;
+    height: 72px;
+    background: repeating-linear-gradient(45deg, #c1b0ef 0 10px, #f4b6d5 10px 20px);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    animation: reminder_popper 3.6s both;
+
+    &--left {
+      left: 3%;
+      rotate: 40deg;
+    }
+    &--right {
+      right: 3%;
+      rotate: -40deg;
+    }
+  }
+
+  &__petal {
+    position: absolute;
+    bottom: 26%;
+    width: 12px;
+    height: 18px;
+    border-radius: 80% 0 80% 30%;
+    background: var(--petal-color);
+    animation: reminder_petals 2.8s var(--delay) both;
+
+    &--left {
+      left: 6%;
+    }
+    &--right {
+      right: 6%;
+    }
+  }
+}
+
+@keyframes reminder_petals {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  8% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 1;
+    transform: translate(calc(var(--drift) * 0.6), var(--rise)) rotate(calc(var(--turn) * 0.4));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--drift), 180px) rotate(var(--turn));
+  }
+}
+
+@keyframes reminder_popper {
+  0% {
+    opacity: 0;
+    scale: 0.5;
+  }
+  8%,
+  70% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdown_reminder__celebration {
+    display: none;
+  }
+}

@@ -9,6 +9,7 @@
 @use "countdown_detail";
 @use "countdown_add";
 @use "countdown_list";
+@use "countdown_reminder";
 
 $main: var(--color-main, #f6ecf8);
 $soft: var(--color-soft, #fdf6ff);
