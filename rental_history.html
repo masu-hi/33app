@@ -21,16 +21,31 @@
       レンタル情報を読み込んでいます
     </div>
     <main class="app_shell rental_history">
-      <header class="mypage_header">
-        <a class="mypage_header__back" href="mypage.html" aria-label="マイページへ戻る">
+      <header class="app_header">
+        <a
+          class="app_header__icon app_header__back"
+          href="mypage.html"
+          aria-label="マイページへ戻る"
+        >
           <img src="assets/images/back.png" alt="" />
         </a>
-        <div class="mypage_header__actions">
-          <a href="#" aria-label="通知">
-            <img src="assets/images/notice-icon--outline.png" alt="" />
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="notice.html" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
           </a>
-          <a href="cart.html" aria-label="カート">
-            <img src="assets/images/cart-icon--outline.png" alt="" />
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
           </a>
         </div>
       </header>

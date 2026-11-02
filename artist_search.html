@@ -1,222 +1,157 @@
 <!doctype html>
 <html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>アーティストから探す | おしりーす</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/scss/style.css" />
+    <script src="assets/js/user_storage.js"></script>
+    <script src="assets/js/app.js" defer></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>アーティストから探す | おしりーす</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="src/scss/style.css" />
-  <script src="assets/js/user_storage.js"></script>
-  <script src="assets/js/app.js" defer></script>
-</head>
-
-<body class="mobile_app">
-  <main class="app_shell">
-    <header class="app_header">
-      <button class="app_header__icon app_header__back" type="button" aria-label="前の画面へ戻る" data-history-back>
-        <img src="assets/images/back.png" alt="" />
-      </button>
-      <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
-      <div class="app_header__actions">
-        <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
-          <img src="assets/images/notice-icon--outline.png" data-outline="assets/images/notice-icon--outline.png"
-            data-filled="assets/images/notice-icon--filled.png" alt="" />
-        </a>
-        <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
-          <img src="assets/images/cart-icon--outline.png" data-outline="assets/images/cart-icon--outline.png"
-            data-filled="assets/images/cart-icon--filled.png" alt="" />
-        </a>
-      </div>
-    </header>
-    <section class="search_intro">
-      <span class="search_choice__visual search_choice__visual--artist" aria-hidden="true">
-        <img src="assets/images/artists.png" alt="" />
-        <section class="search_intro">
-          <span class="search_choice__visual search_choice__visual--artist" aria-hidden="true">
+  <body class="mobile_app">
+    <main class="app_shell">
+      <header class="app_header">
+        <button
+          class="app_header__icon app_header__back"
+          type="button"
+          aria-label="前の画面へ戻る"
+          data-history-back
+        >
+          <img src="assets/images/back.png" alt="" />
+        </button>
+        <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
+        <div class="app_header__actions">
+          <a href="#" aria-label="通知" data-nav-icon data-pages="notice.html">
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
+          </a>
+          <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
+          </a>
+        </div>
+      </header>
+      <section class="search_intro">
+        <span class="search_choice__visual search_choice__visual--artist" aria-hidden="true">
+          <img src="assets/images/artists.png" alt="" />
+        </span>
+        <div>
+          <h1>アーティスト</h1>
+          <p>
+            アーティスト・グループ名から
+            <br />
+            レンタルしたいアイテムを探せます
+          </p>
+        </div>
+      </section>
+      <form action="search.html" class="app_search app_search--separate">
+        <span aria-hidden="true">⌕</span>
+        <input
+          name="artist"
+          required
+          aria-label="アーティスト検索"
+          placeholder="アーティスト名で検索"
+        />
+      </form>
+      <section class="artist_content">
+        <h2>近日ライブ</h2>
+        <div class="artist_grid">
+          <button class="artist_item" type="button" data-artist-select data-artist-id="lumina">
             <span class="artist_avatar artist_avatar--1"></span>
-          </span>
-          <div>
-            <h1>アーティスト</h1>
-            <p>
-              アーティスト・グループ名から
-              <br />
-              レンタルしたいアイテムを探せます
-            </p>
-          </div>
-        </section>
-        <form action="search.html" class="app_search app_search--separate">
-          <span aria-hidden="true">⌕</span>
-          <input name="artist" required aria-label="アーティスト検索" placeholder="アーティスト名で検索" />
-        </form>
-        <section class="artist_content">
-          <h2>近日ライブ</h2>
-          <div class="artist_grid">
-            <button class="artist_item" type="button" data-artist-select data-artist-id="lumina">
-              <span class="artist_avatar artist_avatar--1"></span>
-              <b>LUMINA</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="sora-note">
-              <span class="artist_avatar artist_avatar--2"></span>
-              <b>SORA NOTE</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="mint-parade">
-              <span class="artist_avatar artist_avatar--3"></span>
-              <b>MINT PARADE</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="vivid-loop">
-              <span class="artist_avatar artist_avatar--4"></span>
-              <b>VIVID LOOP</b>
-            </button>
-          </div>
-          <h2>人気アーティスト</h2>
-          <div class="artist_grid">
-            <button class="artist_item" type="button" data-artist-select data-artist-id="nocturne">
-              <span class="artist_avatar artist_avatar--5"></span>
-              <b>NOCTURNE</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="snow-drop">
-              <span class="artist_avatar artist_avatar--6"></span>
-              <b>SNOW DROP</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="coral-beat">
-              <span class="artist_avatar artist_avatar--7"></span>
-              <b>CORAL BEAT</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="sunny-days">
-              <span class="artist_avatar artist_avatar--8"></span>
-              <b>SUNNY DAYS</b>
-            </button>
-          </div>
-          <h2>最近見たアーティスト</h2>
-          <div class="search_chips">
-            <button type="button">LUMINA</button>
-            <button type="button">MINT PARADE</button>
-            <button type="button">SUNNY DAYS</button>
-          </div>
-        </section>
-        <footer class="app_footer">
-          <nav aria-label="フッターナビゲーション">
-            <a href="about.html">お店について</a>
-            <a href="usage_guide.html">使い方ガイド</a>
-            <a href="terms.html">利用規約</a>
-            <a href="privacy_policy.html">個人情報保護方針</a>
-          </nav>
-          <small>Tokimekilab&copy;2026</small>
-        </footer>
-        <nav class="bottom_nav" aria-label="下部ナビゲーション">
-          <a href="home.html" data-nav-icon data-pages="home.html,artist_search.html,goods_search.html">
-            <img src="assets/images/home-icon--outline.png" data-outline="assets/images/home-icon--outline.png"
-              data-filled="assets/images/home-icon--filled.png" alt="" />
-            ホーム
-          </a>
-          <a href="favorites.html" data-favorite-nav>
-            <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
-            <span class="bottom_nav__badge" data-favorite-count>0</span>
-            お気に入り
-          </a>
-          <a href="mypage.html" data-nav-icon data-pages="mypage.html">
-            <img src="assets/images/mypage-icon--outline.png" data-outline="assets/images/mypage-icon--outline.png"
-              data-filled="assets/images/mypage-icon--filled.png" alt="" />
-            マイページ
-          </a>
+            <b>LUMINA</b>
+          </button>
+          <button class="artist_item" type="button" data-artist-select data-artist-id="sora-note">
+            <span class="artist_avatar artist_avatar--2"></span>
+            <b>SORA NOTE</b>
+          </button>
+          <button class="artist_item" type="button" data-artist-select data-artist-id="mint-parade">
+            <span class="artist_avatar artist_avatar--3"></span>
+            <b>MINT PARADE</b>
+          </button>
+          <button class="artist_item" type="button" data-artist-select data-artist-id="vivid-loop">
+            <span class="artist_avatar artist_avatar--4"></span>
+            <b>VIVID LOOP</b>
+          </button>
+        </div>
+        <h2>人気アーティスト</h2>
+        <div class="artist_grid">
+          <button class="artist_item" type="button" data-artist-select data-artist-id="nocturne">
+            <span class="artist_avatar artist_avatar--5"></span>
+            <b>NOCTURNE</b>
+          </button>
+          <button class="artist_item" type="button" data-artist-select data-artist-id="snow-drop">
+            <span class="artist_avatar artist_avatar--6"></span>
+            <b>SNOW DROP</b>
+          </button>
+          <button class="artist_item" type="button" data-artist-select data-artist-id="coral-beat">
+            <span class="artist_avatar artist_avatar--7"></span>
+            <b>CORAL BEAT</b>
+          </button>
+          <button class="artist_item" type="button" data-artist-select data-artist-id="sunny-days">
+            <span class="artist_avatar artist_avatar--8"></span>
+            <b>SUNNY DAYS</b>
+          </button>
+        </div>
+        <h2>最近見たアーティスト</h2>
+        <div class="search_chips">
+          <button type="button">LUMINA</button>
+          <button type="button">MINT PARADE</button>
+          <button type="button">SUNNY DAYS</button>
+        </div>
+      </section>
+      <footer class="app_footer">
+        <nav aria-label="フッターナビゲーション">
+          <a href="about.html">お店について</a>
+          <a href="usage_guide.html">使い方ガイド</a>
+          <a href="terms.html">利用規約</a>
+          <a href="privacy_policy.html">個人情報保護方針</a>
         </nav>
-        <section class="search_intro">
-          <span class="search_choice__visual search_choice__visual--artist" aria-hidden="true">
-            <img src="assets/images/artists.png" alt="" />
-
-            <span class="artist_avatar artist_avatar--1"></span>
-          </span>
-          <div>
-            <h1>アーティスト</h1>
-            <p>
-              アーティスト・グループ名から
-              <br />
-              レンタルしたいアイテムを探せます
-            </p>
-          </div>
-        </section>
-        <form action="search.html" class="app_search app_search--separate">
-          <span aria-hidden="true">⌕</span>
-          <input name="artist" required aria-label="アーティスト検索" placeholder="アーティスト名で検索" />
-        </form>
-        <section class="artist_content">
-          <h2>近日ライブ</h2>
-          <div class="artist_grid">
-            <button class="artist_item" type="button" data-artist-select data-artist-id="lumina">
-              <span class="artist_avatar artist_avatar--1"></span>
-              <b>LUMINA</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="sora-note">
-              <span class="artist_avatar artist_avatar--2"></span>
-              <b>SORA NOTE</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="mint-parade">
-              <span class="artist_avatar artist_avatar--3"></span>
-              <b>MINT PARADE</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="vivid-loop">
-              <span class="artist_avatar artist_avatar--4"></span>
-              <b>VIVID LOOP</b>
-            </button>
-          </div>
-          <h2>人気アーティスト</h2>
-          <div class="artist_grid">
-            <button class="artist_item" type="button" data-artist-select data-artist-id="nocturne">
-              <span class="artist_avatar artist_avatar--5"></span>
-              <b>NOCTURNE</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="snow-drop">
-              <span class="artist_avatar artist_avatar--6"></span>
-              <b>SNOW DROP</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="coral-beat">
-              <span class="artist_avatar artist_avatar--7"></span>
-              <b>CORAL BEAT</b>
-            </button>
-            <button class="artist_item" type="button" data-artist-select data-artist-id="sunny-days">
-              <span class="artist_avatar artist_avatar--8"></span>
-              <b>SUNNY DAYS</b>
-            </button>
-          </div>
-          <h2>最近見たアーティスト</h2>
-          <div class="search_chips">
-            <button type="button">LUMINA</button>
-            <button type="button">MINT PARADE</button>
-            <button type="button">SUNNY DAYS</button>
-          </div>
-        </section>
-        <footer class="app_footer">
-          <nav aria-label="フッターナビゲーション">
-            <a href="about.html">お店について</a>
-            <a href="usage_guide.html">使い方ガイド</a>
-            <a href="terms.html">利用規約</a>
-            <a href="privacy_policy.html">個人情報保護方針</a>
-          </nav>
-          <small>Tokimekilab&copy;2026</small>
-        </footer>
-        <nav class="bottom_nav" aria-label="下部ナビゲーション">
-          <a href="home.html" data-nav-icon data-pages="home.html,artist_search.html,goods_search.html">
-            <img src="assets/images/home-icon--outline.png" data-outline="assets/images/home-icon--outline.png"
-              data-filled="assets/images/home-icon--filled.png" alt="" />
-            ホーム
-          </a>
-          <a href="favorites.html" data-favorite-nav>
-            <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
-            <span class="bottom_nav__badge" data-favorite-count>0</span>
-            お気に入り
-          </a>
-          <a href="mypage.html" data-nav-icon data-pages="mypage.html">
-            <img src="assets/images/mypage-icon--outline.png" data-outline="assets/images/mypage-icon--outline.png"
-              data-filled="assets/images/mypage-icon--filled.png" alt="" />
-            マイページ
-          </a>
-        </nav>
-  </main>
-</body>
-
+        <small>Tokimekilab&copy;2026</small>
+      </footer>
+      <nav class="bottom_nav" aria-label="下部ナビゲーション">
+        <a
+          href="home.html"
+          data-nav-icon
+          data-pages="home.html,artist_search.html,goods_search.html"
+        >
+          <img
+            src="assets/images/home-icon--outline.png"
+            data-outline="assets/images/home-icon--outline.png"
+            data-filled="assets/images/home-icon--filled.png"
+            alt=""
+          />
+          ホーム
+        </a>
+        <a href="favorites.html" data-favorite-nav>
+          <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
+          <span class="bottom_nav__badge" data-favorite-count>0</span>
+          お気に入り
+        </a>
+        <a href="mypage.html" data-nav-icon data-pages="mypage.html">
+          <img
+            src="assets/images/mypage-icon--outline.png"
+            data-outline="assets/images/mypage-icon--outline.png"
+            data-filled="assets/images/mypage-icon--filled.png"
+            alt=""
+          />
+          マイページ
+        </a>
+      </nav>
+    </main>
+  </body>
 </html>

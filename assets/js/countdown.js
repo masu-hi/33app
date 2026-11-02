@@ -1,22 +1,10 @@
 /**
  * countdown.js - カウントダウン画面専用スクリプト
  */
-document.addEventListener("DOMContentLoaded", () => {
-  const DEFAULT_EVENT = {
-    title: "Sugar ♡ Tune LIVE TOUR",
-    date: "2026-12-24",
-    place: "名古屋◯◯ホール",
-  };
-
-  const getEventData = () => ({ ...DEFAULT_EVENT, ...window.countdownStore.getSelectedEvent() });
-
-  const saveEventData = (data) => {
-    try {
-      window.countdownStore.updateSelectedEvent(data);
-    } catch (e) {
-      console.error("Failed to save event data", e);
-    }
-  };
+(() => {
+  const getEventData = () => window.countdownStore.getSelectedEvent();
+  const status = document.querySelector(".countdown_sync_status");
+  let editingEvent;
 
   const elements = {
     circleLabel: document.getElementById("circleLabel"),
@@ -36,6 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
     inputDate: document.getElementById("inputDate"),
     inputPlace: document.getElementById("inputPlace"),
   };
+  const editStatus = document.createElement("p");
+  editStatus.setAttribute("role", "status");
+  elements.form.append(editStatus);
+  elements.inputTitle.maxLength = 120;
+  elements.inputPlace.maxLength = 200;
 
   const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -60,6 +53,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const render = () => {
     const event = getEventData();
+    if (elements.editBtn) elements.editBtn.disabled = !event;
+    if (!event) {
+      for (const key of ["countdownDays", "circleDate", "cardBadgeDate", "cardEventPlace"]) {
+        if (elements[key]) elements[key].textContent = "--";
+      }
+      if (elements.circleLabel) elements.circleLabel.textContent = "イベント未登録";
+      if (elements.cardBadgeWeekday) elements.cardBadgeWeekday.textContent = "";
+      if (elements.cardEventTitle)
+        elements.cardEventTitle.textContent = "イベントを追加してください";
+      if (elements.countdownMessage)
+        elements.countdownMessage.textContent = "楽しみな予定を登録しましょう";
+      return;
+    }
     const targetDate = new Date(event.date + "T00:00:00");
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -116,6 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (elements.editBtn && elements.modal) {
     elements.editBtn.addEventListener("click", () => {
       const event = getEventData();
+      if (!event) return;
+      editingEvent = event;
+      editStatus.textContent = "";
       if (elements.inputTitle) elements.inputTitle.value = event.title;
       if (elements.inputDate) elements.inputDate.value = event.date;
       if (elements.inputPlace) elements.inputPlace.value = event.place;
@@ -138,20 +147,36 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (elements.form) {
-    elements.form.addEventListener("submit", (e) => {
+    elements.form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const updated = {
-        title: elements.inputTitle.value.trim() || DEFAULT_EVENT.title,
-        date: elements.inputDate.value || DEFAULT_EVENT.date,
-        place: elements.inputPlace.value.trim() || DEFAULT_EVENT.place,
+        title: elements.inputTitle.value.trim(),
+        date: elements.inputDate.value,
+        place: elements.inputPlace.value.trim(),
       };
-      saveEventData(updated);
-      render();
-      if (elements.modal) {
-        elements.modal.close();
+      const controls = [...elements.form.elements];
+      controls.forEach((control) => {
+        control.disabled = true;
+      });
+      status.textContent = "保存しています。";
+      try {
+        await window.countdownStore.updateEvent(editingEvent.id, updated, editingEvent);
+        render();
+        elements.modal?.close();
+        status.textContent = "予定を保存しました。";
+      } catch (error) {
+        status.textContent = error.message;
+        editStatus.textContent = error.message;
+      } finally {
+        controls.forEach((control) => {
+          control.disabled = false;
+        });
       }
     });
   }
 
+  window.addEventListener("countdown:updated", render);
+  const timer = setInterval(render, 60000);
+  window.addEventListener("pagehide", () => clearInterval(timer));
   render();
-});
+})();

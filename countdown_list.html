@@ -11,12 +11,12 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/scss/style.css" />
-    <script src="assets/js/countdown_store.js"></script>
     <script src="assets/js/user_storage.js"></script>
-    <script src="assets/js/app.js" defer></script>
-    <script src="assets/js/countdown_list.js" defer></script>
+    <script src="assets/js/theme_init.js"></script>
+    <script type="module" src="assets/js/countdown_bootstrap.js"></script>
   </head>
-  <body class="mobile_app countdown_list_page">
+  <body class="mobile_app countdown_list_page is_product_data_loading">
+    <div class="product_data_loading" data-countdown-loading role="status">予定を読み込んでいます。</div>
     <main class="app_shell">
       <header class="app_header">
         <a

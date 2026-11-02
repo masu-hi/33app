@@ -716,7 +716,9 @@ h3,
   font-size: 16px;
   line-height: 24px;
 
-  button {
+  a {
+    display: inline-flex;
+    align-items: center;
     min-height: 35px;
     padding: 3px 13px;
     border: 1px solid $theme_line;
@@ -725,6 +727,7 @@ h3,
     background: #fff9ff;
     font-family: inherit;
     font-size: 14px;
+    text-decoration: none;
     cursor: pointer;
   }
 }
@@ -3386,17 +3389,6 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
     min-height: 110px;
     align-items: center;
     padding: 8px 36px 8px 0;
-    color: $text;
-    text-decoration: none;
-  }
-
-  &__link2 {
-    display: grid;
-    grid-template-columns: 86px 1fr;
-    column-gap: 15px;
-    min-height: 110px;
-    align-items: center;
-    padding: 8px 0;
     color: $text;
     text-decoration: none;
   }

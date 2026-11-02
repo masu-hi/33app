@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test": "node --test tests/*.test.mjs",
     "test:user-state": "node --test tests/firebase_user_state.test.mjs",
     "test:inventory": "node --test tests/rental_inventory.test.mjs",
     "test:waitlist": "node --test tests/waitlist_notifications.test.mjs",

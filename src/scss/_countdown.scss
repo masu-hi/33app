@@ -31,6 +31,35 @@
   z-index: 1;
 }
 
+.countdown_sync_status {
+  margin: 0;
+  padding: 12px 24px;
+  color: #353b60;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.countdown_sync_status:empty {
+  display: none;
+}
+
+.countdown_memo_save {
+  min-height: 44px;
+  padding: 8px 16px;
+  margin-top: 12px;
+  border: 1px solid var(--color-line, #ead5ee);
+  border-radius: 5px;
+  color: #353b60;
+  background: var(--color-main, #f6ecf8);
+  font: inherit;
+  cursor: pointer;
+}
+
+.countdown_memo_save:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 // 散りばめられたハート背景（ふわふわ浮遊アニメーション）
 @keyframes float_heart {
   0%,

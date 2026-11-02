@@ -1,14 +1,26 @@
 /**
  * countdown_detail.js - カウントダウン詳細画面スクリプト
  */
-document.addEventListener("DOMContentLoaded", () => {
+(() => {
   const DEFAULT_EVENT = {
     title: "Sugar ♡ Tune LIVE TOUR",
     date: "2026-12-24",
     place: "名古屋◯◯ホール",
   };
 
-  const getEventData = () => ({ ...DEFAULT_EVENT, ...window.countdownStore.getSelectedEvent() });
+  const selected = window.countdownStore.getSelectedEvent();
+  if (!selected) {
+    window.location.replace("countdown_list.html");
+    return;
+  }
+  const getEventData = () =>
+    window.countdownStore.getEvents().find((event) => event.id === selected.id);
+  const status = document.querySelector(".countdown_sync_status");
+  const saveButton = document.getElementById("saveMemoButton");
+  let baselineMemo = selected.memo || "";
+  let dirty = false;
+  let saving = false;
+  let debounce;
 
   const elements = {
     detailArtist: document.getElementById("detailArtist"),
@@ -23,6 +35,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const render = () => {
     const event = getEventData();
+    if (!event) {
+      elements.memoTextarea.disabled = true;
+      saveButton.disabled = true;
+      status.textContent =
+        "この予定は別の画面で削除されました。メモが未保存の場合は内容を控えてください。";
+      return;
+    }
+    if (!dirty && !saving) {
+      elements.memoTextarea.value = event.memo || "";
+      baselineMemo = event.memo || "";
+    }
     const targetDate = new Date(event.date + "T00:00:00");
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -67,19 +90,51 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // メモの読み込みと自動保存
-  if (elements.memoTextarea) {
-    const savedMemo = window.countdownStore.getSelectedEvent().memo || "";
-    elements.memoTextarea.value = savedMemo;
+  const saveMemo = async () => {
+    clearTimeout(debounce);
+    if (!dirty || saving || !getEventData()) return;
+    saving = true;
+    saveButton.disabled = true;
+    const text = elements.memoTextarea.value;
+    status.textContent = "メモを保存しています。";
+    try {
+      await window.countdownStore.updateEvent(selected.id, { memo: text }, { memo: baselineMemo });
+      baselineMemo = text;
+      dirty = elements.memoTextarea.value !== text;
+      status.textContent = dirty ? "メモに未保存の変更があります。" : "メモを保存しました。";
+      if (dirty) debounce = setTimeout(saveMemo, 700);
+    } catch (error) {
+      status.textContent = error.message;
+    } finally {
+      saving = false;
+      saveButton.disabled = !dirty || !getEventData();
+    }
+  };
 
-    elements.memoTextarea.addEventListener("input", (e) => {
-      try {
-        window.countdownStore.saveMemo(e.target.value);
-      } catch (err) {
-        console.error("Failed to save memo", err);
-      }
+  if (elements.memoTextarea) {
+    elements.memoTextarea.value = baselineMemo;
+    elements.memoTextarea.maxLength = 5000;
+    elements.memoTextarea.addEventListener("input", () => {
+      dirty = elements.memoTextarea.value !== baselineMemo;
+      saveButton.disabled = !dirty || saving;
+      status.textContent = dirty ? "メモに未保存の変更があります。" : "";
+      clearTimeout(debounce);
+      if (dirty) debounce = setTimeout(saveMemo, 700);
     });
   }
-
+  saveButton.disabled = true;
+  saveButton.addEventListener("click", saveMemo);
+  window.addEventListener("beforeunload", (event) => {
+    if (dirty || saving) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  });
+  window.addEventListener("countdown:updated", render);
+  const timer = setInterval(render, 60000);
+  window.addEventListener("pagehide", () => {
+    clearTimeout(debounce);
+    clearInterval(timer);
+  });
   render();
-});
+})();
