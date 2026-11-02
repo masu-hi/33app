@@ -1179,10 +1179,6 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", async () =>
   }
 });
 
-document.querySelector("[data-show-reviews]")?.addEventListener("click", () => {
-  window.alert("レビューは現在準備中です。\n評価 4.5 / 5.0");
-});
-
 const savedFavorites = new Set(JSON.parse(appStorage.getItem("favoriteProducts") || "[]"));
 
 const legacyFavoriteProducts = {
@@ -2183,22 +2179,6 @@ if (cancellationConfirm) {
     }
   }
 }
-
-document.querySelector("[data-filter-button]")?.addEventListener("click", () => {
-  const category = document.querySelector("[data-filter-category]").value;
-  const color = document.querySelector('input[name="color"]:checked').value;
-  let count = 0;
-
-  document.querySelectorAll("[data-product]").forEach((product) => {
-    const categoryMatches = category === "all" || product.dataset.category === category;
-    const colorMatches = color === "all" || product.dataset.color === color;
-    const visible = categoryMatches && colorMatches;
-    product.hidden = !visible;
-    count += visible ? 1 : 0;
-  });
-
-  document.querySelector("[data-result-count]").textContent = count;
-});
 
 document.querySelector("[data-checkout-form]")?.addEventListener("submit", (event) => {
   event.preventDefault();

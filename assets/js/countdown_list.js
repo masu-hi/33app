@@ -1,5 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
+(() => {
   const list = document.getElementById("eventList");
+  const status = document.querySelector(".countdown_sync_status");
+  let saving = false;
   const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
 
   const formatCountdown = (dateValue) => {
@@ -74,19 +76,49 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  list.addEventListener("click", (clickEvent) => {
+  list.addEventListener("click", async (clickEvent) => {
+    if (saving) {
+      clickEvent.preventDefault();
+      return;
+    }
     const removeButton = clickEvent.target.closest("[data-remove-event]");
     if (removeButton) {
       clickEvent.preventDefault();
       clickEvent.stopPropagation();
-      window.countdownStore.removeEvent(removeButton.dataset.removeEvent);
-      render();
+      const event = window.countdownStore
+        .getEvents()
+        .find((item) => item.id === removeButton.dataset.removeEvent);
+      if (!event || !window.confirm(`「${event.title}」を削除しますか？`)) return;
+      saving = true;
+      removeButton.disabled = true;
+      try {
+        await window.countdownStore.removeEvent(event.id, event.revision);
+        status.textContent = "予定を削除しました。";
+      } catch (error) {
+        status.textContent = error.message;
+      } finally {
+        saving = false;
+        render();
+      }
       return;
     }
 
     const link = clickEvent.target.closest("[data-event-id]");
-    if (link) window.countdownStore.selectEvent(link.dataset.eventId);
+    if (link) {
+      clickEvent.preventDefault();
+      saving = true;
+      try {
+        await window.countdownStore.selectEvent(link.dataset.eventId);
+        window.location.href = link.href;
+      } catch (error) {
+        status.textContent = error.message;
+        saving = false;
+      }
+    }
   });
 
+  window.addEventListener("countdown:updated", render);
+  const timer = setInterval(render, 60000);
+  window.addEventListener("pagehide", () => clearInterval(timer));
   render();
-});
+})();

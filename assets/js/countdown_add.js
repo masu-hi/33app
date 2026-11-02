@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+(() => {
   const DEFAULT_EVENT = {
     title: "Sugar ♡ Tune LIVE TOUR",
     date: "2026-12-24",
@@ -16,6 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const previousMonthButton = document.getElementById("previousMonth");
   const nextMonthButton = document.getElementById("nextMonth");
   const errorMessage = document.getElementById("formError");
+  const submitButton = document.querySelector('[form="countdownAddForm"]');
+  let requestId = crypto.randomUUID();
+  let saving = false;
+  form.addEventListener("input", () => {
+    if (!saving) requestId = crypto.randomUUID();
+  });
+  titleInput.maxLength = 120;
+  placeInput.maxLength = 200;
+  memoInput.maxLength = 5000;
 
   const formatDate = (value) => {
     if (!value) return "";
@@ -110,8 +119,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderCalendar();
 
-  form.addEventListener("submit", (eventSubmit) => {
+  form.addEventListener("submit", async (eventSubmit) => {
     eventSubmit.preventDefault();
+    if (saving) return;
     const title = titleInput.value.trim();
     const place = placeInput.value.trim();
 
@@ -120,12 +130,25 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    window.countdownStore.addEvent({
-      title,
-      date: dateInput.value,
-      place,
-      memo: memoInput.value,
+    saving = true;
+    const controls = [...form.elements, submitButton];
+    controls.forEach((control) => {
+      control.disabled = true;
     });
-    window.location.href = "countdown.html";
+    try {
+      await window.countdownStore.addEvent(
+        { title, date: dateInput.value, place, memo: memoInput.value },
+        requestId,
+      );
+      window.location.href = "countdown.html";
+    } catch (error) {
+      errorMessage.textContent = error.message;
+      errorMessage.hidden = false;
+    } finally {
+      saving = false;
+      controls.forEach((control) => {
+        control.disabled = false;
+      });
+    }
   });
-});
+})();
