@@ -315,6 +315,22 @@ favoriteColorButtons.forEach((button) => {
 
 const currentPage = window.location.pathname.split("/").pop() || "home.html";
 
+userStateReady.then(async (api) => {
+  if (!api) return;
+  try {
+    const { showDailyCountdownReminder } = await import("./countdown_reminder.js");
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible")
+        showDailyCountdownReminder().catch((error) =>
+          console.warn("ライブのお知らせを確認できませんでした。", error),
+        );
+    });
+    await showDailyCountdownReminder();
+  } catch (error) {
+    console.warn("ライブのお知らせを確認できませんでした。", error);
+  }
+});
+
 document.querySelectorAll("[data-nav-icon]").forEach((link) => {
   const pages = link.dataset.pages.split(",");
   const isCurrent = pages.includes(currentPage);
