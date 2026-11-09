@@ -202,7 +202,7 @@
   }
 }
 
-// ツールバー（カレンダー編集ボタン）
+// ツールバー（イベント一覧と予定追加）
 .countdown_toolbar {
   width: 100%;
   max-width: 340px;
@@ -257,6 +257,24 @@
     color: #4d5f9b;
     font-size: 13px;
     text-decoration: none;
+  }
+}
+
+.countdown_edit_link {
+  z-index: 2;
+  min-height: 44px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: 1px solid var(--color-line, #ead5ee);
+  border-radius: 22px;
+  background: #fff;
+  color: #4d5f9b;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:disabled {
+    display: none;
   }
 }
 
@@ -564,10 +582,4 @@
       font-size: 14px;
     }
   }
-}
-
-// フッターの2アイテム用レイアウト（ホームとマイページのみの場合）
-.bottom_nav--two_items {
-  justify-content: space-around;
-  padding: 0 40px;
 }

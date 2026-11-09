@@ -6082,39 +6082,6 @@ html.is-dark-favorite
   color: #5260a0;
 }
 
-.review_section .results_header__title button {
-  position: absolute;
-  left: 28px;
-  top: 50%;
-  transform: translateY(-50%);
-
-  width: 20px;
-  height: 20px;
-
-  padding: 0;
-  margin: 0;
-
-  border: none;
-  background: transparent;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.review_section .results_header__title button img {
-  width: 20px;
-  height: 20px;
-  display: block;
-}
-
-.review_section .results_header__title h1 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  color: #5260a0;
-}
-
 /* 総合評価 */
 .review_summary {
   width: calc(100% - 88px);

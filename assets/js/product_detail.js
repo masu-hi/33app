@@ -12,6 +12,25 @@
 
     document.title = `${product.name} | おしりーす`;
     document.body.dataset.productId = product.id || productId;
+    const reviewLink = document.querySelector("[data-product-review-link]");
+    if (reviewLink) reviewLink.href = `review.html?id=${encodeURIComponent(productId)}`;
+    import("./firebase_reviews.js")
+      .then(({ subscribeReviews, reviewSummary }) => {
+        const unsubscribe = subscribeReviews(
+          productId,
+          (reviews) => {
+            const score = document.querySelector("[data-product-review-score]");
+            const { average } = reviewSummary(reviews);
+            if (score) {
+              score.textContent = `★ ${average.toFixed(1)}`;
+              score.setAttribute("aria-label", `評価${average.toFixed(1)}、5点満点。デモ5件を含む`);
+            }
+          },
+          (error) => console.warn("レビューを読み込めませんでした。", error),
+        );
+        window.addEventListener("pagehide", unsubscribe, { once: true });
+      })
+      .catch((error) => console.warn("レビューを読み込めませんでした。", error));
 
     // 商品名の更新
     const nameEl = document.querySelector("[data-product-detail-name]");

@@ -175,11 +175,25 @@ service cloud.firestore {
     }
 
     match /reviews/{reviewId} {
-      allow read: if resource.data.isPublished == true || isAdmin();
+      allow read: if resource.data.isPublished == true || isAdmin()
+        || isOwner(resource.data.userId);
+      allow get: if signedIn()
+        && !exists(/databases/$(database)/documents/reviews/$(reviewId));
       allow create: if signedIn()
-        && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if isAdmin()
-        || (signedIn() && resource.data.userId == request.auth.uid);
+        && request.auth.token.firebase.sign_in_provider != "anonymous"
+        && request.resource.data.keys().hasAll(["userId", "productId", "rating", "text", "isPublished", "createdAt"])
+        && request.resource.data.keys().hasOnly(["userId", "productId", "rating", "text", "isPublished", "createdAt"])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.productId in ["penlight", "bag", "binoculars", "fan", "set"]
+        && request.resource.data.rating is int
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 300
+        && request.resource.data.isPublished == true
+        && request.resource.data.createdAt is string;
+      allow update, delete: if isAdmin();
     }
 
     match /inventoryLogs/{logId} {
