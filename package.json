@@ -8,6 +8,7 @@
     "test:inventory": "node --test tests/rental_inventory.test.mjs",
     "test:waitlist": "node --test tests/waitlist_notifications.test.mjs",
     "build": "sass src/scss/style.scss src/scss/style.css --style=expanded --no-source-map",
+    "release": "npm run build && node scripts/package_site.mjs",
     "dev": "node scripts/dev.mjs",
     "format": "prettier --write \"*.html\" \"assets/js/*.js\" \"scripts/*.mjs\" \"src/scss/*.scss\"",
     "format:check": "prettier --check \"*.html\" \"assets/js/*.js\" \"scripts/*.mjs\" \"src/scss/*.scss\""

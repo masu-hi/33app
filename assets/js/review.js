@@ -1,194 +1,145 @@
-// ========================================
-// レビュー投稿
-// ========================================
+import {
+  submitReview,
+  subscribeReviews,
+  reviewProductId,
+  reviewSummary,
+} from "./firebase_reviews.js";
+import { auth } from "./firebase_config.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-const reviewSubmitButton = document.querySelector("[data-review-submit]");
-const reviewTextarea = document.querySelector(".review_form__textarea");
-const reviewStars = document.querySelectorAll(".review_form__stars button");
-const reviewList = document.querySelector(".review_list");
-
-let selectedRating = 0;
-let savedReviews = JSON.parse(localStorage.getItem("oshleaseReviews")) || [];
-
-// 星を選択
-reviewStars.forEach((star, index) => {
+const submitButton = document.querySelector("[data-review-submit]");
+const textarea = document.querySelector(".review_form__textarea");
+const stars = [...document.querySelectorAll("[data-review-stars] button")];
+const list = document.querySelector(".review_list");
+const productId = reviewProductId(new URLSearchParams(location.search).get("id"));
+const status = document.createElement("p");
+status.setAttribute("role", "status");
+submitButton.after(status);
+let rating = 0;
+let saving = false;
+let requestId = crypto.randomUUID();
+const renewRequest = () => {
+  if (!saving) requestId = crypto.randomUUID();
+};
+textarea.addEventListener("input", renewRequest);
+stars.forEach((star, index) => {
+  star.setAttribute("aria-label", `${index + 1}点`);
+  star.setAttribute("aria-pressed", "false");
   star.addEventListener("click", () => {
-    selectedRating = index + 1;
-
-    reviewStars.forEach((item, itemIndex) => {
-      item.classList.toggle("is_selected", itemIndex < selectedRating);
+    rating = index + 1;
+    renewRequest();
+    stars.forEach((item, i) => {
+      item.classList.toggle("is_selected", i < rating);
+      item.setAttribute("aria-pressed", String(i + 1 === rating));
     });
   });
 });
 
-// 現在のレビュー数と平均評価
-let totalReviewCount = 15300;
-let totalRatingPoints = 15300 * 4.5;
-// 保存されているレビューを表示
-savedReviews.forEach((review) => {
-  const newReview = document.createElement("article");
-  newReview.className = "review_item";
-
-  const stars = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
-
-  newReview.innerHTML = `
-        <div class="review_item__header">
-            <span class="review_item__stars">
-                ${stars}
-            </span>
-
-            <span class="review_item__score">
-                ${review.rating}/5
-            </span>
-
-            <time datetime="${review.date}">
-                ${review.dateText}
-            </time>
-        </div>
-
-        <p class="review_item__text">
-            ${review.text.replace(/\n/g, "<br>")}
-        </p>
-    `;
-
-  reviewList.prepend(newReview);
-});
-
-// レビュー投稿
-reviewSubmitButton?.addEventListener("click", () => {
-  // 評価が選ばれていない場合
-  if (selectedRating === 0) {
-    alert("評価を選択してください");
-    return;
-  }
-
-  // レビュー本文が空の場合
-  const reviewText = reviewTextarea.value.trim();
-
-  if (reviewText === "") {
-    alert("レビューを入力してください");
-    return;
-  }
-
-  // 今日の日付
-  const today = new Date();
-
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-
-  const dateText = `${year}.${month}.${day}`;
-
-  // 星を作る
-  const stars = "★".repeat(selectedRating) + "☆".repeat(5 - selectedRating);
-
-  // 新しいレビューを作成
-  const newReview = document.createElement("article");
-
-  newReview.className = "review_item";
-
-  newReview.innerHTML = `
-        <div class="review_item__header">
-
-            <span class="review_item__stars">
-                ${stars}
-            </span>
-
-            <span class="review_item__score">
-                ${selectedRating}/5
-            </span>
-
-            <time datetime="${year}-${month}-${day}">
-                ${dateText}
-            </time>
-
-        </div>
-
-        <p class="review_item__text">
-            ${reviewText.replace(/\n/g, "<br>")}
-        </p>
-    `;
-
-  reviewList.prepend(newReview);
-
-  // ========================================
-  // レビューを保存
-  // ========================================
-
-  savedReviews.unshift({
-    rating: selectedRating,
-    text: reviewText,
-    date: `${year}-${month}-${day}`,
-    dateText: dateText,
-  });
-
-  localStorage.setItem("oshleaseReviews", JSON.stringify(savedReviews));
-
-  // レビュー件数と平均評価を更新
-  totalReviewCount++;
-  totalRatingPoints += selectedRating;
-
-  updateReviewSummary();
-
-  // フォームをリセット
-  reviewTextarea.value = "";
-
-  selectedRating = 0;
-
-  reviewStars.forEach((star) => {
-    star.classList.remove("is_selected");
-  });
-
-  // 投稿完了
-  alert("レビューを投稿しました！");
-});
-
-// ========================================
-// レビュー集計
-// ========================================
-
-const reviewCountElement = document.querySelector("[data-review-count]");
-
-const reviewAverageElement = document.querySelector("[data-review-average]");
-
-const reviewSummaryStars = document.querySelector("[data-review-summary-stars]");
-
-// レビュー情報を更新する関数
-function updateReviewSummary() {
-  const averageRating = totalRatingPoints / totalReviewCount;
-
-  const roundedAverage = Math.round(averageRating * 10) / 10;
-
-  reviewCountElement.textContent = `${totalReviewCount.toLocaleString()}件のレビュー`;
-
-  reviewAverageElement.textContent = roundedAverage.toFixed(1);
-
-  // ========================================
-  // 星の表示
-  // ========================================
-
-  let stars = "";
-
-  for (let i = 1; i <= 5; i++) {
-    // その星が完全に埋まる
-    if (roundedAverage >= i) {
-      stars += `
-                <span class="star is_full">★</span>
-            `;
-
-      // その星が半分だけ埋まる
-    } else if (roundedAverage >= i - 0.5) {
-      stars += `
-                <span class="star is_half">★</span>
-            `;
-
-      // 空の星
-    } else {
-      stars += `
-                <span class="star">★</span>
-            `;
+const render = (reviews) => {
+  list.querySelectorAll("[data-cloud-review]").forEach((item) => item.remove());
+  const fragment = document.createDocumentFragment();
+  reviews.forEach((review) => {
+    const item = document.createElement("article");
+    item.className = "review_item";
+    item.dataset.cloudReview = "";
+    const header = document.createElement("div");
+    header.className = "review_item__header";
+    const scoreStars = document.createElement("span");
+    scoreStars.className = "review_item__stars";
+    scoreStars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
+    const score = document.createElement("span");
+    score.className = "review_item__score";
+    score.textContent = `${review.rating}/5`;
+    const time = document.createElement("time");
+    const date = new Date(review.createdAt);
+    if (Number.isFinite(date.getTime())) {
+      time.dateTime = date.toISOString();
+      time.textContent = new Intl.DateTimeFormat("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+        .format(date)
+        .replaceAll("/", ".");
     }
+    header.append(scoreStars, score, time);
+    const text = document.createElement("p");
+    text.className = "review_item__text";
+    text.textContent = review.text;
+    text.style.whiteSpace = "pre-wrap";
+    item.append(header, text);
+    fragment.append(item);
+  });
+  list.prepend(fragment);
+  const summary = reviewSummary(reviews);
+  document.querySelector("[data-review-count]").textContent =
+    `${summary.count.toLocaleString()}件のレビュー（デモ5件を含む）`;
+  document.querySelector("[data-review-average]").textContent = summary.average.toFixed(1);
+  const summaryStars = document.querySelector("[data-review-summary-stars]");
+  summaryStars.replaceChildren();
+  const rounded = Math.round(summary.average * 2) / 2;
+  for (let i = 1; i <= 5; i += 1) {
+    const star = document.createElement("span");
+    star.className = `star${rounded >= i ? " is_full" : rounded >= i - 0.5 ? " is_half" : ""}`;
+    star.textContent = "★";
+    summaryStars.append(star);
   }
+};
+render([]);
+const unsubscribe = subscribeReviews(productId, render, () => {
+  status.textContent = "レビューを読み込めませんでした。接続状態を確認して再読み込みしてください。";
+});
+const stopAuth = onAuthStateChanged(auth, () => {
+  textarea.value = "";
+  rating = 0;
+  requestId = crypto.randomUUID();
+  stars.forEach((star) => {
+    star.classList.remove("is_selected");
+    star.setAttribute("aria-pressed", "false");
+  });
+});
+window.addEventListener(
+  "pagehide",
+  () => {
+    unsubscribe();
+    stopAuth();
+  },
+  { once: true },
+);
 
-  reviewSummaryStars.innerHTML = stars;
-}
+submitButton.addEventListener("click", async () => {
+  if (saving) return;
+  if (!rating || !textarea.value.trim()) {
+    status.textContent = "評価を選び、レビューを入力してください。";
+    if (!rating) stars[0].focus();
+    else textarea.focus();
+    return;
+  }
+  const ownerId = auth.currentUser?.uid;
+  saving = true;
+  [submitButton, textarea, ...stars].forEach((control) => {
+    control.disabled = true;
+  });
+  status.textContent = "投稿しています。";
+  try {
+    await submitReview(requestId, productId, rating, textarea.value);
+    if (auth.currentUser?.uid !== ownerId) return;
+    textarea.value = "";
+    rating = 0;
+    requestId = crypto.randomUUID();
+    stars.forEach((star) => {
+      star.classList.remove("is_selected");
+      star.setAttribute("aria-pressed", "false");
+    });
+    status.textContent = "レビューを投稿しました。";
+  } catch (error) {
+    if (auth.currentUser?.uid === ownerId)
+      status.textContent = `${error.message} 入力内容は残っています。`;
+  } finally {
+    saving = false;
+    [submitButton, textarea, ...stars].forEach((control) => {
+      control.disabled = false;
+    });
+  }
+});

@@ -17,7 +17,9 @@
   </head>
 
   <body class="mobile_app countdown_page is_product_data_loading">
-    <div class="product_data_loading" data-countdown-loading role="status">予定を読み込んでいます。</div>
+    <div class="product_data_loading" data-countdown-loading role="status">
+      予定を読み込んでいます。
+    </div>
     <main class="app_shell">
       <header class="app_header">
         <div class="app_header__start">
@@ -91,15 +93,13 @@
 
         <div class="countdown_toolbar">
           <a class="countdown_toolbar__list_link" href="countdown_list.html">イベント一覧</a>
-          <a class="countdown_toolbar__list_link" href="countdown_add.html">予定を追加</a>
-          <button
-            type="button"
-            id="editEventBtn"
+          <a
+            href="countdown_add.html"
             class="countdown_toolbar__edit_button"
-            aria-label="ライブ予定を編集する"
+            aria-label="イベントを追加する"
           >
             <img src="assets/images/calendar_edit_icon.svg" alt="" width="24" height="24" />
-          </button>
+          </a>
         </div>
 
         <div class="countdown_circle" role="timer" aria-live="polite">
@@ -137,6 +137,9 @@
             </p>
           </div>
         </a>
+        <button type="button" id="editEventBtn" class="countdown_edit_link">
+          この予定を編集する
+        </button>
       </div>
 
       <dialog class="countdown_modal" id="eventModal">

@@ -1890,6 +1890,23 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
   text-decoration: none;
 }
 
+.countdown_edit_link {
+  z-index: 2;
+  min-height: 44px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: 1px solid var(--color-line, #ead5ee);
+  border-radius: 22px;
+  background: #fff;
+  color: #4d5f9b;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.countdown_edit_link:disabled {
+  display: none;
+}
+
 .countdown_circle {
   position: relative;
   width: 244px;
@@ -2150,11 +2167,6 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
   min-height: 44px;
   border-radius: 12px;
   font-size: 14px;
-}
-
-.bottom_nav--two_items {
-  justify-content: space-around;
-  padding: 0 40px;
 }
 
 .countdown_detail_page {
@@ -8481,35 +8493,6 @@ details[open] .notice_item__arrow::after {
   justify-content: center;
   border-bottom: 1px solid #eee3f2;
   margin-bottom: 20px;
-}
-
-.review_section .results_header__title h1 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  color: #5260a0;
-}
-
-.review_section .results_header__title button {
-  position: absolute;
-  left: 28px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.review_section .results_header__title button img {
-  width: 20px;
-  height: 20px;
-  display: block;
 }
 
 .review_section .results_header__title h1 {
