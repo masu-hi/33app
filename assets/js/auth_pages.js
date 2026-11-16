@@ -1,25 +1,16 @@
-<!doctype html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>アカウント設定 | おしりーす</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="src/scss/style.css" />
-    <script src="assets/js/user_storage.js"></script>
-    <script type="module" src="assets/js/auth.js"></script>
-    <script src="assets/js/password_toggle.js" defer></script>
-  </head>
-  <body class="app_auth">
+import { authLogoHeader, registrationHeader } from "./shared_page_markup.js";
+
+export const defaultView = "register";
+
+export const pages = {
+  register: {
+    page: "register.html",
+    title: "アカウント設定 | おしりーす",
+    bodyAttributes: { class: "app_auth" },
+    scripts: ["user_storage.js", "module:auth.js", "password_toggle.js"],
+    markup: `
     <main class="auth_screen">
-      <header class="auth_header">
-        <a href="login.html"><img src="assets/images/logo.png" alt="おしりーす" /></a>
-      </header>
+      ${registrationHeader}
       <form class="account_form" data-register-form>
         <label>
           メールアドレス
@@ -299,5 +290,113 @@
         </button>
       </form>
     </main>
-  </body>
-</html>
+  
+`,
+  },
+
+  confirm: {
+    page: "register_confirm.html",
+    title: "登録内容の確認 | おしりーす",
+    bodyAttributes: { class: "app_auth" },
+    scripts: ["user_storage.js", "module:auth.js"],
+    markup: `
+    <main class="auth_screen">
+      ${registrationHeader}
+      <section class="confirm_content" data-confirm-content>
+        <dl>
+          <div>
+            <dt>メールアドレス</dt>
+            <dd data-value="email"></dd>
+          </div>
+          <div>
+            <dt>パスワード</dt>
+            <dd data-value="password"></dd>
+            <small>※半角英数字８桁以上</small>
+          </div>
+          <div>
+            <dt>利用規約・プライバシーについて</dt>
+            <dd>同意する</dd>
+          </div>
+        </dl>
+        <p data-registration-error role="status"></p>
+        <a class="auth_secondary" href="login.html" data-registration-login hidden>
+          ログイン画面へ
+        </a>
+        <a class="auth_primary" href="auth.html?view=complete" data-registration-submit>
+          アカウント登録
+        </a>
+        <a class="confirm_back" href="auth.html?view=register">入力内容を修正する</a>
+      </section>
+    </main>
+  
+`,
+  },
+
+  complete: {
+    page: "register_complete.html",
+    title: "登録完了 | おしりーす",
+    bodyAttributes: { class: "app_auth" },
+    scripts: ["user_storage.js"],
+    markup: `
+    <main class="auth_screen auth_screen--complete">
+      ${authLogoHeader}
+      <section class="registration_complete" data-registration-complete>
+        <h1>アカウント登録完了</h1>
+        <a class="auth_primary registration_complete__login" href="login.html">ログイン画面へ</a>
+      </section>
+    </main>
+  
+`,
+  },
+
+  reset: {
+    page: "password_reset.html",
+    title: "パスワード再設定 | おしりーす",
+    bodyAttributes: { class: "app_auth" },
+    scripts: ["user_storage.js", "theme_init.js", "password_reset.js"],
+    markup: `
+    <main class="auth_screen">
+      ${authLogoHeader}
+      <section class="login_form password_reset" aria-labelledby="password_reset_title">
+        <h1 id="password_reset_title">パスワード再設定</h1>
+        <p class="password_reset__description">
+          登録したメールアドレスを入力してください。パスワードを再設定するためのリンクをお送りします。
+        </p>
+        <form data-password-reset-form>
+          <label>
+            メールアドレス
+            <input
+              name="email"
+              type="email"
+              placeholder="example@email.com"
+              required
+              autocomplete="email"
+              inputmode="email"
+              autocapitalize="none"
+              spellcheck="false"
+            />
+          </label>
+          <p class="account_form__error" data-password-reset-error role="alert"></p>
+          <button class="auth_primary" type="submit">再設定メールを送る</button>
+        </form>
+        <div
+          class="password_reset__result"
+          data-password-reset-result
+          role="status"
+          aria-live="polite"
+          tabindex="-1"
+          hidden
+        >
+          <h2>再設定メールの送信を受け付けました</h2>
+          <p>
+            登録されているメールアドレスの場合、再設定メールが届きます。メール内のリンクから新しいパスワードを設定してください。
+          </p>
+          <p>届かない場合は、メールアドレスと迷惑メールフォルダをご確認ください。</p>
+        </div>
+        <a class="auth_secondary" href="login.html">ログイン画面へもどる</a>
+      </section>
+    </main>
+  
+`,
+  },
+};

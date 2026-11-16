@@ -1,3 +1,4 @@
+import { readPageSource, pageGroups, templateNames } from "./page_source.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -12,14 +13,24 @@ const attrs = (node) =>
   Object.fromEntries((node.attrs || []).map((attr) => [attr.name, attr.value]));
 
 test("全ページのローカル画像・スクリプト・スタイル・リンク先が存在する", () => {
-  for (const page of readdirSync(root).filter((name) => name.endsWith(".html"))) {
-    for (const node of nodes(parsers.html.parse(read(page)))) {
+  for (const page of new Set([
+    ...readdirSync(root).filter((name) => name.endsWith(".html")),
+    ...templateNames,
+  ])) {
+    for (const node of nodes(parsers.html.parse(readPageSource(page)))) {
       for (const attr of node.attrs || []) {
         if (!["src", "href", "action", "data-outline", "data-filled"].includes(attr.name)) continue;
         const value = attr.value || "";
         if (!value || /^(?:[a-z]+:|#|\/\/)/i.test(value)) continue;
         const path = decodeURIComponent(value.split(/[?#]/)[0]);
-        if (path) assert.ok(existsSync(resolve(root, dirname(page), path)), `${page}: ${value}`);
+        if (!path) continue;
+        assert.ok(existsSync(resolve(root, dirname(page), path)), `${page}: ${value}`);
+        const group = pageGroups[path.replace(/\.html$/, "")];
+        const view = new URL(
+          value.replaceAll("&amp;", "&"),
+          "https://example.test/",
+        ).searchParams.get("view");
+        if (group && view) assert.ok(Object.hasOwn(group, view), `${page}: ${value}`);
       }
     }
   }
@@ -41,12 +52,8 @@ test("JavaScriptとCSS内の画像参照は削除済みファイルを指さな�
   }
 });
 
-test("旧セットURLは共通の商品詳細へ転送し、古い選択UIを残さない", () => {
-  const source = read("set.html");
-  const elements = nodes(parsers.html.parse(source));
-  const redirect = elements.find((node) => attrs(node)["http-equiv"] === "refresh");
-  assert.equal(attrs(redirect).content, "0; url=product_detail.html?id=set");
-  assert.doesNotMatch(source, /data-product-detail|color_options|text_options/);
+test("セットも共通の商品詳細を使い、旧画面の選択UIを残さない", () => {
+  assert.equal(existsSync(resolve(root, "set.html")), false);
   assert.doesNotMatch(
     read("assets/js/product_detail.js"),
     /data-accordion-item|\.changebtn|\.color_options|\.text_options/,

@@ -19,7 +19,7 @@ try {
   } else {
     await initializeCountdownStore(user);
     await import("./app.js");
-    await import(pages[window.location.pathname.split("/").pop()]);
+    await import(pages[document.body.dataset.page || window.location.pathname.split("/").pop()]);
     document.body.classList.remove("is_product_data_loading");
     loading.remove();
   }

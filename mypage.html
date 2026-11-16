@@ -23,26 +23,52 @@
     <main class="app_shell mypage">
       <header class="app_header">
         <div class="app_header__start">
-          <a class="app_header__icon" href="color_change.html" aria-label="設定" data-nav-icon
-            data-pages="color_change.html,password_setting.html,credit_card.html">
-            <img src="assets/images/setting-icon--outline.png" data-outline="assets/images/setting-icon--outline.png"
-              data-filled="assets/images/setting-icon--filled.png" alt="" />
+          <a
+            class="app_header__icon"
+            href="account.html?view=color"
+            aria-label="設定"
+            data-nav-icon
+            data-pages="color_change.html,password_setting.html,credit_card.html"
+          >
+            <img
+              src="assets/images/setting-icon--outline.png"
+              data-outline="assets/images/setting-icon--outline.png"
+              data-filled="assets/images/setting-icon--filled.png"
+              alt=""
+            />
           </a>
-          <a class="app_header__icon" href="countdown.html" aria-label="カウントダウン" data-nav-icon
-            data-pages="countdown.html">
-            <img src="assets/images/timer-icon--outline.svg" data-outline="assets/images/timer-icon--outline.svg"
-              data-filled="assets/images/timer-icon--filled.svg" alt="" />
+          <a
+            class="app_header__icon"
+            href="countdown.html"
+            aria-label="カウントダウン"
+            data-nav-icon
+            data-pages="countdown.html"
+          >
+            <img
+              src="assets/images/timer-icon--outline.svg"
+              data-outline="assets/images/timer-icon--outline.svg"
+              data-filled="assets/images/timer-icon--filled.svg"
+              alt=""
+            />
           </a>
         </div>
         <img class="app_header__logo" src="assets/images/logo.png" alt="おしりーす" />
         <div class="app_header__actions">
           <a href="notice.html" aria-label="通知" data-nav-icon data-pages="notice.html">
-            <img src="assets/images/notice-icon--outline.png" data-outline="assets/images/notice-icon--outline.png"
-              data-filled="assets/images/notice-icon--filled.png" alt="" />
+            <img
+              src="assets/images/notice-icon--outline.png"
+              data-outline="assets/images/notice-icon--outline.png"
+              data-filled="assets/images/notice-icon--filled.png"
+              alt=""
+            />
           </a>
           <a href="cart.html" aria-label="カート" data-nav-icon data-pages="cart.html">
-            <img src="assets/images/cart-icon--outline.png" data-outline="assets/images/cart-icon--outline.png"
-              data-filled="assets/images/cart-icon--filled.png" alt="" />
+            <img
+              src="assets/images/cart-icon--outline.png"
+              data-outline="assets/images/cart-icon--outline.png"
+              data-filled="assets/images/cart-icon--filled.png"
+              alt=""
+            />
           </a>
         </div>
       </header>
@@ -52,7 +78,7 @@
       </section>
 
       <section class="rental_summary">
-        <a class="rental_summary__card" href="rental_history.html">
+        <a class="rental_summary__card" href="rental.html?view=history">
           <span class="rental_summary__heading">
             <strong>レンタル履歴</strong>
             <span aria-hidden="true">›</span>
@@ -83,29 +109,29 @@
       </section>
 
       <nav class="mypage_menu" aria-label="マイページメニュー">
-        <a href="member_info.html">会員情報</a>
-        <a href="cancellation_refund.html">キャンセル・払い戻し</a>
-        <a href="favorites.html">お気に入り♡</a>
-        <a href="recently_viewed.html">最近見た商品</a>
-        <a href="packing_checklist.html">持ち物チェックリスト</a>
-        <a href="waitlist.html">空き待ちリスト</a>
-        <a href="contact.html">お問い合わせ</a>
+        <a href="account.html?view=profile">会員情報</a>
+        <a href="rental.html?view=cancel">キャンセル・払い戻し</a>
+        <a href="account.html?view=favorites">お気に入り♡</a>
+        <a href="account.html?view=recent">最近見た商品</a>
+        <a href="account.html?view=checklist">持ち物チェックリスト</a>
+        <a href="account.html?view=waitlist">空き待ちリスト</a>
+        <a href="account.html?view=contact">お問い合わせ</a>
       </nav>
 
       <nav class="mypage_support" aria-label="サポートメニュー">
-        <a href="faq.html">
+        <a href="guide.html?view=faq">
           <img src="assets/images/question-icon.png" alt="" />
           よくある質問
         </a>
-        <a href="help.html">
+        <a href="guide.html?view=help">
           <img src="assets/images/help-icon.png" alt="" />
           ヘルプ
         </a>
-        <a href="terms.html">
+        <a href="guide.html?view=terms">
           <img src="assets/images/note-icon.png" alt="" />
           利用規約
         </a>
-        <a href="color_change.html">
+        <a href="account.html?view=color">
           <img src="assets/images/setting-icon--filled.png" alt="" />
           設定
         </a>
@@ -113,10 +139,10 @@
 
       <footer class="app_footer">
         <nav aria-label="フッターナビゲーション">
-          <a href="about.html">お店について</a>
-          <a href="usage_guide.html">使い方ガイド</a>
-          <a href="terms.html">利用規約</a>
-          <a href="privacy_policy.html">個人情報保護方針</a>
+          <a href="guide.html?view=about">お店について</a>
+          <a href="guide.html?view=usage">使い方ガイド</a>
+          <a href="guide.html?view=terms">利用規約</a>
+          <a href="guide.html?view=privacy">個人情報保護方針</a>
         </nav>
         <small>Tokimekilab&copy;2026</small>
       </footer>
@@ -135,7 +161,7 @@
           />
           ホーム
         </a>
-        <a href="favorites.html" data-favorite-nav>
+        <a href="account.html?view=favorites" data-favorite-nav>
           <span class="bottom_nav__favorite_icon" aria-hidden="true">♥</span>
           <span class="bottom_nav__badge" data-favorite-count>0</span>
           お気に入り

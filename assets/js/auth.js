@@ -137,7 +137,7 @@ registerForm?.addEventListener("submit", (event) => {
   const values = Object.fromEntries(formData.entries());
   values.email = normalizeEmail(values.email);
   sessionStorage.setItem("registrationData", JSON.stringify(values));
-  window.location.href = "register_confirm.html";
+  window.location.href = "auth.html?view=confirm";
 });
 
 const confirmContent = document.querySelector("[data-confirm-content]");

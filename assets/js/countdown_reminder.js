@@ -106,10 +106,10 @@ export const reminderAction = (event, orders) => {
         order.arrivalDate <= event.date &&
         event.date <= order.returnDate,
     );
-    if (rented) return { href: "packing_checklist.html", label: "持ち物チェックリストを開く" };
-    if (event.days <= 7) return { href: "goods_search.html", label: "レンタルする" };
+    if (rented) return { href: "account.html?view=checklist", label: "持ち物チェックリストを開く" };
+    if (event.days <= 7) return { href: "browse.html?view=goods", label: "レンタルする" };
   }
-  return { href: "countdown_list.html", label: "予定を確認する" };
+  return { href: "countdown.html?view=list", label: "予定を確認する" };
 };
 
 const addCelebration = (dialog) => {

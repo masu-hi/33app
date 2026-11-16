@@ -7,7 +7,7 @@ import { auth, db } from "./firebase_config.js";
 
 const redirectToLogin = async () => {
   await signOut(auth).catch(() => {});
-  window.location.replace("admin_login.html");
+  window.location.replace("admin.html?view=login");
 };
 
 onAuthStateChanged(auth, async (user) => {
@@ -32,5 +32,5 @@ onAuthStateChanged(auth, async (user) => {
 
 document.querySelector("[data-admin-logout]")?.addEventListener("click", async () => {
   await signOut(auth);
-  window.location.replace("admin_login.html");
+  window.location.replace("admin.html?view=login");
 });

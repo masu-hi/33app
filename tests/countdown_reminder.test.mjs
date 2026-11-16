@@ -95,7 +95,7 @@ test("節目ごとのメッセージと、ライブ当日を含む注文によ�
   assert.equal(new Set([30, 7, 3, 1, 0].map(api.reminderMessage)).size, 5);
   const live = { date: "2026-11-09", days: 7 };
   const order = { arrivalDate: "2026-11-08", returnDate: "2026-11-11", status: "配送待ち" };
-  assert.equal(api.reminderAction(live, [order]).href, "packing_checklist.html");
+  assert.equal(api.reminderAction(live, [order]).href, "account.html?view=checklist");
   for (const status of ["キャンセル", "返品完了"]) {
     assert.equal(api.reminderAction(live, [{ ...order, status }]).label, "レンタルする");
   }
@@ -111,7 +111,10 @@ test("節目ごとのメッセージと、ライブ当日を含む注文によ�
   assert.equal(api.reminderAction(live, null).label, "予定を確認する");
   assert.equal(api.reminderAction({ ...live, days: 30 }, []).label, "予定を確認する");
   for (const date of [order.arrivalDate, order.returnDate]) {
-    assert.equal(api.reminderAction({ ...live, date }, [order]).href, "packing_checklist.html");
+    assert.equal(
+      api.reminderAction({ ...live, date }, [order]).href,
+      "account.html?view=checklist",
+    );
   }
 });
 

@@ -75,7 +75,7 @@ if (user) {
             addRow(
               list,
               [order.id, `${order.product} × ${order.quantity}`, order.status],
-              "admin_orders.html",
+              "admin.html?view=orders",
             );
           });
         document.querySelector("[data-dashboard-orders-empty]").hidden = orders.length > 0;
