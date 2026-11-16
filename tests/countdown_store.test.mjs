@@ -1,3 +1,4 @@
+import { readPageSource } from "./page_source.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -5,12 +6,13 @@ import vm from "node:vm";
 import { webcrypto } from "node:crypto";
 
 const source = readFileSync(new URL("../assets/js/countdown_store.js", import.meta.url), "utf8")
-  .replace(/import[\s\S]*?from\s+"[^"]+";/g, "").replace(/export /g, "");
+  .replace(/import[\s\S]*?from\s+"[^"]+";/g, "")
+  .replace(/export /g, "");
 const event = { title: "テストライブ", date: "2027-01-15", place: "デモホール", memo: "双眼鏡" };
 
 test("全カウントダウン画面が認証後に初期化され、読込前のサンプルを表示しない", () => {
   for (const page of ["countdown", "countdown_add", "countdown_list", "countdown_detail"]) {
-    const html = readFileSync(new URL(`../${page}.html`, import.meta.url), "utf8");
+    const html = readPageSource(`${page}.html`);
     assert.match(html, /type="module" src="assets\/js\/countdown_bootstrap.js"/);
     assert.match(html, /<body class="[^"]*is_product_data_loading/);
     assert.match(html, /data-countdown-loading/);
@@ -22,7 +24,15 @@ test("全カウントダウン画面が認証後に初期化され、読込前�
 
 const fixture = () => {
   const documents = new Map();
-  const legacy = new Map(["countdownEvents", "countdownSelectedEventId", "countdownEvent", "countdownMemo", "unrelated"].map((key) => [key, "demo"]));
+  const legacy = new Map(
+    [
+      "countdownEvents",
+      "countdownSelectedEventId",
+      "countdownEvent",
+      "countdownMemo",
+      "unrelated",
+    ].map((key) => [key, "demo"]),
+  );
   const listeners = [];
   let fail = false;
   let queue = Promise.resolve();
@@ -31,13 +41,28 @@ const fixture = () => {
     let user = { uid, isAnonymous: false };
     const window = { dispatchEvent() {}, addEventListener() {} };
     const context = {
-      window, crypto: webcrypto, structuredClone,
-      CustomEvent: class { constructor(type) { this.type = type; } },
-      auth: { get currentUser() { return user; } }, db: {},
+      window,
+      crypto: webcrypto,
+      structuredClone,
+      CustomEvent: class {
+        constructor(type) {
+          this.type = type;
+        }
+      },
+      auth: {
+        get currentUser() {
+          return user;
+        },
+      },
+      db: {},
       sessionStorage: { getItem: () => uid },
       localStorage: {
-        getItem() { throw new Error("共通の端末データを読まないこと"); },
-        removeItem(key) { legacy.delete(key); },
+        getItem() {
+          throw new Error("共通の端末データを読まないこと");
+        },
+        removeItem(key) {
+          legacy.delete(key);
+        },
       },
       doc: (db, ...parts) => ({ path: parts.join("/") }),
       getDoc: async (reference) => snapshot(reference),
@@ -65,9 +90,22 @@ const fixture = () => {
     };
     const init = vm.runInNewContext(`${source}\ninitializeCountdownStore`, context);
     await init(user);
-    return { api: window.countdownStore, switchUser: (uid) => { user = { uid }; } };
+    return {
+      api: window.countdownStore,
+      switchUser: (uid) => {
+        user = { uid };
+      },
+    };
   };
-  return { documents, legacy, client, fail: () => { fail = true; }, error: () => listeners.forEach((listener) => listener.onError()) };
+  return {
+    documents,
+    legacy,
+    client,
+    fail: () => {
+      fail = true;
+    },
+    error: () => listeners.forEach((listener) => listener.onError()),
+  };
 };
 
 test("未登録の利用者に架空予定や以前の共通データを表示せず、アカウントを分離する", async () => {
@@ -87,7 +125,10 @@ test("同じアカウントの二端末で追加・選択・削除が反映さ�
   const f = fixture();
   const a = await f.client("alice");
   const b = await f.client("alice");
-  await Promise.all([a.api.addEvent(event, "one"), b.api.addEvent({ ...event, title: "二つ目" }, "two")]);
+  await Promise.all([
+    a.api.addEvent(event, "one"),
+    b.api.addEvent({ ...event, title: "二つ目" }, "two"),
+  ]);
   assert.equal(a.api.getEvents().length, 2);
   assert.equal(b.api.getEvents().length, 2);
   await b.api.selectEvent("one");
@@ -109,10 +150,16 @@ test("違う項目の編集は併存し、同じメモの古い内容による�
   await b.api.updateEvent("one", { memo: "バッグも持参" }, { memo: event.memo });
   assert.equal(a.api.getSelectedEvent().title, "更新したライブ");
   assert.equal(a.api.getSelectedEvent().memo, "バッグも持参");
-  await assert.rejects(a.api.updateEvent("one", { memo: "古い入力" }, { memo: event.memo }), /別の画面/);
+  await assert.rejects(
+    a.api.updateEvent("one", { memo: "古い入力" }, { memo: event.memo }),
+    /別の画面/,
+  );
   await assert.rejects(a.api.removeEvent("one", 1), /更新/);
   await b.api.removeEvent("one", 3);
-  await assert.rejects(a.api.updateEvent("one", { memo: "復活させない" }, { memo: "バッグも持参" }), /削除/);
+  await assert.rejects(
+    a.api.updateEvent("one", { memo: "復活させない" }, { memo: "バッグも持参" }),
+    /削除/,
+  );
 });
 
 test("送信の再試行を重複登録せず、不正な日付や空欄を保存しない", async () => {
@@ -121,7 +168,12 @@ test("送信の再試行を重複登録せず、不正な日付や空欄を保�
   await api.addEvent(event, "one");
   await api.addEvent(event, "one");
   assert.equal(api.getEvents().length, 1);
-  for (const changes of [{ title: " " }, { place: "" }, { date: "2027-02-30" }, { memo: "a".repeat(5001) }])
+  for (const changes of [
+    { title: " " },
+    { place: "" },
+    { date: "2027-02-30" },
+    { memo: "a".repeat(5001) },
+  ])
     await assert.rejects(api.addEvent({ ...event, ...changes }));
 });
 

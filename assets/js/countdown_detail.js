@@ -10,7 +10,7 @@
 
   const selected = window.countdownStore.getSelectedEvent();
   if (!selected) {
-    window.location.replace("countdown_list.html");
+    window.location.replace("countdown.html?view=list");
     return;
   }
   const getEventData = () =>

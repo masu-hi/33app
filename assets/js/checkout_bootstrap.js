@@ -10,7 +10,7 @@ try {
   } else {
     const profile = await loadUserProfile(user);
     if (!isProfileComplete(profile)) {
-      window.location.replace("checkout_profile.html");
+      window.location.replace("rental.html?view=profile");
     } else {
       await initializeUserState();
       await import("./app.js");

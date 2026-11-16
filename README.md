@@ -53,7 +53,8 @@ CSSは `src/scss/` のSassから生成します。`style.css` を直接編集せ
 
 ## 構成
 
-- ルートのHTML: 利用者画面と管理者画面
+- ルートのHTML: 主要画面と、関連画面をまとめた入口
+- `assets/js/*_pages.js`: 区分ごとの画面テンプレート。共通パーツは `shared_page_markup.js`
 - `assets/js/`: ページの処理、Firebaseとの通信、初期化処理
 - `assets/images/`: 表示用画像とアイコン
 - `src/scss/style.scss`: 共通スタイルと各部分の読み込み
@@ -63,6 +64,14 @@ CSSは `src/scss/` のSassから生成します。`style.css` を直接編集せ
 - `dist/`: 公開用の生成物（Gitの管理対象外）
 
 ## 公開用ファイル
+
+Cyberduckで直接公開する場合は、`npm run build` でCSSを生成し、公開先の同じ階層に次のファイルをアップロードします。
+
+- ルートのHTML（初期登録用の `firebase_seed.html` を除く）
+- `assets/js/`（初期登録用の `firebase_seed.js` を除く）と `assets/images/`
+- `src/scss/style.css`
+
+一括で用意する場合は、次のコマンドで同じ構成の公開用フォルダを生成できます。
 
 ```sh
 npm run release
@@ -88,7 +97,7 @@ CSSをビルドして、公開に必要なHTML・JavaScript・画像・CSSだけ
 
 `firebase_seed.html` は管理者による商品初期登録用です。通常の画面からリンクしていませんが、セットアップに使用するため残しています。
 
-管理者画面の入口は `admin_login.html` です。Firebase Authenticationのアカウントと、その利用者のUIDに対応する `admins/{uid}` ドキュメントで権限を確認します。一般の利用者登録だけでは管理者にはなりません。ログイン情報はREADMEに記載しません。
+管理者画面の入口は `admin.html?view=login` です。Firebase Authenticationのアカウントと、その利用者のUIDに対応する `admins/{uid}` ドキュメントで権限を確認します。一般の利用者登録だけでは管理者にはなりません。ログイン情報はREADMEに記載しません。
 
 会員情報、お気に入り、カート、ライブ予定は利用者ごとに保存します。カウントダウンは `users/{uid}/countdown/current`、お問い合わせは `contacts`、返信通知は `notifications` を使用します。
 
@@ -104,8 +113,22 @@ CSSをビルドして、公開に必要なHTML・JavaScript・画像・CSSだけ
 
 ## 互換性と素材
 
+関連画面は共通HTMLの `view` で切り替えます。画面の内容は対応する `*_pages.js` を編集します。
+
+| 区分             | URLの例                                                    |
+| ---------------- | ---------------------------------------------------------- |
+| 案内             | `guide.html?view=faq`、`guide.html?view=usage`             |
+| 商品を探す       | `browse.html?view=artists`、`browse.html?view=goods`       |
+| 利用者情報       | `account.html?view=profile`、`account.html?view=favorites` |
+| レンタル         | `rental.html?view=history`、`rental.html?view=confirm`     |
+| 会員登録・再設定 | `auth.html?view=register`、`auth.html?view=reset`          |
+| イベント予定     | `countdown.html`、`countdown.html?view=add`                |
+| 管理             | `admin.html?view=login`、`admin.html?view=dashboard`       |
+
+公開済みの個別URLをブックマークや提出資料で案内している場合は、新しいURLに更新してください。公開先に旧HTMLが残っている場合は、新しい画面の確認後に旧HTMLを整理してください。
+
 - 商品詳細は `product_detail.html?id=商品ID` に統一しています。
-- 旧 `set.html` は `product_detail.html?id=set` への転送専用です。
+- 推し活セットのURLは `product_detail.html?id=set` です。
 - Firebaseに画像パスが保存されている場合があるため、商品画像はコードからの参照だけで削除しないでください。
 - `lucide_license.txt` と画像生成プロンプトは、素材のライセンス・制作記録として残しています。
 

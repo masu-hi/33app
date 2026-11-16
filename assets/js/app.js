@@ -313,7 +313,8 @@ favoriteColorButtons.forEach((button) => {
   });
 });
 
-const currentPage = window.location.pathname.split("/").pop() || "home.html";
+const currentPage =
+  document.body.dataset.page || window.location.pathname.split("/").pop() || "home.html";
 
 userStateReady.then(async (api) => {
   if (!api) return;
@@ -1078,7 +1079,7 @@ document.querySelector("[data-add-cart]")?.addEventListener("click", async () =>
   if (button.disabled) return;
 
   if (button.dataset.cartState === "waitlist-added") {
-    window.location.href = "waitlist.html";
+    window.location.href = "account.html?view=waitlist";
     return;
   }
 
@@ -1691,7 +1692,7 @@ if (paymentPage) {
     document.querySelector(".payment_page__header_title").textContent = "レンタル延長";
     document.querySelector(".payment_form h1").textContent = "延長料金の決済方法";
     document.querySelector(".mypage_header__back").href =
-      `rental_extension.html?order=${encodeURIComponent(extensionOrderId)}`;
+      `rental.html?view=extension&order=${encodeURIComponent(extensionOrderId)}`;
     document
       .querySelectorAll('[data-payment-method="deferred"], [data-payment-method="convenience"]')
       .forEach((method) => {
@@ -1998,7 +1999,7 @@ if (orderConfirmPage) {
             paymentName: draft.paymentName,
           }),
         );
-        window.location.href = `order_complete.html?extension=${encodeURIComponent(target.id)}`;
+        window.location.href = `rental.html?view=complete&extension=${encodeURIComponent(target.id)}`;
       } catch (error) {
         availabilityMessage.hidden = false;
         availabilityMessage.textContent = error.code
@@ -2035,7 +2036,7 @@ if (orderConfirmPage) {
         appStorage.removeItem("pendingReservation");
         appStorage.removeItem("pendingOrderId");
       }
-      window.location.href = "order_complete.html";
+      window.location.href = "rental.html?view=complete";
     } catch (error) {
       console.error("注文を保存できませんでした。", error);
       availabilityMessage.hidden = false;
@@ -2055,7 +2056,7 @@ if (orderCompletePage) {
   const order = extensionOrderId
     ? JSON.parse(appStorage.getItem("latestExtension") || "null")
     : JSON.parse(appStorage.getItem("latestOrder") || "null") || getOrderDraft();
-  if (!order) window.location.href = "rental_history.html";
+  if (!order) window.location.href = "rental.html?view=history";
 
   if (extensionOrderId) {
     document.title = "延長完了 | おしりーす";
@@ -2065,7 +2066,7 @@ if (orderCompletePage) {
     document.querySelector(".order_complete__message").textContent =
       "延長手続きが完了しました。新しい返却期限までに商品をご返却ください。";
     const returnLink = document.querySelector(".order_page__primary");
-    returnLink.href = "rental_history.html";
+    returnLink.href = "rental.html?view=history";
     returnLink.textContent = "レンタル履歴に戻る";
   }
   document.querySelector("[data-complete-id]").textContent = order.id;
@@ -2123,7 +2124,7 @@ if (rentalHistoryPage) {
     const canExtend = canExtendRentalOrder(order);
 
     if (canExtend) {
-      extensionLink.href = `rental_extension.html?order=${encodeURIComponent(order.id)}`;
+      extensionLink.href = `rental.html?view=extension&order=${encodeURIComponent(order.id)}`;
       extensionLink.textContent = "延長する";
     } else {
       extensionLink.setAttribute("aria-disabled", "true");
@@ -2132,7 +2133,7 @@ if (rentalHistoryPage) {
     extensionLink.className = "rental_history_item__extension";
     article.append(extensionLink);
     cancelLink.className = "rental_history_item__cancel";
-    cancelLink.href = `cancellation_refund.html?order=${encodeURIComponent(order.id)}`;
+    cancelLink.href = `rental.html?view=cancel&order=${encodeURIComponent(order.id)}`;
     cancelLink.textContent = "キャンセルする";
     article.append(cancelLink);
     list.append(article);
@@ -2201,8 +2202,8 @@ document.querySelector("[data-checkout-form]")?.addEventListener("submit", (even
   if (paymentPage) {
     const extensionOrderId = paymentPage.dataset.extensionOrderId;
     window.location.href = extensionOrderId
-      ? `order_confirm.html?extension=${encodeURIComponent(extensionOrderId)}`
-      : "order_confirm.html";
+      ? `rental.html?view=confirm&extension=${encodeURIComponent(extensionOrderId)}`
+      : "rental.html?view=confirm";
     return;
   }
 
@@ -2287,7 +2288,7 @@ if (noticeTabs.length) {
           const link = document.createElement("a");
           link.className = "notice_item__link";
           link.href = notice.contactId
-            ? "contact.html"
+            ? "account.html?view=contact"
             : `product_detail.html?id=${encodeURIComponent(notice.productId)}`;
           link.textContent = notice.contactId ? "お問い合わせを確認する ›" : "商品を確認する ›";
           action.append(link);

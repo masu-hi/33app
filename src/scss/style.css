@@ -40,7 +40,8 @@
   display: block;
   width: 120px;
   height: 36px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
   margin-bottom: 4px;
 }
 
@@ -964,7 +965,8 @@
 .faq__heading img {
   width: 48px;
   height: 48px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .faq__heading h1 {
@@ -1129,7 +1131,8 @@
 .help__heading img {
   width: 48px;
   height: 48px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .help__heading h1 {
@@ -1427,7 +1430,8 @@
 .waitlist_item__product img {
   width: 78px;
   height: 96px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .waitlist_item h2,
@@ -1608,7 +1612,9 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
   background-color: #ffffff;
   border: 1px solid var(--color-line, #ead5ee);
   border-radius: 5px;
-  appearance: auto;
+  -webkit-appearance: auto;
+     -moz-appearance: auto;
+          appearance: auto;
   box-sizing: border-box;
 }
 .product_detail__option_select:focus {
@@ -1740,7 +1746,9 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
   font-size: 16px;
   font-weight: 300;
   line-height: 1;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   opacity: 0.85;
   animation: float_heart 4s ease-in-out infinite;
 }
@@ -1874,7 +1882,8 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
 .countdown_toolbar__edit_button img {
   width: 22px;
   height: 22px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .countdown_toolbar__list_link {
   display: inline-flex;
@@ -2237,7 +2246,9 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
   position: absolute;
   color: #eabfe8;
   line-height: 1;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .countdown_detail_nav__heart--1 {
   top: -2px;
@@ -2308,7 +2319,8 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
   width: 28px;
   height: 28px;
   flex: none;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .countdown_detail_info_item__text {
   font-family: "M PLUS Rounded 1c", sans-serif;
@@ -2363,7 +2375,9 @@ html.is-dark-favorite .product_detail__option_choice--message.is_selected {
   position: absolute;
   color: #eabfe8;
   line-height: 1;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .countdown_detail_counter__heart--1 {
   bottom: 2px;
@@ -3306,8 +3320,10 @@ h3,
   width: 100%;
   height: 100%;
   max-height: 480px;
-  object-fit: cover;
-  object-position: center;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
 }
 
 .section,
@@ -3365,7 +3381,8 @@ h3,
 .product_card img {
   width: 100%;
   aspect-ratio: 1;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .product_card__body {
@@ -4394,6 +4411,7 @@ h3,
   background: var(--color-main, #f6ecf8);
 }
 .account_form select {
+  width: -moz-fit-content;
   width: fit-content;
   max-width: 100%;
   font-size: 14px;
@@ -4734,7 +4752,8 @@ h3,
 .app_header__icon img, .app_header__actions img {
   width: 26px;
   height: 26px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .app_header__cart_count, .app_header__notice_count {
   position: absolute;
@@ -4760,6 +4779,7 @@ h3,
   z-index: 100;
   bottom: 96px;
   left: 50%;
+  width: -moz-max-content;
   width: max-content;
   max-width: calc(100% - 48px);
   margin: 0;
@@ -4821,17 +4841,20 @@ h3,
 .search_choice__visual img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .search_choice__visual--artist img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .search_choice__visual--penlight img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .search_choice__visual--artist {
   color: #6574aa;
@@ -4938,7 +4961,8 @@ h3,
   width: 30px;
   height: 30px;
   margin-bottom: 2px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .bottom_nav .is_current {
   font-weight: 700;
@@ -5411,7 +5435,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .member_info__form select[name=favorite_color], .member_info__form select[name=prefecture] {
   width: 100%;
   padding-right: 52px;
-  appearance: none;
+  -moz-appearance: none;
+       appearance: none;
   background-image: url("../../assets/images/chevron_down.svg");
   background-position: right 28px center;
   background-repeat: no-repeat;
@@ -5428,7 +5453,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   padding: 8px 4px;
   text-align: center;
   text-indent: -8px;
-  appearance: none;
+  -moz-appearance: none;
+       appearance: none;
   background-image: url("../../assets/images/chevron_down.svg");
   background-position: right 12px center;
   background-repeat: no-repeat;
@@ -5749,7 +5775,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .search_intro .search_choice__visual--penlight img {
   max-width: 100%;
   max-height: 100%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .search_intro h1,
 .search_intro p {
@@ -5883,12 +5910,14 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .goods_grid img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .goods_grid__penlight_image img {
   max-width: 100%;
   max-height: 100%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .goods_grid b {
   font-weight: 500;
@@ -5940,7 +5969,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .binocular_filter_intro__image img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .binocular_filter_intro h1,
 .binocular_filter_intro p {
@@ -6020,7 +6050,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .results_header__title button img {
   width: 20px;
   height: 20px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .results_header h1 {
   margin: 0;
@@ -6129,7 +6160,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .result_item__link > img {
   width: 78px;
   height: 92px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .result_item h2,
 .result_item p {
@@ -6196,7 +6228,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .mypage_header > button img, .mypage_header__back img {
   width: 20px;
   height: 20px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .mypage_header__actions {
   display: flex;
@@ -6215,7 +6248,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .mypage_header__actions img {
   width: 26px;
   height: 26px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .mypage_name {
@@ -6331,7 +6365,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
   width: 44px;
   height: 44px;
   margin-bottom: 4px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .contact_page {
@@ -6539,7 +6574,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .favorite_item__link img {
   width: 78px;
   height: 96px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .favorite_item h2,
 .favorite_item p {
@@ -6665,7 +6701,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .cart_product > img {
   width: 82px;
   height: 98px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .cart_product__details h2, .cart_product__details p {
   margin: 0;
@@ -6804,7 +6841,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 }
 .checkout_shipping_fields > label select[name=shipping_prefecture] {
   padding-right: 52px;
-  appearance: none;
+  -moz-appearance: none;
+       appearance: none;
   background-image: url("../../assets/images/chevron_down.svg");
   background-position: right 28px center;
   background-repeat: no-repeat;
@@ -7055,7 +7093,8 @@ html.is-dark-favorite .app_shell .about_mid_nav a {
 .order_product img {
   width: 82px;
   height: 98px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .order_product h2,
 .order_product p {
@@ -7590,7 +7629,8 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
 .rental_history_item__product img {
   width: 72px;
   height: 86px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .rental_history_item h2, .rental_history_item__product p {
   margin: 0;
@@ -7808,7 +7848,8 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
   width: 100%;
   height: 100%;
   max-width: none;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   transform: scale(1);
 }
 
@@ -7946,7 +7987,8 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
 .about_problem__image {
   width: 110px;
   flex-shrink: 0;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_problem__bubble {
   position: relative;
@@ -7995,7 +8037,8 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
   width: 28px;
   height: 28px;
   margin-bottom: 2px;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .about_feeling {
@@ -8029,7 +8072,8 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
   position: absolute;
   width: 26px;
   height: auto;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_feeling__penlight--1 {
   top: 24px;
@@ -8102,7 +8146,8 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
   left: 28px;
   width: 65px;
   height: auto;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .about_solution {
@@ -8117,7 +8162,8 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
 .about_solution__image {
   width: 120px;
   flex-shrink: 0;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_solution__bubble {
   position: relative;
@@ -8164,7 +8210,8 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
 .about_oshi__main_image {
   width: 92%;
   margin: 0 auto;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_oshi__feature {
   display: flex;
@@ -8180,7 +8227,8 @@ html.is-dark-favorite .packing_checklist_page__content .packing_checklist__item 
   text-align: center;
 }
 .about_oshi__feature_image {
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .about_oshi__feature--worry .about_oshi__feature_image {
   width: 120px;
@@ -8678,6 +8726,10 @@ details[open] .notice_item__arrow::after {
   outline: none;
 }
 
+.review_form__textarea::-moz-placeholder {
+  color: #b7b4c0;
+}
+
 .review_form__textarea::placeholder {
   color: #b7b4c0;
 }
@@ -8707,7 +8759,9 @@ details[open] .notice_item__arrow::after {
 
 select:not([multiple]):not([size]),
 select:not([multiple])[size="1"] {
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   padding-right: 36px;
   background-image: url("../../assets/images/select_chevron.svg");
   background-repeat: no-repeat;
@@ -8733,7 +8787,9 @@ select:not([multiple])[size="1"] {
 @media (forced-colors: active) {
   select:not([multiple]):not([size]),
   select:not([multiple])[size="1"] {
-    appearance: auto;
+    -webkit-appearance: auto;
+       -moz-appearance: auto;
+            appearance: auto;
     background-image: none;
   }
-}
+}/*# sourceMappingURL=style.css.map */

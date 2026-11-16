@@ -24,7 +24,7 @@
       const message = document.createElement("p");
       message.textContent = "登録したイベントはまだありません";
       const addLink = document.createElement("a");
-      addLink.href = "countdown_add.html";
+      addLink.href = "countdown.html?view=add";
       addLink.textContent = "イベントを追加する";
       empty.append(message, addLink);
       list.append(empty);
